@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -6,6 +6,31 @@ import Swal from 'sweetalert2';
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [image, setImage] = useState('');
+  const [name, setName] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownRef]);
+
+  const closeDropdown = () => {
+    setDropdownOpen(false);
+  };
 
   const logout = async () => {
     const result = await Swal.fire({
@@ -23,11 +48,39 @@ const Navbar = () => {
         await axios.post('http://localhost:8000/logout');
         localStorage.removeItem('token');
         navigate('/');
+        closeDropdown();
       } catch (error) {
         console.error('Error logging out:', error);
       }
     }
   };
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error("No token found in localStorage");
+        return;
+      }
+
+      try {
+        const response = await axios.get('http://localhost:8000/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.data && response.data.body) {
+          const { image, name } = response.data.body;
+          setImage(`http://localhost:8000/${image}`);
+          setName(name);
+        }
+      } catch (error) {
+        console.error("Error fetching profile data", error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const pathToTitleMap = {
     '/dashboard': 'Dashboard',
@@ -46,52 +99,67 @@ const Navbar = () => {
     '/viewuser': 'User Details',
     '/service': 'Sub Category Details',
     '/viewcategory': 'Category Details',
-    '/Map': "Map"
+    '/Map': 'Map'
   };
 
   const currentPath = location.pathname;
 
- 
   const currentTitle = pathToTitleMap[currentPath] ||
-    (currentPath.startsWith('/viewuser') ? 'User Details' : 
-     currentPath.startsWith('/booking') ? 'Booking Details' : 
-     currentPath.startsWith('/service') ? 'Sub Category Details' : 
-     currentPath.startsWith('/viewcategeory') ? 'Category Details' : '');
-
-  // const breadcrumbs = currentPath.split('/').filter((item) => item);
-  // const uniqueBreadcrumbs = Array.from(new Set(breadcrumbs));
-  // const breadcrumbItems = uniqueBreadcrumbs.map((item, index) => {
-  //   const path = `/${uniqueBreadcrumbs.slice(0, index + 1).join('/')}`;
-  //   return (
-  //     <li key={index} className="breadcrumb-item text-sm">
-  //       <Link to={path} className="opacity-5 text-dark">
-  //         {item.charAt(0).toUpperCase() + item.slice(1)}
-  //       </Link>
-  //     </li>
-  //   );
-  // });
+    (currentPath.startsWith('/viewuser') ? 'User Details' :
+      currentPath.startsWith('/booking') ? 'Booking Details' :
+        currentPath.startsWith('/service') ? 'Sub Category Details' :
+          currentPath.startsWith('/viewcategory') ? 'Category Details' : '');
 
   return (
-    <nav className="navbar navbar-main navbar-expand-lg px-0 mx-4 mt-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
-      <div className="container-fluid py-1 px-3">
+    <nav className="navbar navbar-main navbar-expand-lg px-0 mx-4 mt-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true" style={{ backgroundColor: 'white' }}>
+      <div className="container-fluid py-1 px-3 d-flex justify-content-between align-items-center">
         <Link to="/" aria-label="breadcrumb">
           <h2 className="font-weight-bolder mb-0">{currentTitle}</h2>
         </Link>
-        <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div className="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div className="input-group input-group-outline">
-              <label className="form-label"></label>
-            </div>
-          </div>
-          <ul className="navbar-nav justify-content-end">
-            <li className="nav-item d-flex align-items-center">
-              <Link to="#" onClick={logout} className="nav-link text-body font-weight-bold px-0">
-                <h4 className="fa fa-sign-out-alt me-sm-1" style={{ color: '#D81B60' }}></h4>
-                <h4 className="d-sm-inline d-none">Logout</h4>
+        <ul className="navbar-nav navbar-right mx-5 d-flex align-items-center">
+          <li className="d-flex align-items-center">
+            <h6 className="ml-2 mb-0 mr-3">{name}</h6>
+            <div className="dropdown" ref={dropdownRef}>
+              <Link
+                to="#"
+                onClick={toggleDropdown}
+                className="nav-link dropdown-toggle nav-link-lg nav-link-user d-flex align-items-center"
+                style={{ position: 'relative' }}
+              >
+                <img
+                  alt="avatar"
+                  src={image || 'default_avatar.png'}
+                  style={{ height: '50px', width: '50px', cursor: 'pointer' }}
+                  className="rounded-circle mr-1"
+                />
               </Link>
-            </li>
-          </ul>
-        </div>
+              {dropdownOpen && (
+                <div
+                  className={`dropdown-menu dropdown-menu-right ${dropdownOpen ? 'show' : ''}`} // Added 'dropdown-menu-right'
+                  style={{
+                    backgroundColor: 'pink',
+                    position: 'absolute',
+                    top: '10px', 
+                    right: '0',
+                    borderRadius: '0.5rem',
+                    minWidth: '170px',
+                    zIndex: 1000,
+                  }}
+                >
+                  <Link to="/profile" className="dropdown-item has-icon text-success" onClick={closeDropdown}>
+                    <i className="far fa-user" /> Profile
+                  </Link>
+                  <Link to="/changepassword" className="dropdown-item has-icon text-info" onClick={closeDropdown}>
+                    <i className="fas fa-lock" /> Change Password
+                  </Link>
+                  <Link to="#" onClick={logout} className="dropdown-item has-icon text-danger">
+                    <i className="fas fa-sign-out-alt" /> Logout
+                  </Link>
+                </div>
+              )}
+            </div>
+          </li>
+        </ul>
       </div>
     </nav>
   );
