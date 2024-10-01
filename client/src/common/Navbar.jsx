@@ -99,7 +99,8 @@ const Navbar = () => {
     '/viewuser': 'User Details',
     '/service': 'Sub Category Details',
     '/viewcategory': 'Category Details',
-    '/Map': 'Map'
+    '/Map': 'Map',
+    
   };
 
   const currentPath = location.pathname;
@@ -110,12 +111,14 @@ const Navbar = () => {
         currentPath.startsWith('/service') ? 'Sub Category Details' :
           currentPath.startsWith('/viewcategory') ? 'Category Details' : '');
 
+  
+
   return (
     <nav className="navbar navbar-main navbar-expand-lg px-0 mx-4 mt-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true" style={{ backgroundColor: 'white' }}>
       <div className="container-fluid py-1 px-3 d-flex justify-content-between align-items-center">
-        <Link to="/" aria-label="breadcrumb">
+        <div aria-label="breadcrumb">
           <h2 className="font-weight-bolder mb-0">{currentTitle}</h2>
-        </Link>
+        </div>
         <ul className="navbar-nav navbar-right mx-5 d-flex align-items-center">
           <li className="d-flex align-items-center">
             <h6 className="ml-2 mb-0 mr-3">{name}</h6>
@@ -135,12 +138,11 @@ const Navbar = () => {
               </Link>
               {dropdownOpen && (
                 <div
-                  className={`dropdown-menu dropdown-menu-right ${dropdownOpen ? 'show' : ''}`} // Added 'dropdown-menu-right'
+                  className={`dropdown-menu dropdown-menu-right ${dropdownOpen ? 'show' : ''}`}
                   style={{
                     backgroundColor: 'pink',
                     position: 'absolute',
-                    top: '10px', 
-                    right: '0',
+                    top: '10px',  
                     borderRadius: '0.5rem',
                     minWidth: '170px',
                     zIndex: 1000,

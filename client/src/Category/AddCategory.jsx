@@ -92,10 +92,10 @@ const AddCategory = () => {
                           src={imagePreview}
                           alt="Preview"
                           style={{
-                           
-                            width: '265px',
+                             borderRadius:'10px',
+                            width: '330px',
                             height: '200px',
-                          
+                            marginBottom:'5px'
                           }}
                         />
                       )}

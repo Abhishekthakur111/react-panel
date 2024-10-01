@@ -121,10 +121,11 @@ const SubCategoryAdd = () => {
                           src={imagePreview}
                           alt="Preview"
                           style={{
-                            paddingBottom: '20px',
-                            width: '265px',
-                            height: '200px',
-                          }}
+                            borderRadius:'10px',
+                           width: '330px',
+                           height: '200px',
+                           marginBottom:'5px'
+                         }}
                         />
                       )}
                       <input
