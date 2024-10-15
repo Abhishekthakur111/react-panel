@@ -94,7 +94,7 @@ const UserList = () => {
     }
   };
 
-  // Filter users based on the search term
+ 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );

@@ -18,37 +18,36 @@ import SubCategoryAdd from "./SubCategory/SubCategoryAdd";
 import BookingList from "./Booking/BookingList";
 import BookingView from "./Booking/BookingView";
 import Map from "./Booking/Map";
-
-
+import PrivateRoute from "./PrivateRoute"; 
 
 function App() {
   return (
-   <>
-   <Router>
-   <Routes>
-    <Route path='/' element={<Login/>}/>
-    <Route element={<Layout/>}>
-    <Route path="/dashboard" element={<Dashboard/>}/>
-    <Route path='/userlist' element={<UserList/>}/>
-    <Route path="/profile" element={<Profile/>}/>
-    <Route path='/viewuser/:_id' element={<ListView/>}/>
-    <Route path="/categorylist" element={<CategoryList/>}/>
-    <Route path='/viewcategeory/:_id' element={<CategoryView/>}/>
-    <Route path="/categoryadd" element={<AddCategory/>}/>
-    <Route path="/privacy" element={<Privacy/>}/>
-    <Route path="/aboutus" element={<AboutUs/>}/>
-    <Route path="/terms"element={<Terms/>}/>
-    <Route path="/changepassword" element={<Password/>}/>
-    <Route path="/services" element={<SubCategoryList/>}/>
-    <Route path="/service/:_id" element={<SubCategoryView/>}/>
-    <Route path="/subcategoryadd" element={<SubCategoryAdd/>}/>
-    <Route path='/bookinglist' element={<BookingList/>}/>
-    <Route path="/booking/:_id" element={<BookingView/>}/>
-    <Route path='/Map' element={<Map/>}/>
-    </Route>
-   </Routes>
-   </Router>
-   </>
+    <>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+            <Route path="/userlist" element={<PrivateRoute element={<UserList />} />} />
+            <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+            <Route path="/viewuser/:_id" element={<PrivateRoute element={<ListView />} />} />
+            <Route path="/categorylist" element={<PrivateRoute element={<CategoryList />} />} />
+            <Route path="/viewcategeory/:_id" element={<PrivateRoute element={<CategoryView />} />} />
+            <Route path="/categoryadd" element={<PrivateRoute element={<AddCategory />} />} />
+            <Route path="/privacy" element={<PrivateRoute element={<Privacy />} />} />
+            <Route path="/aboutus" element={<PrivateRoute element={<AboutUs />} />} />
+            <Route path="/terms" element={<PrivateRoute element={<Terms />} />} />
+            <Route path="/changepassword" element={<PrivateRoute element={<Password />} />} />
+            <Route path="/services" element={<PrivateRoute element={<SubCategoryList />} />} />
+            <Route path="/service/:_id" element={<PrivateRoute element={<SubCategoryView />} />} />
+            <Route path="/subcategoryadd" element={<PrivateRoute element={<SubCategoryAdd />} />} />
+            <Route path="/bookinglist" element={<PrivateRoute element={<BookingList />} />} />
+            <Route path="/booking/:_id" element={<PrivateRoute element={<BookingView />} />} />
+            <Route path="/Map" element={<PrivateRoute element={<Map />} />} />
+          </Route>
+        </Routes>
+      </Router>
+    </>
   );
 }
 

@@ -29,9 +29,9 @@ const Dashboard = () => {
 
       if (response.data.success) {
         setUsers(response.data.body.userCount);
-        setCategories(response.data.body.data); // Assuming data is the count of categories
-        setSubCategories(response.data.body.subdata); // Assuming subdata is the count of subcategories
-        setBookings(response.data.body.databooking); // Assuming databooking is the count of bookings
+        setCategories(response.data.body.data); 
+        setSubCategories(response.data.body.subdata); 
+        setBookings(response.data.body.databooking); 
       } else {
         toast.error('Failed to fetch dashboard data');
       }

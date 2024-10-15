@@ -73,6 +73,17 @@ const Sidebar = () => {
             <li className="nav-item">
               <NavLink
                 className={({ isActive }) => `nav-link text-white ${isActive ? 'active bg-gradient-primary' : ''}`}
+                to="/Map"
+              >
+                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i className="material-icons opacity-10">map</i>
+                </div>
+                <span className="nav-link-text ms-1">Map</span>
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                className={({ isActive }) => `nav-link text-white ${isActive ? 'active bg-gradient-primary' : ''}`}
                 to="/privacy"
               >
                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -103,43 +114,7 @@ const Sidebar = () => {
                 <span className="nav-link-text ms-1">Terms & Conditions</span>
               </NavLink>
             </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) => `nav-link text-white ${isActive ? 'active bg-gradient-primary' : ''}`}
-                to="/Map"
-              >
-                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i className="material-icons opacity-10">map</i>
-                </div>
-                <span className="nav-link-text ms-1">Map</span>
-              </NavLink>
-            </li>
-            {/* <li className="nav-item mt-3">
-              <h6 className="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account pages</h6>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) => `nav-link text-white ${isActive ? 'active bg-gradient-primary' : ''}`}
-                to="/profile"
-              >
-                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i className="material-icons opacity-10">person</i>
-                </div>
-                <span className="nav-link-text ms-1">Profile</span>
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                className={({ isActive }) => `nav-link text-white ${isActive ? 'active bg-gradient-primary' : ''}`}
-                to="/changepassword"
-              >
-                <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i className="material-icons opacity-10">lock</i>
-                </div>
-                <span className="nav-link-text ms-1">Password</span>
-              </NavLink>
-            </li>
-            */}
+          
           </ul>
         </div>
       </aside>

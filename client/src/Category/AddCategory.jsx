@@ -29,7 +29,7 @@ const AddCategory = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     const formData = new FormData();
     formData.append('name', data.name);
     if (data.image) {
@@ -86,7 +86,7 @@ const AddCategory = () => {
               <form onSubmit={handleSubmit}>
                 <div className="card-body">
                   <div className="form-group  col-3 mb-2 mx-auto  bg-lightpink">
-                    <div className="admin_profile" data-aspect="1/1">
+                    <div className="admin_profile mt-2" data-aspect="1/1" >
                       {imagePreview && (
                         <img
                           src={imagePreview}

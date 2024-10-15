@@ -88,7 +88,7 @@ const Navbar = () => {
     '/categorylist': 'Categories',
     '/privacy': 'Privacy Policy',
     '/aboutus': 'About Us',
-    '/terms': 'Terms & Conditions',
+    '/terms': 'Terms&Conditions',
     '/profile': 'Profile',
     '/changepassword': 'Change Password',
     '/categoryadd': 'Add New Category',
@@ -109,7 +109,7 @@ const Navbar = () => {
     (currentPath.startsWith('/viewuser') ? 'User Details' :
       currentPath.startsWith('/booking') ? 'Booking Details' :
         currentPath.startsWith('/service') ? 'Sub Category Details' :
-          currentPath.startsWith('/viewcategory') ? 'Category Details' : '');
+          currentPath.startsWith('/viewcategeory') ? 'Category Details' : '');
 
   
 
@@ -119,14 +119,14 @@ const Navbar = () => {
         <div aria-label="breadcrumb">
           <h2 className="font-weight-bolder mb-0">{currentTitle}</h2>
         </div>
-        <ul className="navbar-nav navbar-right mx-5 d-flex align-items-center">
+        <ul className="navbar-nav navbar-right d-flex align-items-center">
           <li className="d-flex align-items-center">
-            <h6 className="ml-2 mb-0 mr-3">{name}</h6>
+            <h5 className="ml-2 mb-0 mr-3">{name}</h5>
             <div className="dropdown" ref={dropdownRef}>
               <Link
                 to="#"
                 onClick={toggleDropdown}
-                className="nav-link dropdown-toggle nav-link-lg nav-link-user d-flex align-items-center"
+                className="nav-link  nav-link-lg nav-link-user d-flex align-items-center"
                 style={{ position: 'relative' }}
               >
                 <img
@@ -138,11 +138,11 @@ const Navbar = () => {
               </Link>
               {dropdownOpen && (
                 <div
-                  className={`dropdown-menu dropdown-menu-right ${dropdownOpen ? 'show' : ''}`}
+                  className={`dropdown-menu dropdown-menu-end ${dropdownOpen ? 'show' : ''}`}
                   style={{
                     backgroundColor: 'pink',
                     position: 'absolute',
-                    top: '10px',  
+                    top: '15px',  
                     borderRadius: '0.5rem',
                     minWidth: '170px',
                     zIndex: 1000,

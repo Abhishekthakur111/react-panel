@@ -81,23 +81,25 @@ const Login = () => {
                     <div className="card-body">
                       <form onSubmit={handleSubmit} className="text-start">
                         <div className="input-group input-group-outline my-3">
-                          <label className="form-label">Email</label>
+                          {/* <label className="form-label">Email</label> */}
                           <input
                             type="email"
                             className="form-control"
                             value={email}
                             onChange={handleChangeEmail}
                             required
+                            placeholder='email'
                           />
                         </div>
                         <div className="input-group input-group-outline mb-3">
-                          <label className="form-label">Password</label>
+                          {/* <label className="form-label">Password</label> */}
                           <input
                             type="password"
                             className="form-control"
                             value={password}
                             onChange={handleChangePassword}
                             required
+                            placeholder='password'
                           />
                         </div>
                         <div className="form-check form-switch d-flex align-items-center mb-3">

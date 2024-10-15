@@ -8,10 +8,10 @@ const Layout = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <div className="col-2">
+        <div className="col-lg-2 d-none d-lg-block">
           <Sidebar />
         </div>
-        <div className="col-10">
+        <div className="col-12 col-lg-10">
           <Navbar />
           <div className="py-2">
             <Outlet />

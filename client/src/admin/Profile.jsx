@@ -63,7 +63,7 @@ const Profile = () => {
       console.error("No token found in localStorage");
       return;
     }
-
+ 
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('email', data.email);
