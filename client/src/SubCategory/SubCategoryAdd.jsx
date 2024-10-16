@@ -66,7 +66,7 @@ const SubCategoryAdd = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('cat_id', data.cat_id.name); 
+    formData.append('cat_id', data.cat_id); 
     formData.append('name', data.name);
     formData.append('price', data.price);
     if (data.image) {

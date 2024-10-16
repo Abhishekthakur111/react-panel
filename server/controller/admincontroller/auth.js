@@ -88,7 +88,7 @@ module.exports = {
             token,
           });
         } else {
-          return helper.error(res, "please enter the valid length");
+          return helper.error(res, "please enter the valid password");
         }
       }
     } catch (error) {

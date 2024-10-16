@@ -1,7 +1,6 @@
 const user = require("../../models/users");
 const CryptoJS = require("crypto-js");
 const { Validator } = require("node-input-validator");
-const jwt = require("jsonwebtoken");
 const helper = require('../../helper/helper');
 
 module.exports = {
@@ -39,18 +38,9 @@ module.exports = {
           status: req.body.status,
         });
 
-        const secret = "secretkey_12";
-        const token = jwt.sign(
-          {
-            id: data.id,
-            name: data.name,
-          },
-          secret,
-          { expiresIn: "9999hr" }
-        );
-        data.token = token;
+        
 
-        return helper.success(res, "User Created Successfully", { data, token });
+        return helper.success(res, "User Created Successfully", { data });
       }
     } catch (error) {
       console.error("Error creating user:", error);

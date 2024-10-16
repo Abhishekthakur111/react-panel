@@ -16,7 +16,7 @@ class ApexChart extends Component {
           height: 350,
           type: 'bar',
         },
-        colors: ['#D81B60'], // Set the bar color to pink
+        colors: ['#D81B60'], 
         plotOptions: {
           bar: {
             borderRadius: 10,
@@ -94,14 +94,14 @@ class ApexChart extends Component {
           ...this.state.options,
           xaxis: {
             ...this.state.options.xaxis,
-            categories: categories,
+            categories: categories,  
           },
         },
       });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  };                              
 
   render() {
     return (
