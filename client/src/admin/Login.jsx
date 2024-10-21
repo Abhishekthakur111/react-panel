@@ -4,34 +4,59 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
 import axios from 'axios';
+import { BASE_URL } from '../Config';
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(email)) {
+      setEmailError('Invalid email format');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  const validatePassword = (password) => {
+    if (password.length < 6) {
+      setPasswordError('Password must be at least 6 characters long');
+    } else {
+      setPasswordError('');
+    }
+  };
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
+    validateEmail(e.target.value);
   };
 
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
+    validatePassword(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8000/login', { email, password });
-      console.log(response);
-      if (response.data.success) {
-        localStorage.setItem('token', response.data.body.token);
-        toast.success("Admin logged in successfully");
-        navigate('/dashboard', { state: { message: 'Admin logged in successfully' } });
-      } else {
-        toast.error(response.data.message || "Login failed");
+    if (!emailError && !passwordError) {
+      try {
+        const response = await axios.post(`${BASE_URL}/login`, { email, password });
+        if (response.data.success) {
+          localStorage.setItem('token', response.data.body.token);
+          toast.success("Admin logged in successfully");
+          navigate('/dashboard', { state: { message: 'Admin logged in successfully' } });
+        } else {
+          toast.error(response.data.message || "Login failed");
+        }
+      } catch (error) {
+        toast.error('An error occurred while logging in. Please try again');
       }
-    } catch (error) {
-      toast.error('An error occurred while logging in. Please try again');
+    } else {
+      toast.error('Please fix the validation errors before submitting');
     }
   };
 
@@ -81,33 +106,35 @@ const Login = () => {
                     <div className="card-body">
                       <form onSubmit={handleSubmit} className="text-start">
                         <div className="input-group input-group-outline my-3">
-                          {/* <label className="form-label">Email</label> */}
                           <input
                             type="email"
                             className="form-control"
                             value={email}
                             onChange={handleChangeEmail}
                             required
-                            placeholder='email'
+                            placeholder='Email'
                           />
                         </div>
+                        {emailError && <small className="text-danger">{emailError}</small>}
+                        
                         <div className="input-group input-group-outline mb-3">
-                          {/* <label className="form-label">Password</label> */}
                           <input
                             type="password"
                             className="form-control"
                             value={password}
                             onChange={handleChangePassword}
                             required
-                            placeholder='password'
+                            placeholder='Password'
                           />
                         </div>
+                        {passwordError && <small className="text-danger">{passwordError}</small>}
+
                         <div className="form-check form-switch d-flex align-items-center mb-3">
                           <input className="form-check-input" type="checkbox" id="rememberMe" />
                           <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe">Remember me</label>
                         </div>
                         <div className="text-center">
-                          <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
+                          <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2" disabled={emailError || passwordError}>Sign in</button>
                         </div>
                       </form>
                     </div>

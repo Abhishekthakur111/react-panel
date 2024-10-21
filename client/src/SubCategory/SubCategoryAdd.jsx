@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL } from '../Config';
 
-const BASE_URL = "http://localhost:8000";
 
 const SubCategoryAdd = () => {
   const [data, setData] = useState({

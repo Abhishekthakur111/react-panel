@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import { BASE_URL } from '../Config';
 
 const Password = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Password = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/change_password',
+        `${BASE_URL}/change_password`,
         { password, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );

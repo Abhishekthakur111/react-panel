@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
+import { BASE_URL } from './Config';
 
 class ApexChart extends Component {
   constructor(props) {
@@ -85,7 +86,7 @@ class ApexChart extends Component {
 
   fetchData = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/graph');
+      const response = await axios.post(`${BASE_URL}/graph`);
       const { data, categories } = response.data;
 
       this.setState({

@@ -5,6 +5,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BASE_URL } from "../Config";
 
 const AboutUs = () => {
   const [title, setTitle] = useState("");
@@ -16,7 +17,7 @@ const AboutUs = () => {
   useEffect(() => {
     const fetchPrivacyPolicy = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/aboutus");
+        const response = await axios.get(`${BASE_URL}/aboutus`);
         const { data } = response.data;
         setTitle(data.title || "");
         setContent(data.content || "<p><br></p>");
@@ -39,7 +40,7 @@ const AboutUs = () => {
     setSubmitError("");
 
     try {
-      await axios.post("http://localhost:8000/updateabout", {
+      await axios.post(`${BASE_URL}/updateabout`, {
         title,
         content,
       });

@@ -1,11 +1,13 @@
-import React from 'react'
+import React from 'react';
+export const BASE_URL = "http://localhost:8000";
 
 const Config = () => {
+  const BASE_URL = 'http://localhost:8000';
   return (
     <>
-    BASE_URL = 'http://localhost:8000"
+      <p>Base URL: {BASE_URL}</p>
     </>
-  )
-}
+  );
+};
 
-export default Config
+export default Config;

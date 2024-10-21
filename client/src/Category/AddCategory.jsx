@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
+import { BASE_URL } from '../Config';
 
 const AddCategory = () => {
   const [data, setData] = useState({
@@ -38,7 +39,7 @@ const AddCategory = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8000/createcategory',
+        `${BASE_URL}/createcategory`,
         formData,
         {
           headers: {

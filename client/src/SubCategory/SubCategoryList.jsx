@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
+import { BASE_URL } from "../Config";
 
-const BASE_URL = "http://localhost:8000";
+
 
 const SubCategoryList = () => {
   const [services, setServices] = useState([]);
@@ -22,7 +23,7 @@ const SubCategoryList = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL}/services`, {
+      const response = await axios.get(`${BASE_URL  }/services`, {
         params: { page: currentPage, size: pageSize },
       });
       if (response.data.success) {

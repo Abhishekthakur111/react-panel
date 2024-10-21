@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../Config";
 
-const BASE_URL = "http://localhost:8000";
 
 function View() {
   const { _id } = useParams();

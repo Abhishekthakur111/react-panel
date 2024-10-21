@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { BASE_URL } from '../Config';
 
-const BASE_URL = "http://localhost:8000";
+
 
 const SubCategoryView = () => {
   const { _id } = useParams();

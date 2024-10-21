@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./admin/Login";
 import Layout from "./common/Layout";
@@ -20,7 +21,9 @@ import BookingView from "./Booking/BookingView";
 import Map from "./Booking/Map";
 import PrivateRoute from "./PrivateRoute"; 
 
-function App() {
+const App = () => {
+ 
+
   return (
     <>
       <Router>

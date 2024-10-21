@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { BASE_URL } from '../Config';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Navbar = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.post('http://localhost:8000/logout');
+        await axios.post(`${BASE_URL}/logout`);
         localStorage.removeItem('token');
         navigate('/');
         closeDropdown();
@@ -64,14 +65,14 @@ const Navbar = () => {
       }
 
       try {
-        const response = await axios.get('http://localhost:8000/profile', {
+        const response = await axios.get(`${BASE_URL}/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         if (response.data && response.data.body) {
           const { image, name } = response.data.body;
-          setImage(`http://localhost:8000/${image}`);
+          setImage(`${BASE_URL}/${image}`);
           setName(name);
         }
       } catch (error) {

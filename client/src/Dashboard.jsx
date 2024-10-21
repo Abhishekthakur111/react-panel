@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import ApexChart from './ApexChart';
+import { BASE_URL } from './Config';
 
 const Dashboard = () => {
   const [users, setUsers] = useState(0);
@@ -21,7 +22,7 @@ const Dashboard = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:8000/dashboard', {
+      const response = await axios.get(`${BASE_URL}/dashboard`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

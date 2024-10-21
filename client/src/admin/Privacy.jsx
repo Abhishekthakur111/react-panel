@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // Import the required styles for ReactQuill
+import "react-quill/dist/quill.snow.css"; 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BASE_URL } from "../Config";
 
 const Privacy = () => {
   const [title, setTitle] = useState("");
@@ -16,7 +17,7 @@ const Privacy = () => {
   useEffect(() => {
     const fetchPrivacyPolicy = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/privacy");
+        const response = await axios.get(`${BASE_URL}/privacy`);
         const { data } = response.data;
         setTitle(data.title || "");
         setContent(data.content || "<p><br></p>");
@@ -39,7 +40,7 @@ const Privacy = () => {
     setSubmitError("");
 
     try {
-      await axios.post("http://localhost:8000/privacypolicy", {
+      await axios.post(`${BASE_URL}/privacypolicy`, {
         title,
         content,
       });

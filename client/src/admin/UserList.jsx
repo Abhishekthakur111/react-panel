@@ -3,8 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-
-const BASE_URL = "http://localhost:8000";
+import { BASE_URL } from "../Config";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -94,7 +93,6 @@ const UserList = () => {
     }
   };
 
- 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -130,7 +128,7 @@ const UserList = () => {
                       placeholder="Search by name..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      style={{ backgroundColor: "white" ,paddingLeft:"10px"}} 
+                      style={{ backgroundColor: "white", paddingLeft: "10px" }}
                     />
                   </div>
                 </div>

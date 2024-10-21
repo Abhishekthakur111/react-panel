@@ -4,8 +4,9 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BASE_URL } from '../Config';
 
-const BASE_URL = "http://localhost:8000";
+
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);

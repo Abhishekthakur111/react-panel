@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
+import { BASE_URL } from "../Config";
 
-const BASE_URL = "http://localhost:8000";
+
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);

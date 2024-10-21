@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenNib } from '@fortawesome/free-solid-svg-icons';
+import { BASE_URL } from '../Config';
 
 const Profile = () => {
   const [data, setData] = useState({
@@ -26,7 +27,7 @@ const Profile = () => {
       }
 
       try {
-        const response = await axios.get('http://localhost:8000/profile', {
+        const response = await axios.get(`${BASE_URL}/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -36,7 +37,7 @@ const Profile = () => {
           setData(response.data.body);
           const imageUrl = response.data.body.image.startsWith('http')
             ? response.data.body.image
-            : `http://localhost:8000/${response.data.body.image}`;
+            : `${BASE_URL}/${response.data.body.image}`;
           setImagePreview(imageUrl);
         }
       } catch (error) {
@@ -74,7 +75,7 @@ const Profile = () => {
     }
 
     try {
-      await axios.post('http://localhost:8000/profileupdate', formData, {
+      await axios.post(`${BASE_URL}/profileupdate`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
