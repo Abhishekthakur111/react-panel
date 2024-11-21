@@ -21,7 +21,7 @@ const CategoryList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/catergeorylist`, {
+      const response = await axios.get(`${BASE_URL}/categorylist`, {
         params: {
           page: currentPage,
           size: pageSize,
@@ -61,7 +61,7 @@ const CategoryList = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${BASE_URL}/delete_categeory/${_id}`);
+        await axios.delete(`${BASE_URL}/deletecategory/${_id}`);
         fetchData();
         Swal.fire("Deleted!", "Category has been deleted.", "success");
       } catch (error) {
@@ -126,7 +126,7 @@ const CategoryList = () => {
           <div className="col-12">
             <div className="card my-3">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-2">
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
                   <div className="d-flex justify-content-between align-items-center px-3">
                     <h6 className="text-white text-capitalize">Categories</h6>
                     <div className="d-flex align-items-center">
@@ -220,7 +220,7 @@ const CategoryList = () => {
 
                               <td>
                                 <Link
-                                  to={`/viewcategeory/${category._id}`}
+                                  to={`/viewcategory/${category._id}`}
                                   className="has-icon btn btn-success m-1"
                                   style={{
                                     backgroundColor: "#D81B60",
@@ -228,6 +228,16 @@ const CategoryList = () => {
                                   }}
                                 >
                                   <i className="me-100 fas fa-eye" />
+                                </Link>
+                                <Link
+                                  to={`/updatecategory/${category._id}`}
+                                  className="has-icon btn btn-success m-1"
+                                  style={{
+                                    backgroundColor: "#D81B60",
+                                    color: "white",
+                                  }}
+                                >
+                                  <i className="me-100 fas fa-edit" />
                                 </Link>
                                 <button
                                   onClick={() => deleteUser(category._id)}

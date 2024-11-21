@@ -72,17 +72,6 @@ const SubCategoryView = () => {
                         )}
                       </div>
                       <div className="form-group mb-2">
-                        <label>Name</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="name"
-                          value={service.name || ""}
-                          readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
-                        />
-                      </div>
-                      <div className="form-group mb-2">
                         <label>Category</label>
                         <input
                           type="text"
@@ -93,6 +82,18 @@ const SubCategoryView = () => {
                           style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
                         />
                       </div>
+                      <div className="form-group mb-2">
+                        <label>Name</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="name"
+                          value={service.name || ""}
+                          readOnly
+                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                        />
+                      </div>
+                     
                       <div className="form-group">
                         <label>Price</label>
                         <input

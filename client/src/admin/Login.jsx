@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
 import axios from 'axios';
 import { BASE_URL } from '../Config';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -87,17 +89,17 @@ const Login = () => {
                         <div className="row mt-3">
                           <div className="col-2 text-center ms-auto">
                             <Link className="btn btn-link px-3" to="">
-                              <i className="fa fa-facebook text-white text-lg"></i>
+                            <i className="fab fa-facebook text-white text-lg"/>
                             </Link>
                           </div>
                           <div className="col-2 text-center px-1">
                             <Link className="btn btn-link px-3" to="">
-                              <i className="fa fa-github text-white text-lg"></i>
+                            <i className="fab fa-github text-white text-lg"></i>
                             </Link>
                           </div>
                           <div className="col-2 text-center me-auto">
                             <Link className="btn btn-link px-3" to="">
-                              <i className="fa fa-google text-white text-lg"></i>
+                            <i className="fab fa-google text-white text-lg"></i>
                             </Link>
                           </div>
                         </div>

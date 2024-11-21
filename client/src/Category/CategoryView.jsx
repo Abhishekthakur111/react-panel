@@ -15,7 +15,7 @@ const CategoryView = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/viewcategeory/${_id}`);
+        const response = await axios.get(`${BASE_URL}/viewcategory/${_id}`);
         if (response.data.success) {
           setData(response.data.body);
         } else {

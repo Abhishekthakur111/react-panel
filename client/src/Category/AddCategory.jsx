@@ -30,7 +30,18 @@ const AddCategory = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
+
+    // Validation for name and image
+    if (!data.name.trim()) {
+      toast.error('Category name is required!');
+      return;
+    }
+    if (!data.image) {
+      toast.error('Category image is required!');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('name', data.name);
     if (data.image) {
@@ -73,7 +84,7 @@ const AddCategory = () => {
         draggable
         pauseOnHover
       />
-      <div className="container-fluid ">
+      <div className="container-fluid">
         <div className="row">
           <div className="col-12">
             <div className="card my-4">
@@ -86,17 +97,17 @@ const AddCategory = () => {
               </div>
               <form onSubmit={handleSubmit}>
                 <div className="card-body">
-                  <div className="form-group  col-3 mb-2 mx-auto  bg-lightpink">
-                    <div className="admin_profile mt-2" data-aspect="1/1" >
+                  <div className="form-group col-3 mb-2 mx-auto bg-lightpink">
+                    <div className="admin_profile mt-2" data-aspect="1/1">
                       {imagePreview && (
                         <img
                           src={imagePreview}
                           alt="Preview"
                           style={{
-                             borderRadius:'10px',
+                            borderRadius: '10px',
                             width: '330px',
                             height: '200px',
-                            marginBottom:'5px'
+                            marginBottom: '5px',
                           }}
                         />
                       )}
@@ -114,11 +125,11 @@ const AddCategory = () => {
                     <input
                       type="text"
                       className="form-control"
-                      required
+                      
                       id="name"
                       value={data.name}
                       onChange={handleChange}
-                      style={{paddingLeft:'10px',backgroundColor:'lightpink'}}
+                      style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
                     />
                   </div>
                 </div>

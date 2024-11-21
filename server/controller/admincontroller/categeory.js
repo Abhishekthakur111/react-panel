@@ -106,4 +106,44 @@ module.exports = {
         return res.status(500).json({ message: "Internal server error" });
       }
   },
+  editcategory: async (req, res) => {
+    try {
+      const { _id } = req.params;
+      const v = new Validator(req.body, {
+        name: "required|string",
+        image: "string",
+      });
+      let errorsResponse = await helper.checkValidation(v);
+      if (errorsResponse) {
+        return helper.error(res, errorsResponse);
+      }
+
+      const category = await Category.findById(_id);
+      if (!category) {
+        return helper.error(res, "Category not found");
+      }
+
+      const existingCategory = await Category.findOne({ name: req.body.name, _id: { $ne: _id } });
+      if (existingCategory) {
+        return helper.error(res, "Another category already exists with that name");
+      }
+
+      if (req.files && req.files.image) {
+        let images = await helper.fileUpload(req.files.image);
+        req.body.image = images;
+      }
+
+      category.name = req.body.name;
+      if (req.body.image) {
+        category.image = req.body.image;
+      }
+
+      await category.save();
+
+      return helper.success(res, "Category updated successfully", { data: category });
+    } catch (error) {
+      console.error("Error updating category:", error);
+      return helper.error(res, "Internal server error");
+    }
+  },
 };

@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../Config";
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 
 const UserList = () => {
   const [users, setUsers] = useState([]);

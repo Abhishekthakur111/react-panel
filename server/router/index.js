@@ -52,10 +52,11 @@ router.get('/worker', authcontroller.workers_list);
 
 // router for categeory
 router.post('/createCategory', category.createCategory);
-router.get('/catergeorylist', category.Categorylist);
-router.get('/viewcategeory/:_id', category.categeoryview);
-router.delete('/delete_categeory/:_id', category.deletecategeory);
+router.get('/categorylist', category.Categorylist);
+router.get('/viewcategory/:_id', category.categeoryview);
+router.delete('/deletecategory/:_id', category.deletecategeory);
 router.post('/categorystatus',category.status);
+router.post('/updatecategory/:_id',category.editcategory);
 
 // router for services
 router.post('/createservice', service.createService);
@@ -63,6 +64,7 @@ router.get('/services', service.servicelist);
 router.get('/service/:_id', service.serviceView);
 router.delete('/delete_service/:_id', service.deleteService);
 router.post('/status', service.status);
+router.post('/updatesubcategory/:_id', service.editservice);
 
 // router for bookings
 router.post('/createbooking',booking.createBooking);

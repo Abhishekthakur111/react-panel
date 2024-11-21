@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenNib } from '@fortawesome/free-solid-svg-icons';
-import { BASE_URL } from '../Config';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenNib } from "@fortawesome/free-solid-svg-icons";
+import { BASE_URL } from "../Config";
 
 const Profile = () => {
   const [data, setData] = useState({
-    name: '',
-    email: '',
-    phone_no: '',
-    address: '',
-    image: ''
+    name: "",
+    email: "",
+    phone_no: "",
+    address: "",
+    image: "",
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found in localStorage");
         return;
@@ -35,7 +36,7 @@ const Profile = () => {
 
         if (response.data && response.data.body) {
           setData(response.data.body);
-          const imageUrl = response.data.body.image.startsWith('http')
+          const imageUrl = response.data.body.image.startsWith("http")
             ? response.data.body.image
             : `${BASE_URL}/${response.data.body.image}`;
           setImagePreview(imageUrl);
@@ -57,32 +58,46 @@ const Profile = () => {
     }
   };
 
+  const validateForm = () => {
+    let formErrors = {};
+    if (!data.name) formErrors.name = "Name is required";
+    if (!data.phone_no) formErrors.phone_no = "Phone number is required";
+    if (!data.address) formErrors.address = "Address is required";
+    return formErrors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const formErrors = validateForm();
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+
+    const token = localStorage.getItem("token");
     if (!token) {
       console.error("No token found in localStorage");
       return;
     }
- 
+
     const formData = new FormData();
-    formData.append('name', data.name);
-    formData.append('email', data.email);
-    formData.append('phone_no', data.phone_no);
-    formData.append('address', data.address);
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("phone_no", data.phone_no);
+    formData.append("address", data.address);
     if (selectedImage) {
-      formData.append('image', selectedImage);
+      formData.append("image", selectedImage);
     }
 
     try {
       await axios.post(`${BASE_URL}/profileupdate`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
       toast.success("Profile updated successfully");
-      navigate('/profile');
+      navigate("/profile");
     } catch (error) {
       console.error("Error updating profile", error);
       toast.error("Error updating profile");
@@ -128,8 +143,18 @@ const Profile = () => {
                             aria-labelledby="account-tab"
                             role="tabpanel"
                           >
-                            <div style={{ display: 'flex', alignItems: 'flex-start' }}>
-                              <div style={{ flex: '0 0 auto', position: 'relative' }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  flex: "0 0 auto",
+                                  position: "relative",
+                                }}
+                              >
                                 {imagePreview && (
                                   <>
                                     <img
@@ -139,43 +164,72 @@ const Profile = () => {
                                         marginTop: "10px",
                                         marginBottom: "20px",
                                         width: "300px",
-                                        height: "360px",
-                                        objectFit: 'cover',
-                                        borderRadius: "20px"
+                                        height: "300px",
+                                        objectFit: "cover",
+                                        borderRadius: "20px",
                                       }}
                                     />
                                     <label
                                       htmlFor="image"
                                       style={{
-                                        position: 'absolute',
+                                        position: "absolute",
                                         bottom: "15px",
                                         right: "10px",
                                         cursor: "pointer",
+                                        backgroundColor:
+                                          "rgba(255, 255, 255, 0.7)", 
+                                        borderRadius: "10%", 
+                                        padding: "5px",
                                       }}
                                     >
-                                      <FontAwesomeIcon icon={faPenNib} size="lg" color="red" />
+                                      <FontAwesomeIcon
+                                        icon={faPenNib}
+                                        size="lg"
+                                        color="red"
+                                      />
                                     </label>
                                   </>
                                 )}
                                 <input
                                   type="file"
-                                  style={{ display: 'none' }}
+                                  style={{ display: "none" }}
                                   id="image"
                                   onChange={handleImageChange}
                                 />
                               </div>
 
-                              <div style={{ flex: '1', marginLeft: '16px' }}>
-                                {['name', 'email', 'phone_no', 'address'].map((field, index) => (
-                                  <div key={index} style={{ marginBottom: '16px' }}>
-                                    <label style={{ display: 'block', marginBottom: '8px' }} htmlFor={field}>
-                                      {field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}
+                              <div style={{ flex: "1", marginLeft: "16px" }}>
+                                {["name", "phone_no"].map((field, index) => (
+                                  <div
+                                    key={index}
+                                    style={{ marginBottom: "16px" }}
+                                  >
+                                    <label
+                                      style={{
+                                        display: "block",
+                                        marginBottom: "8px",
+                                      }}
+                                      htmlFor={field}
+                                    >
+                                      {field.charAt(0).toUpperCase() +
+                                        field.slice(1).replace("_", " ")}
                                     </label>
                                     <input
-                                      type={field === 'email' ? 'email' : 'text'}
+                                      type={
+                                        field === "email" ? "email" : "text"
+                                      }
                                       required
-                                      style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ced4da' ,backgroundColor:'lightpink'}}
-                                      placeholder={field.charAt(0).toUpperCase() + field.slice(1).replace('_', ' ')}
+                                      style={{
+                                        width: "100%",
+                                        padding: "8px",
+                                        borderRadius: "4px",
+                                        border: "1px solid #ced4da",
+                                        backgroundColor: "lightpink",
+                                      }}
+                                      placeholder={
+                                        field.charAt(0).toUpperCase() +
+                                        field.slice(1).replace("_", " ")
+                                      }
                                       name={field}
                                       id={field}
                                       value={data[field]}
@@ -186,12 +240,55 @@ const Profile = () => {
                                         }))
                                       }
                                     />
+                                    {errors[field] && (
+                                      <p style={{ color: "red" }}>
+                                        {errors[field]}
+                                      </p>
+                                    )}
                                   </div>
                                 ))}
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                                <div style={{ marginBottom: "16px" }}>
+                                  <label
+                                    style={{
+                                      display: "block",
+                                      marginBottom: "8px",
+                                    }}
+                                    htmlFor="email"
+                                  >
+                                    Email
+                                  </label>
+                                  <input
+                                    type="email"
+                                    required
+                                    readOnly
+                                    style={{
+                                      width: "100%",
+                                      padding: "8px",
+                                      borderRadius: "4px",
+                                      border: "1px solid #ced4da",
+                                      backgroundColor: "lightgrey",
+                                    }}
+                                    placeholder="Email"
+                                    name="email"
+                                    id="email"
+                                    value={data.email}
+                                  />
+                                </div>
+
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "flex-end",
+                                    marginTop: "16px",
+                                  }}
+                                >
                                   <button
-                                    type="submit" className='btn'
-                                    style={{ backgroundColor: '#D81B60', color:"white" }}
+                                    type="submit"
+                                    className="btn"
+                                    style={{
+                                      backgroundColor: "#D81B60",
+                                      color: "white",
+                                    }}
                                   >
                                     Update
                                   </button>

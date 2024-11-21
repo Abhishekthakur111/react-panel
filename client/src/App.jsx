@@ -20,6 +20,8 @@ import BookingList from "./Booking/BookingList";
 import BookingView from "./Booking/BookingView";
 import Map from "./Booking/Map";
 import PrivateRoute from "./PrivateRoute"; 
+import CategoryEdit from './Category/CategoryEdit';
+import SubCategoryEdit from './SubCategory/SubCategoryEdit';
 
 const App = () => {
  
@@ -35,15 +37,17 @@ const App = () => {
             <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
             <Route path="/viewuser/:_id" element={<PrivateRoute element={<ListView />} />} />
             <Route path="/categorylist" element={<PrivateRoute element={<CategoryList />} />} />
-            <Route path="/viewcategeory/:_id" element={<PrivateRoute element={<CategoryView />} />} />
+            <Route path="/viewcategory/:_id" element={<PrivateRoute element={<CategoryView />} />} />
             <Route path="/categoryadd" element={<PrivateRoute element={<AddCategory />} />} />
+            <Route path='/updatecategory/:_id' element={<PrivateRoute element={<CategoryEdit/>}/>}/>
             <Route path="/privacy" element={<PrivateRoute element={<Privacy />} />} />
             <Route path="/aboutus" element={<PrivateRoute element={<AboutUs />} />} />
             <Route path="/terms" element={<PrivateRoute element={<Terms />} />} />
             <Route path="/changepassword" element={<PrivateRoute element={<Password />} />} />
-            <Route path="/services" element={<PrivateRoute element={<SubCategoryList />} />} />
-            <Route path="/service/:_id" element={<PrivateRoute element={<SubCategoryView />} />} />
+            <Route path="/subcategory" element={<PrivateRoute element={<SubCategoryList />} />} />
+            <Route path="/subcategory/:_id" element={<PrivateRoute element={<SubCategoryView />} />} />
             <Route path="/subcategoryadd" element={<PrivateRoute element={<SubCategoryAdd />} />} />
+            <Route path="/updatesubcategory/:_id" element={<PrivateRoute element={<SubCategoryEdit/>}/>}/>
             <Route path="/bookinglist" element={<PrivateRoute element={<BookingList />} />} />
             <Route path="/booking/:_id" element={<PrivateRoute element={<BookingView />} />} />
             <Route path="/Map" element={<PrivateRoute element={<Map />} />} />

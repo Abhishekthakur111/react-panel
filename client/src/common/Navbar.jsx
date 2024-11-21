@@ -93,14 +93,15 @@ const Navbar = () => {
     '/profile': 'Profile',
     '/changepassword': 'Change Password',
     '/categoryadd': 'Add New Category',
-    '/services': 'Sub Categories',
+    '/subcategory': 'Sub Categories',
     '/subcategoryadd': 'Add New Sub Category',
     '/bookinglist': 'Bookings',
     '/booking': 'Booking Details',
     '/viewuser': 'User Details',
-    '/service': 'Sub Category Details',
+    '/subcategory': 'Sub Category Details',
     '/viewcategory': 'Category Details',
     '/Map': 'Map',
+    
     
   };
 
@@ -109,8 +110,10 @@ const Navbar = () => {
   const currentTitle = pathToTitleMap[currentPath] ||
     (currentPath.startsWith('/viewuser') ? 'User Details' :
       currentPath.startsWith('/booking') ? 'Booking Details' :
-        currentPath.startsWith('/service') ? 'Sub Category Details' :
-          currentPath.startsWith('/viewcategeory') ? 'Category Details' : '');
+        currentPath.startsWith('/subcategory') ? 'Sub Category Details' :
+          currentPath.startsWith('/viewcategory') ? 'Category Details' : 
+           currentPath.startsWith('/updatecategory') ? 'Edit Category' : 
+           currentPath.startsWith('/updatesubcategory') ? 'Edit Sub Category' : '');
 
   
 
@@ -145,7 +148,7 @@ const Navbar = () => {
                     position: 'absolute',
                     top: '15px',  
                     borderRadius: '0.5rem',
-                    minWidth: '170px',
+                    minWidth: '130px',
                     zIndex: 1000,
                   }}
                 >
@@ -153,7 +156,7 @@ const Navbar = () => {
                     <i className="far fa-user" /> Profile
                   </Link>
                   <Link to="/changepassword" className="dropdown-item has-icon text-info" onClick={closeDropdown}>
-                    <i className="fas fa-lock" /> Change Password
+                    <i className="fas fa-lock" />  Password
                   </Link>
                   <Link to="#" onClick={logout} className="dropdown-item has-icon text-danger">
                     <i className="fas fa-sign-out-alt" /> Logout

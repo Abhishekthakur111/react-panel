@@ -139,6 +139,51 @@ module.exports = {
             return res.status(500).json({ message: "An error occurred while updating service status" });
         }
     },
+    editservice: async (req, res) => {
+        try {
+            const { _id } = req.params; 
+            const v = new Validator(req.body, {
+                name: "string",
+                price: "numeric",
+                image: "string",
+                cat_id: "string"
+            });
     
+            const service = await Services.findById(_id);
+            if (!service) {
+                return helper.error(res, "Service not found", 404);
+            }
     
+            if (req.body.cat_id) {
+                const category = await Category.findById(req.body.cat_id);
+                if (!category) {
+                    return helper.error(res, "Category not found", 404);
+                }
+            }
+    
+            let errorsResponse = await helper.checkValidation(v);
+            if (errorsResponse) {
+                return helper.error(res, errorsResponse);
+            }
+            if (req.files && req.files.image) {
+                let images = await helper.fileUpload(req.files.image);
+                req.body.image = images;
+            }
+            const updatedService = await Services.findByIdAndUpdate(
+                _id,
+                {
+                    name: req.body.name ,
+                    price: req.body.price || service.price,
+                    image: req.body.image || service.image,
+                    cat_id: req.body.cat_id || service.cat_id,
+                },
+                { new: true }
+            );
+    
+            return helper.success(res, "Service updated successfully", { data: updatedService });
+        } catch (error) {
+            console.error("Error updating service:", error);
+            return helper.error(res, "Internal server error");
+        }
+    }
 };

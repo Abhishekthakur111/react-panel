@@ -125,9 +125,9 @@ const SubCategoryList = () => {
           <div className="col-12">
             <div className="card my-3">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-2">
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
                   <div className="d-flex justify-content-between align-items-center px-3">
-                    <h6 className="text-white text-capitalize">Categories</h6>
+                    <h6 className="text-white text-capitalize">Sub Categories</h6>
                     <div className="d-flex align-items-center">
                       <div className="mx-3">
                         <input
@@ -229,7 +229,7 @@ const SubCategoryList = () => {
                                   </td>
                                   <td>
                                     <Link
-                                      to={`/service/${service._id}`}
+                                      to={`/subcategory/${service._id}`}
                                       className="has-icon btn btn-success m-1"
                                       style={{
                                         backgroundColor: "#D81B60",
@@ -237,6 +237,16 @@ const SubCategoryList = () => {
                                       }}
                                     >
                                       <i className="me-100 fas fa-eye" />
+                                    </Link>
+                                    <Link
+                                      to={`/updatesubcategory/${service._id}`}
+                                      className="has-icon btn btn-success m-1"
+                                      style={{
+                                        backgroundColor: "#D81B60",
+                                        color: "white",
+                                      }}
+                                    >
+                                      <i className="me-100 fas fa-edit" />
                                     </Link>
                                     <button
                                       onClick={() => deleteService(service._id)}
