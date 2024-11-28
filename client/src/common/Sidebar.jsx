@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ handleLinkClick }) => {
   return (
     <div>
       <aside
@@ -14,13 +14,13 @@ const Sidebar = () => {
             aria-hidden="true"
             id="iconSidenav"
           ></i>
-          <NavLink className="navbar-brand m-0" to="/dashboard">
+          <NavLink className="navbar-brand m-0" to="/dashboard" >
             <img
               src="../assets/img/logo-ct.png"
               className="navbar-brand-img h-100"
               alt="main_logo"
             />
-            <span className="ms-1 font-weight-bold text-white">Dashboard</span>
+            <span className="ms-1 font-weight-bold text-white" >Dashboard</span>
           </NavLink>
         </div>
         <hr className="horizontal light mt-0 mb-2" />
@@ -36,7 +36,7 @@ const Sidebar = () => {
                     isActive ? "active bg-gradient-primary" : ""
                   }`
                 }
-                to="/dashboard"
+                to="/dashboard" onClick={handleLinkClick}
               >
                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i className="material-icons opacity-10">dashboard</i>
@@ -52,12 +52,12 @@ const Sidebar = () => {
                     : ""
                 }`
               }
-              to="/userlist"
+              to="/userlist" onClick={handleLinkClick}
             >
               <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                 <i className="material-icons opacity-10">people</i>
               </div>
-              <span className="nav-link-text ms-1">Users</span>
+              <span className="nav-link-text ms-1" >Users</span>
             </NavLink>
 
             <li className="nav-item">
@@ -65,14 +65,14 @@ const Sidebar = () => {
                 className={({ isActive }) =>
                   `nav-link text-white ${
                     isActive ||
-                    ["/categorylist", "/categoryadd",'/updatecategory'].some((path) =>
+                    ["/categorylist", "/categoryadd",'/updatecategory','/viewcategory'].some((path) =>
                       window.location.pathname.startsWith(path)
                     )
                       ? "active bg-gradient-primary"
                       : ""
                   }`
                 }
-                to="/categorylist"
+                to="/categorylist" onClick={handleLinkClick}
               >
                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i className="material-icons opacity-10">grid_view</i>
@@ -91,7 +91,7 @@ const Sidebar = () => {
                     ) ? "active bg-gradient-primary" : ""
                   }`
                 }
-                to="/subcategory"
+                to="/subcategory" onClick={handleLinkClick}
               >
                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i className="material-icons opacity-10">list</i>
@@ -110,7 +110,7 @@ const Sidebar = () => {
                     ? "active bg-gradient-primary" : ""
                   }`
                 }
-                to="/bookinglist"
+                to="/bookinglist" onClick={handleLinkClick}
               >
                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i className="material-icons opacity-10">calendar_today</i>
@@ -125,12 +125,12 @@ const Sidebar = () => {
                     isActive ? "active bg-gradient-primary" : ""
                   }`
                 }
-                to="/Map"
+                to="/Map" onClick={handleLinkClick}
               >
                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i className="material-icons opacity-10">map</i>
                 </div>
-                <span className="nav-link-text ms-1">Map</span>
+                <span className="nav-link-text ms-1">Map</span> 
               </NavLink>
             </li>
             <li className="nav-item">
@@ -140,7 +140,7 @@ const Sidebar = () => {
                     isActive ? "active bg-gradient-primary" : ""
                   }`
                 }
-                to="/privacy"
+                to="/privacy" onClick={handleLinkClick}
               >
                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i className="material-icons opacity-10">shield</i>
@@ -155,7 +155,7 @@ const Sidebar = () => {
                     isActive ? "active bg-gradient-primary" : ""
                   }`
                 }
-                to="/aboutus"
+                to="/aboutus" onClick={handleLinkClick}
               >
                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i className="material-icons opacity-10">info</i>
@@ -170,7 +170,7 @@ const Sidebar = () => {
                     isActive ? "active bg-gradient-primary" : ""
                   }`
                 }
-                to="/terms"
+                to="/terms" onClick={handleLinkClick}
               >
                 <div className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i className="material-icons opacity-10">article</i>

@@ -5,15 +5,13 @@ import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import { BASE_URL } from "../Config";
 
-
-
 const SubCategoryList = () => {
   const [services, setServices] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +21,7 @@ const SubCategoryList = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BASE_URL  }/services`, {
+      const response = await axios.get(`${BASE_URL}/services`, {
         params: { page: currentPage, size: pageSize },
       });
       if (response.data.success) {
@@ -124,10 +122,12 @@ const SubCategoryList = () => {
         <div className="row">
           <div className="col-12">
             <div className="card my-3">
-              <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+              <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2 ">
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-1">
                   <div className="d-flex justify-content-between align-items-center px-3">
-                    <h6 className="text-white text-capitalize">Sub Categories</h6>
+                    <h6 className="text-white text-capitalize ">
+                      Sub Categories
+                    </h6>
                     <div className="d-flex align-items-center">
                       <div className="mx-3">
                         <input
@@ -179,7 +179,11 @@ const SubCategoryList = () => {
                                   <td>
                                     {(currentPage - 1) * pageSize + index + 1}
                                   </td>
-                                  <td>{service.cat_id?.name || "Unknown"}</td>
+                                  <td>
+                                    {service.cat_id?.status === "0"
+                                      ? service.cat_id?.name 
+                                      : "No Category"}
+                                  </td>
                                   <td>{service.name}</td>
                                   <td>${service.price}</td>
                                   <td>

@@ -5,6 +5,7 @@ const User = require('../../models/users');
 const Services = require('../../models/services');
 const Category = require('../../models/categeory');
 const helper = require('../../helper/helper');
+const { deletecategeory } = require('./categorycontroller');
 
 const createBooking = async (req, res) => {
     try {
@@ -137,10 +138,25 @@ const status = async (req, res) => {
         return res.status(500).json({ message: "An error occurred while updating booking status" });
     }
 };
+const  deletebooking = async(req, res)=>{
+    try {
+        const { _id } = req.params;
+        let data = await Booking.findByIdAndDelete(_id);
+        if (data) {
+          return helper.success(res, "Booking Deleted successfully");
+        } else {
+          return helper.error(res, "Booking not found");
+        }
+      } catch (error) {
+        
+        return res.status(500).json({ message: "Internal server error" });
+      }
+  };
 
 module.exports = {
     createBooking,
     bookinglist,
     bookingView,
     status,
+    deletebooking,
 };

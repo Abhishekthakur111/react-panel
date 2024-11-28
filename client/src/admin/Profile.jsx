@@ -73,13 +73,13 @@ const Profile = () => {
       setErrors(formErrors);
       return;
     }
-
+  
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("No token found in localStorage");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("email", data.email);
@@ -88,14 +88,23 @@ const Profile = () => {
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
-
+  
     try {
-      await axios.post(`${BASE_URL}/profileupdate`, formData, {
+      const response = await axios.post(`${BASE_URL}/profileupdate`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
+      const updatedData = response.data.body;
+      setData(updatedData);
+      if (updatedData.image) {
+        const imageUrl = updatedData.image.startsWith("http")
+          ? updatedData.image
+          : `${BASE_URL}/${updatedData.image}`;
+        setImagePreview(imageUrl);
+      }
+  
       toast.success("Profile updated successfully");
       navigate("/profile");
     } catch (error) {
@@ -103,6 +112,7 @@ const Profile = () => {
       toast.error("Error updating profile");
     }
   };
+  
 
   return (
     <>

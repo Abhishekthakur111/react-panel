@@ -140,14 +140,18 @@ const Privacy = () => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-12 d-flex justify-content-end">
-                    <button type="submit" className="btn" style={{ backgroundColor: '#D81B60', color:"white" }}>
-                      Update
-                    </button>
-                  </div>
-                </div>
               </form>
+              <div className="row mt-4 mx-2 ">
+                <div className="col-12 d-flex justify-content-end">
+                  <button
+                    type="submit"
+                    className="btn "
+                    style={{ backgroundColor: "#D81B60", color: "white" }}
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

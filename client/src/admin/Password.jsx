@@ -38,7 +38,7 @@ const Password = () => {
       if (response.data.success) {
         localStorage.setItem('token', response.data.body.token); 
         toast.success("Your password was reset successfully");
-        navigate("/dashboard");
+        navigate("/");
       } else {
         toast.error(response.data.message || "Password reset failed");
       }

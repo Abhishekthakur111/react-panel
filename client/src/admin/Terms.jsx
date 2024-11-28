@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; 
+import "react-quill/dist/quill.snow.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BASE_URL } from "../Config";
@@ -88,7 +88,10 @@ const Terms = () => {
                         className="form-control"
                         value={title}
                         readOnly
-                        style={{paddingLeft:'10px',backgroundColor:'lightpink'}}
+                        style={{
+                          paddingLeft: "10px",
+                          backgroundColor: "lightpink",
+                        }}
                       />
                     </div>
                   </div>
@@ -121,7 +124,7 @@ const Terms = () => {
                               position: "absolute",
                               top: 55,
                               left: 18,
-                              right: 0, 
+                              right: 0,
                               bottom: 0,
                               pointerEvents: "none",
                               color: "red",
@@ -139,14 +142,18 @@ const Terms = () => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-12 d-flex justify-content-end">
-                    <button type="submit" className="btn " style={{ backgroundColor: '#D81B60', color:"white" }}>
-                      Update
-                    </button>
-                  </div>
-                </div>
               </form>
+              <div className="row mt-4 mx-2 ">
+                <div className="col-12 d-flex justify-content-end">
+                  <button
+                    type="submit"
+                    className="btn "
+                    style={{ backgroundColor: "#D81B60", color: "white" }}
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

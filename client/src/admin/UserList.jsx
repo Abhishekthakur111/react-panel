@@ -12,7 +12,7 @@ const UserList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize] = useState(5);
+  const [pageSize] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const UserList = () => {
         draggable
         pauseOnHover
       />
-      <div className="container-fluid ">
+      <div className="container-fluid py-4">
         <div className="row">
           <div className="col-12">
             <div className="card my-4">

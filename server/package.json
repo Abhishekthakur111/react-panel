@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./app.js"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +26,7 @@
     "mongoose": "^8.4.0",
     "morgan": "^1.10.0",
     "node-input-validator": "^4.5.1",
-    "nodemon": "^3.1.0",
+    "nodemon": "^3.1.7",
     "uuid": "^9.0.1"
   }
 }

@@ -21,7 +21,7 @@ const BookingList = () => {
     totalCount: 0,
     totalPages: 0,
     currentPage: 1,
-    pageSize: 5
+    pageSize: 10
   });
   
   const navigate = useNavigate();
@@ -60,7 +60,34 @@ const BookingList = () => {
   const filteredBookings = bookings.filter(booking =>
     booking.booking_code.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  const deleteUser = async (_id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${BASE_URL}/bookingdelete/${_id}`);
+        fetchData(pagination.currentPage);  
+        Swal.fire("Deleted!", "Booking has been deleted.", "success");
+      } catch (error) {
+        Swal.fire(
+          "Error!",
+          error.response?.data?.message || "Error deleting Booking",
+          "error"
+        );
+      }
+    } else {
+      Swal.fire("Cancelled", "Booking deletion has been cancelled", "info");
+    }
+  };
+  
  
 
   const handleStatusChange = async (bookingId, newStatus) => {
@@ -168,8 +195,21 @@ const BookingList = () => {
                                         color: "white",
                                       }}
                                     >
-                                      <i className="me-100 fas fa-eye" />                                    </Link>
+                                      <i className="me-100 fas fa-eye" />   
+                                     </Link>
+                                     <button
+                                  onClick={() => deleteUser(booking._id)}
+                                  className="has-icon btn m-1"
+                                  style={{
+                                    backgroundColor: "#D81B60",
+                                    borderColor: "#D81B60",
+                                    color: "#fff",
+                                  }}
+                                >
+                                  <i className="me-100 fas fa-trash" />
+                                </button>
                                   </td>
+                                  
                                 </tr>
                               ))
                             ) : (
@@ -216,3 +256,5 @@ const BookingList = () => {
 }
 
 export default BookingList;
+
+

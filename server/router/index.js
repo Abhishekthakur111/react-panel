@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-let usercontroller = require('../controller/apicontroller/user');
-let authcontroller = require('../controller/admincontroller/auth');
-let auth =require("../middleware/auth")
-let cmscontroller = require("../controller/admincontroller/cms");
-let category = require('../controller/admincontroller/categeory');
-let service = require('../controller/admincontroller/services');
-let booking = require('../controller/admincontroller/booking');
+let usercontroller = require('../controller/apicontroller/usercontroller');
+let authcontroller = require('../controller/admincontroller/authcontroller');
+let auth =require("../middleware/authtoken");
+let cmscontroller = require("../controller/admincontroller/cmscontroller");
+let category = require('../controller/admincontroller/categorycontroller');
+let service = require('../controller/admincontroller/servicecontroller');
+let booking = require('../controller/admincontroller/bookingcontroller');
 
 // routes for admincontroller
 router.get('/dashboard',authcontroller.dashboard);
@@ -71,6 +71,7 @@ router.post('/createbooking',booking.createBooking);
 router.get('/booking', booking.bookinglist);
 router.get('/booking/:_id', booking.bookingView);
 router.post('/bookingstatus', booking.status);
+router.delete('/bookingdelete/:_id',booking.deletebooking);
 
 
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; 
+import "react-quill/dist/quill.snow.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BASE_URL } from "../Config";
@@ -72,9 +72,7 @@ const AboutUs = () => {
             <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                  <h6 className="text-white text-capitalize ps-3">
-                    About Us
-                  </h6>
+                  <h6 className="text-white text-capitalize ps-3">About Us</h6>
                 </div>
               </div>
               <form onSubmit={handleSubmit} className="p-4">
@@ -88,7 +86,10 @@ const AboutUs = () => {
                         className="form-control"
                         value={title}
                         readOnly
-                        style={{paddingLeft:'10px',backgroundColor:'lightpink'}}
+                        style={{
+                          paddingLeft: "10px",
+                          backgroundColor: "lightpink",
+                        }}
                       />
                     </div>
                   </div>
@@ -139,14 +140,18 @@ const AboutUs = () => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-12 d-flex justify-content-end">
-                    <button type="submit" className="btn " style={{ backgroundColor: '#D81B60', color:"white" }}>
-                      Update
-                    </button>
-                  </div>
-                </div>
               </form>
+              <div className="row mt-4 mx-2 ">
+                <div className="col-12 d-flex justify-content-end">
+                  <button
+                    type="submit"
+                    className="btn "
+                    style={{ backgroundColor: "#D81B60", color: "white" }}
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

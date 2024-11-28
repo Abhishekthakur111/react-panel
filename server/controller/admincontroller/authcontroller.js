@@ -26,7 +26,6 @@ module.exports = {
       return helper.error(res, "Internal server error");
     }
   },
-  
   apexcharts: async (req, res) => {
     try {
       const currentYear = new Date().getFullYear();
@@ -56,8 +55,6 @@ module.exports = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
-  
-  
   login: async (req, res) => {
     try {
       let log_data = await user.findOne({
@@ -65,7 +62,7 @@ module.exports = {
         role: 0,
       });
       if (!log_data) {
-        return helper.error(res, "User not found");
+        return helper.error(res, "Please enter the valid Email");
       } else {
         var ciphertext = log_data.password;
         let bytes = CryptoJS.AES.decrypt(ciphertext, "secretkey_12");
@@ -88,7 +85,7 @@ module.exports = {
             token,
           });
         } else {
-          return helper.error(res, "please enter the valid password");
+          return helper.error(res, "Incorrect Password");
         }
       }
     } catch (error) {
@@ -99,7 +96,7 @@ module.exports = {
   user_list: async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1; 
-      const size = parseInt(req.query.size) || 5; 
+      const size = parseInt(req.query.size) || 10; 
     
       const skip = (page - 1) * size;
       const data = await user.find({role: 1 , raw: true, nest: true })
@@ -125,7 +122,7 @@ module.exports = {
   provider_list: async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1; 
-      const size = parseInt(req.query.size) || 5; 
+      const size = parseInt(req.query.size) || 10; 
     
       const skip = (page - 1) * size;
       const data = await user.find({role: 2 , raw: true, nest: true })
@@ -151,7 +148,7 @@ module.exports = {
   workers_list:async(req,res)=>{
     try {
       const page = parseInt(req.query.page) || 1; 
-      const size = parseInt(req.query.size) || 5; 
+      const size = parseInt(req.query.size) || 10; 
     
       const skip = (page - 1) * size;
       const data = await user.find({role: 3 , raw: true, nest: true })

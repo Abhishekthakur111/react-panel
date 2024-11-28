@@ -39,17 +39,16 @@ module.exports = {
             return helper.error(res, "Internal server error");
         }
     },
-
     servicelist: async (req, res) => {
         try {
             const page = parseInt(req.query.page) || 1;
-            const size = parseInt(req.query.size) || 5;
+            const size = parseInt(req.query.size) || 10;
             const skip = (page - 1) * size;
 
             const totalCount = await Services.countDocuments({});
     
             const data = await Services.find({})
-                .populate('cat_id', 'name')
+                .populate('cat_id', 'name status')
                 .skip(skip)
                 .limit(size)
                 .exec();
@@ -71,12 +70,10 @@ module.exports = {
             return helper.error(res, "Internal server error");
         }
     },
-    
-
     serviceView: async (req, res) => {
         try {
             const service = await Services.findById(req.params._id)
-                .populate('cat_id')
+                .populate()
                 .exec();
                 res.status(200).json({
                     success: true,
@@ -88,9 +85,6 @@ module.exports = {
             return helper.error(res, "Internal server error");
         }
     },
-
-    
-
     deleteService: async (req, res) => {
         try {
             const { _id } = req.params;
@@ -142,13 +136,7 @@ module.exports = {
     editservice: async (req, res) => {
         try {
             const { _id } = req.params; 
-            const v = new Validator(req.body, {
-                name: "string",
-                price: "numeric",
-                image: "string",
-                cat_id: "string"
-            });
-    
+            
             const service = await Services.findById(_id);
             if (!service) {
                 return helper.error(res, "Service not found", 404);
@@ -161,10 +149,7 @@ module.exports = {
                 }
             }
     
-            let errorsResponse = await helper.checkValidation(v);
-            if (errorsResponse) {
-                return helper.error(res, errorsResponse);
-            }
+           
             if (req.files && req.files.image) {
                 let images = await helper.fileUpload(req.files.image);
                 req.body.image = images;

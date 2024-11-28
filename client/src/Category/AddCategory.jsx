@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css'; 
-import { BASE_URL } from '../Config';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { BASE_URL } from "../Config";
 
 const AddCategory = () => {
   const [data, setData] = useState({
-    name: '',
+    name: "",
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
@@ -15,7 +15,7 @@ const AddCategory = () => {
 
   const handleChange = (e) => {
     const { id, value, files } = e.target;
-    if (id === 'image' && files.length > 0) {
+    if (id === "image" && files.length > 0) {
       setData((prevData) => ({
         ...prevData,
         [id]: files[0],
@@ -32,21 +32,20 @@ const AddCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation for name and image
-    if (!data.name.trim()) {
-      toast.error('Category name is required!');
+    if (!data.image) {
+      toast.error("Category image is required!");
       return;
     }
-    if (!data.image) {
-      toast.error('Category image is required!');
+    if (!data.name.trim()) {
+      toast.error("Category name is required!");
       return;
     }
 
     const formData = new FormData();
-    formData.append('name', data.name);
     if (data.image) {
-      formData.append('image', data.image);
+      formData.append("image", data.image);
     }
+    formData.append("name", data.name);
 
     try {
       const response = await axios.post(
@@ -54,20 +53,20 @@ const AddCategory = () => {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
       if (response.status === 200 && response.data.success) {
-        toast.success('Category added successfully!');
-        navigate('/categorylist'); 
+        toast.success("Category added successfully!");
+        navigate("/categorylist");
       } else {
-        toast.error('Category creation failed: ' + response.data.message);
+        toast.error("Category creation failed: " + response.data.message);
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Request failed: ' + error.message);
+      console.error("Error:", error);
+      toast.error("Request failed: " + error.message);
     }
   };
 
@@ -91,7 +90,9 @@ const AddCategory = () => {
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
                   <div className="d-flex justify-content-between align-items-center px-3">
-                    <h6 className="text-white text-capitalize">Add New Category</h6>
+                    <h6 className="text-white text-capitalize">
+                      Add New Category
+                    </h6>
                   </div>
                 </div>
               </div>
@@ -104,10 +105,10 @@ const AddCategory = () => {
                           src={imagePreview}
                           alt="Preview"
                           style={{
-                            borderRadius: '10px',
-                            width: '330px',
-                            height: '200px',
-                            marginBottom: '5px',
+                            borderRadius: "10px",
+                            width: "330px",
+                            height: "200px",
+                            marginBottom: "5px",
                           }}
                         />
                       )}
@@ -116,7 +117,10 @@ const AddCategory = () => {
                         id="image"
                         className="form-control"
                         onChange={handleChange}
-                        style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                        style={{
+                          paddingLeft: "10px",
+                          backgroundColor: "lightpink",
+                        }}
                       />
                     </div>
                   </div>
@@ -125,25 +129,30 @@ const AddCategory = () => {
                     <input
                       type="text"
                       className="form-control"
-                      
                       id="name"
                       value={data.name}
                       onChange={handleChange}
-                      style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                      style={{
+                        paddingLeft: "10px",
+                        backgroundColor: "lightpink",
+                      }}
                     />
                   </div>
                 </div>
-                <div className="card-footer text-right">
+                <div className="mx-4 text-end">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    style={{ marginRight: "10px" }}
+                  >
+                    Add
+                  </button>
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={() => navigate(-1)}
-                    style={{ marginRight: '10px' }}
+                    onClick={() => navigate("/categorylist")}
                   >
                     Back
-                  </button>
-                  <button type="submit" className="btn btn-primary">
-                    Add
                   </button>
                 </div>
               </form>

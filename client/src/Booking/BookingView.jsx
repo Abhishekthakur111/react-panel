@@ -43,7 +43,7 @@ const BookingView = () => {
           <div className="card my-4">
             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 className="text-white text-capitalize ps-3">Booking Details</h6>
+                <h6 className="text-white text-capitalize ps-3">Booking Detail</h6>
               </div>
             </div>
             <div className="section-body">
@@ -150,11 +150,12 @@ const BookingView = () => {
                         />
                       </div>
                     </div>
-                    <div className="mx-4 text-right">
+                    
+                    <div className="mx-4 d-flex justify-content-end">
                       <button
                         type="button"
                         className="btn btn-primary"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate("/bookinglist")}
                       >
                         Back
                       </button>

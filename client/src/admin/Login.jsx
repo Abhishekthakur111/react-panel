@@ -7,13 +7,13 @@ import axios from 'axios';
 import { BASE_URL } from '../Config';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [rememberMe, setRememberMe] = useState(false); 
 
   const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -44,6 +44,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!rememberMe) {
+      toast.error('Please check "Remember Me" before logging in');
+      return; 
+    }
     if (!emailError && !passwordError) {
       try {
         const response = await axios.post(`${BASE_URL}/login`, { email, password });
@@ -132,11 +136,17 @@ const Login = () => {
                         {passwordError && <small className="text-danger">{passwordError}</small>}
 
                         <div className="form-check form-switch d-flex align-items-center mb-3">
-                          <input className="form-check-input" type="checkbox" id="rememberMe" />
+                          <input 
+                            className="form-check-input" 
+                            type="checkbox" 
+                            id="rememberMe" 
+                            checked={rememberMe} 
+                            onChange={() => setRememberMe(!rememberMe)} 
+                          />
                           <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe">Remember me</label>
                         </div>
                         <div className="text-center">
-                          <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2" disabled={emailError || passwordError}>Sign in</button>
+                          <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
                         </div>
                       </form>
                     </div>

@@ -12,7 +12,7 @@ const CategoryList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [pageSize] = useState(5);
+  const [pageSize] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -124,7 +124,7 @@ const CategoryList = () => {
       <div className="container-fluid ">
         <div className="row">
           <div className="col-12">
-            <div className="card my-3">
+            <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
                   <div className="d-flex justify-content-between align-items-center px-3">
@@ -146,7 +146,7 @@ const CategoryList = () => {
                       <Link
                         to="/categoryadd"
                         className="btn btn-light"
-                        style={{ marginLeft: "5px", marginTop: "10px" }}
+                        style={{  marginTop: "10px" }}
                       >
                         Add
                       </Link>
