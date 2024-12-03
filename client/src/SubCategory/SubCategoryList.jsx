@@ -8,7 +8,6 @@ import { BASE_URL } from "../Config";
 const SubCategoryList = () => {
   const [services, setServices] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -19,7 +18,6 @@ const SubCategoryList = () => {
   }, [currentPage]);
 
   const fetchData = async () => {
-    setLoading(true);
     try {
       const response = await axios.get(`${BASE_URL}/services`, {
         params: { page: currentPage, size: pageSize },
@@ -42,34 +40,39 @@ const SubCategoryList = () => {
           "An error occurred while fetching the Sub Category list",
         "error"
       );
-    } finally {
-      setLoading(false);
     }
   };
-
+  const [isToastActive, setIsToastActive] = useState(false);
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "0" ? "1" : "0";
-
+  
     try {
-      const response = await axios.post(`${BASE_URL}/status`, {
+      const response = await axios.post(`${BASE_URL}/subcategorystatus`, {
         id,
         status: newStatus,
       });
-
+  
       if (response.data.success) {
         fetchData();
-        toast.success(
-          `Sub Category status changed to ${
-            newStatus === "0" ? "Active" : "Inactive"
-          }`
-        );
+        if (!isToastActive) {
+          setIsToastActive(true);
+          toast.success(
+            `Sub Category status changed to ${
+              newStatus === "0" ? "Active" : "Inactive"
+            }`
+          );
+          setTimeout(() => {
+            setIsToastActive(false);
+          }, 2000);
+        }
       } else {
         toast.error(response.data.message || "Failed to change status");
       }
     } catch (error) {
-      toast.error("An error occurred while changing status");
+      toast.error("An error occurred while changing subcategory status");
     }
   };
+  
 
   const deleteService = async (_id) => {
     const result = await Swal.fire({
@@ -156,125 +159,118 @@ const SubCategoryList = () => {
               <div className="section-body">
                 <div className="card">
                   <div className="card-body">
-                    {loading ? (
-                      <p>Loading...</p>
-                    ) : (
-                      <div className="table-responsive">
-                        <table className="table text-center">
-                          <thead>
-                            <tr>
-                              <th>Sr_No.</th>
-                              <th>Category Name</th>
-                              <th>Name</th>
-                              <th>Price</th>
-                              <th>Image</th>
-                              <th>Status</th>
-                              <th>Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {filteredServices.length ? (
-                              filteredServices.map((service, index) => (
-                                <tr key={service._id}>
-                                  <td>
-                                    {(currentPage - 1) * pageSize + index + 1}
-                                  </td>
-                                  <td>
-                                    {service.cat_id?.status === "0"
-                                      ? service.cat_id?.name 
-                                      : "No Category"}
-                                  </td>
-                                  <td>{service.name}</td>
-                                  <td>${service.price}</td>
-                                  <td>
-                                    {service.image ? (
-                                      <img
-                                        src={`${BASE_URL}/${service.image}`}
-                                        alt={service.name}
-                                        onError={(e) =>
-                                          (e.target.src =
-                                            "path/to/default/image.jpg")
-                                        }
-                                        style={{
-                                          width: "50px",
-                                          height: "50px",
-                                          borderRadius: "50%",
-                                        }}
-                                      />
-                                    ) : (
-                                      "No Image"
-                                    )}
-                                  </td>
-                                  <td>
-                                    <div className="form-check form-switch d-flex align-items-center justify-content-center">
-                                      <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        id={`statusSwitch-${service._id}`}
-                                        checked={service.status === "0"}
-                                        onChange={() =>
-                                          toggleStatus(
-                                            service._id,
-                                            service.status
-                                          )
-                                        }
-                                        style={{
-                                          backgroundColor:
-                                            service.status === "0"
-                                              ? "#D81B60"
-                                              : "lightgray",
-                                          borderColor:
-                                            service.status === "0"
-                                              ? "#D81B60"
-                                              : "lightgray",
-                                        }}
-                                      />
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <Link
-                                      to={`/subcategory/${service._id}`}
-                                      className="has-icon btn btn-success m-1"
+                    <div className="table-responsive">
+                      <table className="table text-center">
+                        <thead>
+                          <tr>
+                            <th>Sr_No.</th>
+                            <th>Category Name</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredServices.length ? (
+                            filteredServices.map((service, index) => (
+                              <tr key={service._id}>
+                                <td>
+                                  {(currentPage - 1) * pageSize + index + 1}
+                                </td>
+                                <td>
+                                  {service.cat_id?.status === "0"
+                                    ? service.cat_id?.name
+                                    : "No Category"}
+                                </td>
+                                <td>{service.name || "no sub category"}</td>
+                                <td>${service.price || "no price"}</td>
+                                <td>
+                                  {service.image ? (
+                                    <img
+                                      src={`${BASE_URL}/${service.image}`}
+                                      alt={service.name}
+                                      onError={(e) =>
+                                        (e.target.src =
+                                          "path/to/default/image.jpg")
+                                      }
                                       style={{
-                                        backgroundColor: "#D81B60",
-                                        color: "white",
+                                        width: "50px",
+                                        height: "50px",
+                                        borderRadius: "50%",
                                       }}
-                                    >
-                                      <i className="me-100 fas fa-eye" />
-                                    </Link>
-                                    <Link
-                                      to={`/updatesubcategory/${service._id}`}
-                                      className="has-icon btn btn-success m-1"
+                                    />
+                                  ) : (
+                                    "No Image"
+                                  )}
+                                </td>
+                                <td>
+                                  <div className="form-check form-switch d-flex align-items-center justify-content-center">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      id={`statusSwitch-${service._id}`}
+                                      checked={service.status === "0"}
+                                      onChange={() =>
+                                        toggleStatus(service._id, service.status)
+                                      }
                                       style={{
-                                        backgroundColor: "#D81B60",
-                                        color: "white",
+                                        backgroundColor:
+                                          service.status === "0"
+                                            ? "#D81B60"
+                                            : "lightgray",
+                                        borderColor:
+                                          service.status === "0"
+                                            ? "#D81B60"
+                                            : "lightgray",
                                       }}
-                                    >
-                                      <i className="me-100 fas fa-edit" />
-                                    </Link>
-                                    <button
-                                      onClick={() => deleteService(service._id)}
-                                      className="has-icon btn  m-1 "
-                                      style={{
-                                        backgroundColor: "#D81B60",
-                                        borderColor: "#D81B60",
-                                        color: "#fff",
-                                      }}
-                                    >
-                                      <i className="me-100 fas fa-trash" />
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td colSpan="7">No services found</td>
+                                    />
+                                  </div>
+                                </td>
+                                <td>
+                                  <Link
+                                    to={`/subcategory/${service._id}`}
+                                    className="has-icon btn btn-success m-1"
+                                    style={{
+                                      backgroundColor: "#D81B60",
+                                      color: "white",
+                                    }}
+                                  >
+                                    <i className="me-100 fas fa-eye" />
+                                  </Link>
+                                  <Link
+                                    to={`/updatesubcategory/${service._id}`}
+                                    className="has-icon btn btn-success m-1"
+                                    style={{
+                                      backgroundColor: "#D81B60",
+                                      color: "white",
+                                    }}
+                                  >
+                                    <i className="me-100 fas fa-edit" />
+                                  </Link>
+                                  <button
+                                    onClick={() => deleteService(service._id)}
+                                    className="has-icon btn  m-1 "
+                                    style={{
+                                      backgroundColor: "#D81B60",
+                                      borderColor: "#D81B60",
+                                      color: "#fff",
+                                    }}
+                                  >
+                                    <i className="me-100 fas fa-trash" />
+                                  </button>
+                                </td>
                               </tr>
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan="7">No services found</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                   <div className="card-footer text-right">
                     <nav className="d-inline-block">

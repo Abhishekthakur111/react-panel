@@ -124,7 +124,7 @@ const BookingList = () => {
         draggable
         pauseOnHover
       />
-      <div className="container-fluid py-2">
+      <div className="container-fluid">
         <div className="row">
           <div className="col-12">
             <div className="card my-4">
@@ -168,11 +168,11 @@ const BookingList = () => {
                               filteredBookings.map((booking, index) => (
                                 <tr key={booking._id}>
                                   <td>{(pagination.currentPage - 1) * pagination.pageSize + index + 1}</td>
-                                  <td>{booking.user_id?.name || "name"}</td>
-                                  <td>{booking.cat_id?.name || "unknown"}</td>
-                                  <td>{booking.service_id?.name || "unknown"}</td>
-                                  <td>{booking.booking_code}</td>                       
-                                  <td>${booking.amount}</td>
+                                  <td>{booking.user_id?.name || "no name"}</td>
+                                  <td>{booking.cat_id?.name || "no category"}</td>
+                                  <td>{booking.service_id?.name || "no sub category"}</td>
+                                  <td>{booking.booking_code || 'no booking code'}</td>                       
+                                  <td>${booking.amount || 'no amount'}</td>
                                   <td>
                                     <select
                                       value={booking.status}

@@ -103,7 +103,7 @@ const Terms = () => {
                       <div style={{ position: "relative" }}>
                         <ReactQuill
                           id="content"
-                          style={{ height: "300px", marginBottom: "50px" }}
+                          style={{ height: "400px", marginBottom: "50px" }}
                           theme="snow"
                           value={content}
                           onChange={setContent}
@@ -142,8 +142,7 @@ const Terms = () => {
                     </div>
                   </div>
                 </div>
-              </form>
-              <div className="row mt-4 mx-2 ">
+                <div className="row">
                 <div className="col-12 d-flex justify-content-end">
                   <button
                     type="submit"
@@ -154,6 +153,8 @@ const Terms = () => {
                   </button>
                 </div>
               </div>
+              </form>
+              
             </div>
           </div>
         </div>

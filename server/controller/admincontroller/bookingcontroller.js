@@ -58,7 +58,6 @@ const createBooking = async (req, res) => {
         return helper.error(res, 'Internal server error');
     }
 };
-
 const bookinglist = async (req, res) => {
     try {
         const { page = 1, size = 5 } = req.query; 
@@ -92,8 +91,6 @@ const bookinglist = async (req, res) => {
         return helper.error(res, "Internal server error");
     }
 };
-
-
 const bookingView = async (req, res) => {
     try {
         const booking = await Booking.findById(req.params._id)
@@ -113,7 +110,6 @@ const bookingView = async (req, res) => {
         return helper.error(res, "Internal server error");
     }
 };
-
 const status = async (req, res) => {
     try {
         const { id, status } = req.body;
@@ -152,7 +148,6 @@ const  deletebooking = async(req, res)=>{
         return res.status(500).json({ message: "Internal server error" });
       }
   };
-
 module.exports = {
     createBooking,
     bookinglist,

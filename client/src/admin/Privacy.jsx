@@ -101,7 +101,7 @@ const Privacy = () => {
                       <div style={{ position: "relative" }}>
                         <ReactQuill
                           id="content"
-                          style={{ height: "300px", marginBottom: "50px" }}
+                          style={{ height: "400px", marginBottom: "50px" }}
                           theme="snow"
                           value={content}
                           onChange={setContent}
@@ -140,8 +140,7 @@ const Privacy = () => {
                     </div>
                   </div>
                 </div>
-              </form>
-              <div className="row mt-4 mx-2 ">
+                <div className="row">
                 <div className="col-12 d-flex justify-content-end">
                   <button
                     type="submit"
@@ -152,6 +151,8 @@ const Privacy = () => {
                   </button>
                 </div>
               </div>
+              </form>
+             
             </div>
           </div>
         </div>

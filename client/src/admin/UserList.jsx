@@ -14,6 +14,7 @@ const UserList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize] = useState(10);
   const navigate = useNavigate();
+  const [isToastActive, setIsToastActive] = useState(false);
 
   useEffect(() => {
     fetchData(currentPage);
@@ -73,27 +74,36 @@ const UserList = () => {
     }
   };
 
-  const toggleStatus = async (id, currentStatus) => {
-    const newStatus = currentStatus === "0" ? "1" : "0";
+  
 
-    try {
-      const response = await axios.post(`${BASE_URL}/userstatus`, {
-        id,
-        status: newStatus,
-      });
+const toggleStatus = async (id, currentStatus) => {
+  const newStatus = currentStatus === "0" ? "1" : "0";
 
-      if (response.data.success) {
-        fetchData(currentPage);
+  try {
+    const response = await axios.post(`${BASE_URL}/userstatus`, {
+      id,
+      status: newStatus,
+    });
+
+    if (response.data.success) {
+      fetchData(currentPage);
+      if (!isToastActive) {
+        setIsToastActive(true);
         toast.success(
           `User status changed to ${newStatus === "0" ? "Active" : "Inactive"}`
         );
-      } else {
-        toast.error(response.data.message || "Failed to change status");
+        setTimeout(() => {
+          setIsToastActive(false);
+        }, 2000); 
       }
-    } catch (error) {
-      toast.error("An error occurred while changing user status");
+    } else {
+      toast.error(response.data.message || "Failed to change status");
     }
-  };
+  } catch (error) {
+    toast.error("An error occurred while changing user status");
+  }
+};
+
 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -107,7 +117,7 @@ const UserList = () => {
     <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -116,7 +126,7 @@ const UserList = () => {
         draggable
         pauseOnHover
       />
-      <div className="container-fluid py-4">
+      <div className="container-fluid ">
         <div className="row">
           <div className="col-12">
             <div className="card my-4">
@@ -173,10 +183,10 @@ const UserList = () => {
                                   "No Image"
                                 )}
                               </td>
-                              <td>{user.name}</td>
-                              <td>{user.email}</td>
-                              <td>{user.address}</td>
-                              <td>{user.phone_no}</td>
+                              <td>{user.name || 'no user'}</td>
+                              <td>{user.email || 'no email'}</td>
+                              <td>{user.address || 'no address'}</td>
+                              <td>{user.phone_no || 'no phone number'}</td>
                               <td>
                                 <div className="form-check form-switch d-flex align-items-center justify-content-center">
                                   <input

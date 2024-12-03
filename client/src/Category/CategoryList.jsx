@@ -76,29 +76,38 @@ const CategoryList = () => {
     }
   };
 
-  const toggleStatus = async (id, currentStatus) => {
-    const newStatus = currentStatus === "0" ? "1" : "0";
+  const [isToastActive, setIsToastActive] = useState(false);
 
-    try {
-      const response = await axios.post(`${BASE_URL}/categorystatus`, {
-        id,
-        status: newStatus,
-      });
+const toggleStatus = async (id, currentStatus) => {
+  const newStatus = currentStatus === "0" ? "1" : "0";
 
-      if (response.data.success) {
-        fetchData();
+  try {
+    const response = await axios.post(`${BASE_URL}/categorystatus`, {
+      id,
+      status: newStatus,
+    });
+
+    if (response.data.success) {
+      fetchData();
+      if (!isToastActive) {
+        setIsToastActive(true);
         toast.success(
           `Category status changed to ${
             newStatus === "0" ? "Active" : "Inactive"
           }`
         );
-      } else {
-        toast.error(response.data.message || "Failed to change status");
+        setTimeout(() => {
+          setIsToastActive(false);
+        }, 2000);
       }
-    } catch (error) {
-      toast.error("An error occurred while changing category status");
+    } else {
+      toast.error(response.data.message || "Failed to change status");
     }
-  };
+  } catch (error) {
+    toast.error("An error occurred while changing category status");
+  }
+};
+
 
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -112,7 +121,7 @@ const CategoryList = () => {
     <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={1000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -175,7 +184,7 @@ const CategoryList = () => {
                               <td>
                                 {(currentPage - 1) * pageSize + index + 1}
                               </td>
-                              <td>{category.name}</td>
+                              <td>{category.name || 'no category'}</td>
                               <td>
                                 {category.image ? (
                                   <img

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import ApexChart from './ApexChart';
@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [bookings, setBookings] = useState(0);
   
   const navigate = useNavigate();
-
+  const location = useLocation();
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -43,7 +43,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+    if (location.state && location.state.message) {
+      toast.success(location.state.message);
+    }
+  }, [location.state]);
 
   return (
     <>
@@ -69,7 +72,7 @@ const Dashboard = () => {
                   </div>
                   <div className="text-end ">
                     <h4> Users</h4>
-                    <h4  >{users}</h4>
+                    <h4>{users}</h4>
                   </div>
                 </div>
               </div>
@@ -84,14 +87,14 @@ const Dashboard = () => {
                   </div>
                   <div className="text-end ">
                     <h4>Categories</h4>
-                    <h4 className="mb-0">{categories}</h4>
+                    <h4>{categories}</h4>
                   </div>
                 </div>
               </div>
             </Link>
           </div>
           <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <Link to="/services">
+            <Link to="/subcategory">
               <div className="card">
                 <div className="card-header p-3 pt-2">
                   <div className="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
@@ -99,7 +102,7 @@ const Dashboard = () => {
                   </div>
                   <div className="text-end pt-1">
                     <h4>Sub Categories</h4>
-                    <h4 className="mb-0">{subCategories}</h4>
+                    <h4>{subCategories}</h4>
                   </div>
                 </div>
               </div>
@@ -114,7 +117,7 @@ const Dashboard = () => {
                   </div>
                   <div className="text-end pt-1">
                     <h4>Bookings</h4>
-                    <h4 className="mb-0">{bookings}</h4>
+                    <h4>{bookings}</h4>
                   </div>
                 </div>
               </div>
@@ -123,7 +126,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div className='container-fluid'>
-        <ApexChart/>
+        <ApexChart />
       </div>
     </>
   );

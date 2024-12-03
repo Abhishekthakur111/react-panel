@@ -32,31 +32,39 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
     };
   }, []);
 
-  const fetchProfile = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in localStorage");
-      return;
-    }
-    try {
-      const response = await axios.get(`${BASE_URL}/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.data && response.data.body) {
-        const { image, name } = response.data.body;
-        setImage(`${BASE_URL}/${image}`);
-        setName(name);
-      }
-    } catch (error) {
-      console.error("Error fetching profile data", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found in localStorage");
+        return;
+      }
+      try {
+        const response = await axios.get(`${BASE_URL}/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.data && response.data.body) {
+          const { image, name } = response.data.body;
+          setImage(`${BASE_URL}/${image}`);
+          setName(name);
+        }
+      } catch (error) {
+        console.error("Error fetching profile data", error);
+      }
+    };
+  
     fetchProfile();
-  }, []);
+  
+    if (location.state?.updated) {
+      fetchProfile();
+    }
+  }, [location.state]);
+  
+
+ 
+  
 
   const logout = async () => {
     const result = await Swal.fire({
@@ -85,13 +93,14 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
     "/dashboard": "Dashboard",
     "/userlist": "Users",
     "/categorylist": "Categories",
-    "/privacy": "Privacy Policy",
+    "/privacypolicy": "Privacy Policy",
     "/aboutus": "About Us",
-    "/terms": "Terms&Conditions",
+    "/terms&conditions": "Terms&Conditions",
     "/subcategory": "Sub Categories",
     "/bookinglist": "Bookings",
-    "/Map": "Map",
+    "/map": "Map",
     "/changepassword": "Change Password",
+    "/profile":"Profile",
   };
 
   const currentPath = location.pathname;

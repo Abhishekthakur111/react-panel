@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const category = require('../../models/categeory');
 const SubCategory = require('../../models/services');
 const booking = require('../../models/bookings');
+const Secret = process.env.SECRET;
 
 module.exports = {
   dashboard: async (req, res) => {
@@ -65,12 +66,12 @@ module.exports = {
         return helper.error(res, "Please enter the valid Email");
       } else {
         var ciphertext = log_data.password;
-        let bytes = CryptoJS.AES.decrypt(ciphertext, "secretkey_12");
+        let bytes = CryptoJS.AES.decrypt(ciphertext, Secret);
         var originalText = bytes.toString(CryptoJS.enc.Utf8);
 
         const result = req.body.password == originalText;
         if (result) {
-          var secret = "secretkey_12";
+          var secret = Secret;
           const token = jwt.sign(
             {
               id: log_data.id,
@@ -171,7 +172,7 @@ module.exports = {
       return helper.error(res, "internal server error");
     }
   },
-view: async (req, res) => {
+  view: async (req, res) => {
     try {
       let view = await user.findById({_id:req.params._id});
       return helper.success(res, "data", view);
@@ -223,8 +224,6 @@ view: async (req, res) => {
       return res.status(500).json({ message: "Internal server error" });
     }
   },
-
-
   profile: async (req, res) => {
     try {
       const userId = req.user._id;
@@ -240,14 +239,10 @@ view: async (req, res) => {
       return res.status(500).json({ message: "An error occurred while fetching profile" });
     }
   },
-  
   edit_profile: async (req, res) => {
     try {
       const userId = req.user._id;
       const find_user = await user.findById(userId);
-      if (!find_user) {
-        return res.status(404).json({ message: "User not found" });
-      }
   
       let imagePath = find_user.image;
   
@@ -258,7 +253,6 @@ view: async (req, res) => {
           return res.status(500).json({ message: "Failed to upload image" });
         }
       }
-  
       const updatedProfile = await user.findByIdAndUpdate(
         userId,
         {
@@ -274,7 +268,6 @@ view: async (req, res) => {
       if (!updatedProfile) {
         return res.status(400).json({ message: "No changes were made" });
       }
-  
       return res.status(200).json({ message: "Profile updated successfully", body: updatedProfile });
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -321,8 +314,7 @@ view: async (req, res) => {
       return helper.error(res, "An error occurred while resetting the password");
     }
   },
-
-status: async (req, res) => {
+  status: async (req, res) => {
   try {
     const { id, status } = req.body;
 
@@ -344,7 +336,7 @@ status: async (req, res) => {
     console.error("Error updating user status:", error);
     return res.status(500).json({ message: "An error occurred while updating user status" });
   }
-},   
+  },   
   logout: (req, res) => {
     try {
       res.status(200).json({ message: "Logged out successfully" });

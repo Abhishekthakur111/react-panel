@@ -87,7 +87,6 @@ const SubCategoryAdd = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  
     if (!validateForm()) {
       return;
     }
@@ -187,11 +186,15 @@ const SubCategoryAdd = () => {
                       }}
                     >
                       <option value="">Select Category</option>
-                      {categories.map((category) => (
-                        <option key={category._id} value={category._id}>
-                          {category.name}
-                        </option>
-                      ))}
+                      {categories.length > 0 ? (
+                        categories.map((category) => (
+                          <option key={category._id} value={category._id}>
+                            {category.name}
+                          </option>
+                        ))
+                      ) : (
+                        <option disabled>No Categories Available</option>
+                      )}
                     </select>
                   </div>
 
@@ -227,18 +230,20 @@ const SubCategoryAdd = () => {
                 </div>
 
                 <div className="mx-4 text-end">
-                <button type="submit" className="btn btn-primary" style={{ marginRight: "10px" }}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    style={{ marginRight: "10px" }}
+                  >
                     Add
                   </button>
                   <button
                     type="button"
                     className="btn btn-primary"
                     onClick={() => navigate("/subcategory")}
-                    
                   >
                     Back
                   </button>
-                
                 </div>
               </form>
             </div>

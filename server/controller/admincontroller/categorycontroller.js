@@ -36,7 +36,7 @@ module.exports = {
   Categorylist:async(req, res) =>{
    try {
     const page = parseInt(req.query.page) || 1; 
-    const size = parseInt(req.query.size) || 10; 
+    const size = parseInt(req.query.size) || 5; 
   
     const skip = (page - 1) * size;
     const data = await Category.find()
@@ -102,7 +102,6 @@ module.exports = {
           return helper.error(res, "User not found");
         }
       } catch (error) {
-        
         return res.status(500).json({ message: "Internal server error" });
       }
   },

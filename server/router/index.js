@@ -63,7 +63,7 @@ router.post('/createservice', service.createService);
 router.get('/services', service.servicelist);
 router.get('/service/:_id', service.serviceView);
 router.delete('/delete_service/:_id', service.deleteService);
-router.post('/status', service.status);
+router.post('/subcategorystatus', service.status);
 router.post('/updatesubcategory/:_id', service.editservice);
 
 // router for bookings

@@ -45,7 +45,6 @@ module.exports ={
             return res.status(500).json({messgae:"Internal server error"});
         }
     },
-     
     updateabout: async (req, res) => {
         try {
             const { content } = req.body;
@@ -68,8 +67,6 @@ module.exports ={
             return res.status(500).json({ message: "Internal server error" });
         }
     },
-    
-    
     term:async(req,res)=>{
         try {
             let data = await cms.findOne({type:3});

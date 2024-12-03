@@ -25,7 +25,6 @@ module.exports = {
           let images = await helper.fileUpload(req.files.image);
           req.body.image = images;
         }
-
         const ciphertext = CryptoJS.AES.encrypt(req.body.password, "secretkey_12").toString();
         let data = await user.create({
           role: req.body.role,
@@ -37,9 +36,6 @@ module.exports = {
           image: req.body.image,
           status: req.body.status,
         });
-
-        
-
         return helper.success(res, "User Created Successfully", { data });
       }
     } catch (error) {

@@ -106,7 +106,7 @@ const Profile = () => {
       }
   
       toast.success("Profile updated successfully");
-      navigate("/profile");
+      navigate("/profile", { state: { updated: true } });
     } catch (error) {
       console.error("Error updating profile", error);
       toast.error("Error updating profile");

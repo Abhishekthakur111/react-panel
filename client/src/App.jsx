@@ -40,9 +40,9 @@ const App = () => {
             <Route path="/viewcategory/:_id" element={<PrivateRoute element={<CategoryView />} />} />
             <Route path="/categoryadd" element={<PrivateRoute element={<AddCategory />} />} />
             <Route path='/updatecategory/:_id' element={<PrivateRoute element={<CategoryEdit/>}/>}/>
-            <Route path="/privacy" element={<PrivateRoute element={<Privacy />} />} />
+            <Route path="/privacypolicy" element={<PrivateRoute element={<Privacy />} />} />
             <Route path="/aboutus" element={<PrivateRoute element={<AboutUs />} />} />
-            <Route path="/terms" element={<PrivateRoute element={<Terms />} />} />
+            <Route path="/terms&conditions" element={<PrivateRoute element={<Terms />} />} />
             <Route path="/changepassword" element={<PrivateRoute element={<Password />} />} />
             <Route path="/subcategory" element={<PrivateRoute element={<SubCategoryList />} />} />
             <Route path="/subcategory/:_id" element={<PrivateRoute element={<SubCategoryView />} />} />

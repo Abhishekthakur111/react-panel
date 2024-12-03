@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const user = require("../models/users");
-const secret = "secretkey_12";
+const secret = process.env.SECRET;
 
 module.exports = {
   verifyToken: async (req, res, next) => {

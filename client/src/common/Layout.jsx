@@ -6,24 +6,28 @@ import { Outlet } from 'react-router-dom';
 
 const Layout = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);  
 
- 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 992) {
-        setIsSidebarVisible(true);
-      } else {
-        setIsSidebarVisible(false);
-      }
+      setWindowWidth(window.innerWidth);  
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize();
+    handleResize();  
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    if (windowWidth >= 992) {
+      setIsSidebarVisible(true);  
+    } else {
+      setIsSidebarVisible(false);  
+    }
+  }, [windowWidth]);  
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
@@ -41,10 +45,10 @@ const Layout = () => {
     <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
       <div
         style={{
-          flex: isSidebarVisible || window.innerWidth >= 992 ? '0 0 16.666%' : '0 0 0%',
+          flex: isSidebarVisible || windowWidth >= 992 ? '0 0 16.666%' : '0 0 0%',
           transition: 'flex 0.3s ease',
-          display: isSidebarVisible || window.innerWidth >= 992 ? 'block' : 'none',
-          position: window.innerWidth < 992 ? 'fixed' : 'relative',
+          display: isSidebarVisible || windowWidth >= 992 ? 'block' : 'none',
+          position: windowWidth < 992 ? 'fixed' : 'relative',
           zIndex: 1020,
           height: '100vh',
           overflowY: 'auto',
@@ -53,7 +57,7 @@ const Layout = () => {
         <Sidebar handleLinkClick={handleLinkClick} />
       </div>
 
-      {isSidebarVisible && window.innerWidth < 992 && (
+      {isSidebarVisible && windowWidth < 992 && (
         <div
           style={{
             position: 'fixed',
@@ -68,7 +72,6 @@ const Layout = () => {
         ></div>
       )}
 
-     
       <div style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
         <Navbar toggleSidebar={toggleSidebar} closeSidebar={closeSidebar} />
         <div style={{ flex: '1', padding: '20px' }}>
@@ -79,6 +82,5 @@ const Layout = () => {
     </div>
   );
 };
-
 
 export default Layout;
