@@ -62,10 +62,6 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
     }
   }, [location.state]);
   
-
- 
-  
-
   const logout = async () => {
     const result = await Swal.fire({
       title: "Are you sure?",
