@@ -26,7 +26,7 @@ router.get('/profile', auth.verifyToken, authcontroller.profile);
 router.post('/profileupdate', auth.verifyToken, authcontroller.edit_profile); 
 
 // routesfor user controller
-router.post("/Createuser",usercontroller.user_create);
+router.post("/createadmin",usercontroller.user_create);
 router.post('/userstatus',authcontroller.status);
 
 // routes for cms
@@ -65,6 +65,7 @@ router.get('/service/:_id', service.serviceView);
 router.delete('/delete_service/:_id', service.deleteService);
 router.post('/subcategorystatus', service.status);
 router.post('/updatesubcategory/:_id', service.editservice);
+router.get('/editget/:_id',service.serviceViewedit);
 
 // router for bookings
 router.post('/createbooking',booking.createBooking);

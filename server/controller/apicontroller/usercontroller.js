@@ -1,5 +1,5 @@
 const user = require("../../models/users");
-const CryptoJS = require("crypto-js");
+const bcrypt = require("bcryptjs");  
 const { Validator } = require("node-input-validator");
 const helper = require('../../helper/helper');
 
@@ -25,17 +25,21 @@ module.exports = {
           let images = await helper.fileUpload(req.files.image);
           req.body.image = images;
         }
-        const ciphertext = CryptoJS.AES.encrypt(req.body.password, "secretkey_12").toString();
+        
+        
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);  
+
         let data = await user.create({
           role: req.body.role,
           name: req.body.name,
           email: req.body.email,
-          password: ciphertext,
+          password: hashedPassword,  
           address: req.body.address,
           phone_no: req.body.phone_no,
           image: req.body.image,
           status: req.body.status,
         });
+
         return helper.success(res, "User Created Successfully", { data });
       }
     } catch (error) {
@@ -43,4 +47,4 @@ module.exports = {
       return helper.error(res, "Internal server error");
     }
   },
-  }
+};

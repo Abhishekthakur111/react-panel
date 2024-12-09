@@ -33,7 +33,7 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+     
         if (response.data && response.data.body) {
           setData(response.data.body);
           const imageUrl = response.data.body.image.startsWith("http")

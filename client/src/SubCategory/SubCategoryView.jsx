@@ -16,6 +16,7 @@ const SubCategoryView = () => {
     async function fetchService() {
       try {
         const response = await axios.get(`${BASE_URL}/service/${_id}`);
+        console.log(response,'//////////');
         if (response.data.success) {
           setService(response.data.body);
         } else {

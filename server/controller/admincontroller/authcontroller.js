@@ -1,6 +1,6 @@
 const helper = require("../../helper/helper");
 let user = require("../../models/users");
-const CryptoJS = require("crypto-js");
+const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const category = require('../../models/categeory');
 const SubCategory = require('../../models/services');
@@ -65,23 +65,19 @@ module.exports = {
       if (!log_data) {
         return helper.error(res, "Please enter the valid Email");
       } else {
-        var ciphertext = log_data.password;
-        let bytes = CryptoJS.AES.decrypt(ciphertext, Secret);
-        var originalText = bytes.toString(CryptoJS.enc.Utf8);
-
-        const result = req.body.password == originalText;
+        const result = await bcrypt.compare(req.body.password, log_data.password);
         if (result) {
-          var secret = Secret;
+          const secret = process.env.Secret
           const token = jwt.sign(
             {
               id: log_data.id,
               name: log_data.name,
             },
             secret,
-            { expiresIn: "9999hr" }
+            { expiresIn: "23h" }
           );
           log_data.token = token;
-          return helper.success(res, "You are login successfully", {
+          return helper.success(res, "You are logged in successfully", {
             log_data,
             token,
           });
@@ -274,45 +270,37 @@ module.exports = {
       return res.status(500).json({ message: "An error occurred while updating profile" });
     }
   },
-   reset_password :async (req, res) => {
-    try {
-      const { password, newPassword } = req.body;
-      const token = req.headers.authorization?.split(' ')[1]; 
-  
-      if (!token) {
-        return helper.error(res, "No token provided");
-      }
-  
-      
-      const decoded = jwt.verify(token, "secretkey_12");
-      const userId = decoded.id; 
-  
-      const find_data = await user.findById(userId);
-  
-      if (!find_data) {
-        return helper.error(res, "User not found");
-      }
-  
-      const ciphertext = find_data.password;
-      const bytes = CryptoJS.AES.decrypt(ciphertext, "secretkey_12");
-      const originalText = bytes.toString(CryptoJS.enc.Utf8);
-  
-      if (password !== originalText) {
-        return helper.error(res, "Current password is incorrect");
-      }
-  
-      const encryptedNewPassword = CryptoJS.AES.encrypt(newPassword, "secretkey_12").toString();
-      const updatedUser = await user.findByIdAndUpdate(
-        userId, 
-        { password: encryptedNewPassword },
-        { new: true }
-      );
-  
-      return helper.success(res, "Password changed successfully", updatedUser);
-    } catch (error) {
-      console.error("Error resetting password:", error);
-      return helper.error(res, "An error occurred while resetting the password");
+  reset_password: async (req, res) => {
+  try {
+    const { password, newPassword } = req.body;
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+      return helper.error(res, "No token provided");
     }
+    const decoded = jwt.verify(token, "secretkey_12");
+    const userId = decoded.id;
+    const find_data = await user.findById(userId);
+    if (!find_data) {
+      return helper.error(res, "User not found");
+    }
+    const isPasswordMatch = await bcrypt.compare(password, find_data.password);
+
+    if (!isPasswordMatch) {
+      return helper.error(res, "Current password is incorrect");
+    }
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    const updatedUser = await user.findByIdAndUpdate(
+      userId,
+      { password: hashedNewPassword },
+      { new: true }
+    );
+
+    return helper.success(res, "Password changed successfully", updatedUser);
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    return helper.error(res, "An error occurred while resetting the password");
+  }
   },
   status: async (req, res) => {
   try {

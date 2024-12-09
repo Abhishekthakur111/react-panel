@@ -17,7 +17,7 @@ const SubCategoryEdit = () => {
   useEffect(() => {
     const fetchSubcategoryData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/service/${_id}`);
+        const response = await axios.get(`${BASE_URL}/editget/${_id}`);
         if (response.data.success) {
           setSubcategory(response.data.body);
           setImagePreview(

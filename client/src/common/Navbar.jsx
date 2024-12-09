@@ -56,7 +56,7 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
     };
   
     fetchProfile();
-  
+   
     if (location.state?.updated) {
       fetchProfile();
     }

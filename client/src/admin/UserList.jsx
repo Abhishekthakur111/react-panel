@@ -25,7 +25,6 @@ const UserList = () => {
       const response = await axios.get(`${BASE_URL}/user_list`, {
         params: { page, size: pageSize },
       });
-
       if (response.data.success) {
         setUsers(response.data.body.data);
         setTotalPages(response.data.body.pagination.totalPages);

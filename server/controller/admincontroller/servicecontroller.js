@@ -73,7 +73,7 @@ module.exports = {
     serviceView: async (req, res) => {
         try {
             const service = await Services.findById(req.params._id)
-                .populate()
+                .populate('cat_id')
                 .exec();
                 res.status(200).json({
                     success: true,
@@ -131,6 +131,21 @@ module.exports = {
         } catch (error) {
             console.error("Error updating service status:", error);
             return res.status(500).json({ message: "An error occurred while updating service status" });
+        }
+    },
+    serviceViewedit: async (req, res) => {
+        try {
+            const service = await Services.findById(req.params._id)
+                .populate()
+                .exec();
+                res.status(200).json({
+                    success: true,
+                    message: "Services retrieved successfully",
+                    body: service});
+            
+        } catch (error) {
+            console.error("Error retrieving service details:", error);
+            return helper.error(res, "Internal server error");
         }
     },
     editservice: async (req, res) => {

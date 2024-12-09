@@ -45,13 +45,13 @@ const SubCategoryList = () => {
   const [isToastActive, setIsToastActive] = useState(false);
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "0" ? "1" : "0";
-  
+
     try {
       const response = await axios.post(`${BASE_URL}/subcategorystatus`, {
         id,
         status: newStatus,
       });
-  
+
       if (response.data.success) {
         fetchData();
         if (!isToastActive) {
@@ -72,7 +72,6 @@ const SubCategoryList = () => {
       toast.error("An error occurred while changing subcategory status");
     }
   };
-  
 
   const deleteService = async (_id) => {
     const result = await Swal.fire({
@@ -180,10 +179,11 @@ const SubCategoryList = () => {
                                   {(currentPage - 1) * pageSize + index + 1}
                                 </td>
                                 <td>
-                                  {service.cat_id?.status === "0"
-                                    ? service.cat_id?.name
+                                  {service.cat_id?.name
+                                    ? service.cat_id.name
                                     : "No Category"}
                                 </td>
+
                                 <td>{service.name || "no sub category"}</td>
                                 <td>${service.price || "no price"}</td>
                                 <td>
@@ -213,7 +213,10 @@ const SubCategoryList = () => {
                                       id={`statusSwitch-${service._id}`}
                                       checked={service.status === "0"}
                                       onChange={() =>
-                                        toggleStatus(service._id, service.status)
+                                        toggleStatus(
+                                          service._id,
+                                          service.status
+                                        )
                                       }
                                       style={{
                                         backgroundColor:
