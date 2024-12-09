@@ -147,7 +147,7 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
 
         <ul className="navbar-nav navbar-right d-flex align-items-center">
           <li className="d-flex align-items-center ms-auto">
-            <h5 className="mb-0">{name}</h5>
+            <h6 className="mb-0">{name}</h6 >
             <div className="dropdown" ref={dropdownRef}>
               <Link
                 to="#"

@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const category = require('../../models/categeory');
 const SubCategory = require('../../models/services');
 const booking = require('../../models/bookings');
-const Secret = process.env.SECRET;
+
 
 module.exports = {
   dashboard: async (req, res) => {
@@ -58,36 +58,30 @@ module.exports = {
   },
   login: async (req, res) => {
     try {
-      let log_data = await user.findOne({
-        email: req.body.email,
-        role: 0,
-      });
-      if (!log_data) {
-        return helper.error(res, "Please enter the valid Email");
-      } else {
-        const result = await bcrypt.compare(req.body.password, log_data.password);
-        if (result) {
-          const secret = process.env.Secret
-          const token = jwt.sign(
-            {
-              id: log_data.id,
-              name: log_data.name,
-            },
-            secret,
-            { expiresIn: "23h" }
-          );
-          log_data.token = token;
-          return helper.success(res, "You are logged in successfully", {
-            log_data,
-            token,
-          });
-        } else {
-          return helper.error(res, "Incorrect Password");
-        }
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return helper.error(res, "Email and Password are required");
       }
+      const userData = await user.findOne({ email, role: 0 });
+      if (!userData) {
+        return helper.error(res, "Invalid Email or user not authorized");
+      }
+      const isPasswordValid = await bcrypt.compare(password, userData.password);
+      if (!isPasswordValid) {
+        return helper.error(res, "Incorrect Password");
+      }
+      const secret = process.env.SECRET ;
+      const token = jwt.sign(
+        { id: userData.id, name: userData.name },
+        secret,
+        { expiresIn: "23h" }
+      );
+      userData.token = token;
+      await userData.save();
+      return helper.success(res, "Login successful", { token });
     } catch (error) {
-      console.error(error);
-      return helper.error(res, "Internal server error", error);
+      console.error("Login Error:", error);
+      return helper.error(res, "Internal server error", error.message);
     }
   },
   user_list: async (req, res) => {
