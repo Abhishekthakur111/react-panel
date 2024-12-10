@@ -97,6 +97,9 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
     "/map": "Map",
     "/changepassword": "Change Password",
     "/profile":"Profile",
+    '/contacts':'Contacts',
+    '/categoryadd':'Add Category',
+    '/subcategoryadd': 'Add Sub Category'
   };
 
   const currentPath = location.pathname;
@@ -114,6 +117,11 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
       ? "Edit Category"
       : currentPath.startsWith("/updatesubcategory")
       ? "Edit Sub Category"
+      : currentPath.startsWith("/contactview/")
+      ? "Contact Detail"
+       : currentPath.startsWith("/categoryadd")
+      ? "Add Category"
+      
       : "");
 
   const handleLinkClick = () => {

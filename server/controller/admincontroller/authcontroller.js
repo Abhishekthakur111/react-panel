@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const category = require('../../models/categeory');
 const SubCategory = require('../../models/services');
 const booking = require('../../models/bookings');
-
+const Contact = require('../../models/contacts');
 
 module.exports = {
   dashboard: async (req, res) => {
@@ -14,13 +14,14 @@ module.exports = {
       let data = await category.countDocuments({});
       let subdata = await SubCategory.countDocuments({});
       let databooking = await booking.countDocuments({});
+      let datacontact = await Contact.countDocuments({});
   
       return helper.success(res, "Dashboard data fetched successfully", {
         userCount,
         data,
         subdata,
-        databooking
-       
+        databooking,
+        datacontact
       });
     } catch (error) {
       console.error("Error fetching dashboard data:", error);

@@ -22,6 +22,8 @@ import Map from "./Booking/Map";
 import PrivateRoute from "./PrivateRoute"; 
 import CategoryEdit from './Category/CategoryEdit';
 import SubCategoryEdit from './SubCategory/SubCategoryEdit';
+import ContactList from './Contact/ContactList';
+import ContactView from './Contact/ContactView';
 
 const App = () => {
  
@@ -51,6 +53,8 @@ const App = () => {
             <Route path="/bookinglist" element={<PrivateRoute element={<BookingList />} />} />
             <Route path="/booking/:_id" element={<PrivateRoute element={<BookingView />} />} />
             <Route path="/Map" element={<PrivateRoute element={<Map />} />} />
+            <Route path='/contacts' element={<PrivateRoute element={<ContactList/>}/>}/>
+            <Route path='/contactview/:_id' element={<PrivateRoute element={<ContactView/>}/>}/>
           </Route>
         </Routes>
       </Router>

@@ -70,13 +70,13 @@ const Map = () => {
         style={{
           ...styles.mapContainer,
           ...(isFullscreen ? styles.fullscreen : {}),
-          height: "500px",
+          height: "100vh",
         }}
       >
         <button
           style={styles.fullscreenButton}
           onClick={toggleFullscreen}
-          title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"} // Tooltip text
+          title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"} 
         >
           {isFullscreen ? <FaCompress /> : <FaExpand />}
         </button>

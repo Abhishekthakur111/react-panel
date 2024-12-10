@@ -59,7 +59,9 @@ const CategoryEdit = () => {
       );
       if (response.data.success) {
         toast.success("Category updated successfully");
-        navigate("/categorylist");
+        setTimeout(() => {
+          navigate("/categorylist");
+        }, 1000);
       } else {
         setError("Failed to update category.");
       }

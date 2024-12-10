@@ -97,7 +97,9 @@ const SubCategoryEdit = () => {
       );
       if (response.data.success) {
         toast.success("Subcategory updated successfully!");
+       setTimeout(()=>{
         navigate("/subcategory");
+       }, 1000);
       } else {
         toast.error(
           `Update failed: ${response.data.message || "Unknown error"}`

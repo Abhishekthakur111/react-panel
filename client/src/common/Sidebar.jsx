@@ -19,7 +19,7 @@ const menuItems = [
     to: "/subcategory", 
     label: "Sub Categories", 
     icon: "list", 
-    activePaths: ["/subcategoryadd", "/updatesubcategory"] 
+    activePaths: ["/subcategoryadd", "/updatesubcategory",'/subcategoryadd'] 
   },
   { 
     to: "/bookinglist", 
@@ -31,6 +31,11 @@ const menuItems = [
   { to: "/privacypolicy", label: "Privacy Policy", icon: "shield" },
   { to: "/aboutus", label: "About Us", icon: "info" },
   { to: "/terms&conditions", label: "Terms&Conditions", icon: "article" },
+  { to: "/contacts", 
+    label: "Contacts", 
+    icon: "lock",
+    activePaths: ["/contactview"]
+   },
 ];
 
 const Sidebar = ({ handleLinkClick }) => {

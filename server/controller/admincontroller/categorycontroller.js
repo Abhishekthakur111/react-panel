@@ -138,7 +138,6 @@ module.exports = {
       }
 
       await category.save();
-
       return helper.success(res, "Category updated successfully", { data: category });
     } catch (error) {
       console.error("Error updating category:", error);

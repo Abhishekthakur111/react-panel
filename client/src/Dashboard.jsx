@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [categories, setCategories] = useState(0);
   const [subCategories, setSubCategories] = useState(0);
   const [bookings, setBookings] = useState(0);
+  const [contact, setContact] = useState(0);
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,12 +28,12 @@ const Dashboard = () => {
           'Authorization': `Bearer ${token}`
         }
       });
-
       if (response.data.success) {
         setUsers(response.data.body.userCount);
         setCategories(response.data.body.data); 
         setSubCategories(response.data.body.subdata); 
         setBookings(response.data.body.databooking); 
+        setContact(response.data.body.datacontact); 
       } else {
         toast.error('Failed to fetch dashboard data');
       }
@@ -118,6 +119,21 @@ const Dashboard = () => {
                   <div className="text-end pt-1">
                     <h4>Bookings</h4>
                     <h4>{bookings}</h4>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+          <div className="col-xl-3 col-sm-6 mt-5">
+            <Link to="/bookinglist">
+              <div className="card">
+                <div className="card-header p-3 pt-2">
+                  <div className="icon icon-lg icon-shape bg-gradient-warning shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                  <i className="material-icons opacity-10">contacts</i>
+                  </div>
+                  <div className="text-end pt-1">
+                    <h4>Contacts</h4>
+                    <h4>{contact}</h4>
                   </div>
                 </div>
               </div>

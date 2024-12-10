@@ -8,6 +8,7 @@ let cmscontroller = require("../controller/admincontroller/cmscontroller");
 let category = require('../controller/admincontroller/categorycontroller');
 let service = require('../controller/admincontroller/servicecontroller');
 let booking = require('../controller/admincontroller/bookingcontroller');
+let contact = require('../controller/admincontroller/contactController');
 
 // routes for admincontroller
 router.get('/dashboard',authcontroller.dashboard);
@@ -74,11 +75,11 @@ router.get('/booking/:_id', booking.bookingView);
 router.post('/bookingstatus', booking.status);
 router.delete('/bookingdelete/:_id',booking.deletebooking);
 
-
-
-
-
-
+//router for contacts
+router.post('/createcontact',contact.createcontact);
+router.get('/contactlist',contact.contact_get);
+router.get('/contactview/:_id', contact.contact_view);
+router.delete('/contactdelete/:_id',contact.contact_delete);
 
 
 module.exports = router;

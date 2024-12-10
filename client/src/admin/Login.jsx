@@ -53,8 +53,8 @@ const Login = () => {
         const response = await axios.post(`${BASE_URL}/login`, { email, password });
         if (response.data.success) {
           localStorage.setItem('token', response.data.body.token);
+          // toast.success('login successfully');
           navigate('/dashboard', { state: { message: 'Admin logged in successfully' } });
-          // toast.success("Admin logged in successfully");
         } else {
           toast.error(response.data.message || "Login failed");
         }
@@ -162,5 +162,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
