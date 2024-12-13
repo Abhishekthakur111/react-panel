@@ -152,13 +152,15 @@ const toggleStatus = async (id, currentStatus) => {
                           }}
                         />
                       </div>
-                      <Link
+                     <div className="mt-1">
+                     <Link
                         to="/categoryadd"
                         className="btn btn-light"
                         style={{  marginTop: "10px" }}
                       >
                         Add
                       </Link>
+                     </div>
                     </div>
                   </div>
                 </div>

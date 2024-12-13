@@ -11,16 +11,18 @@ const SubCategoryList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [startDate, setStartDate] = useState(""); 
+  const [endDate, setEndDate] = useState(""); 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, startDate, endDate]);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/services`, {
-        params: { page: currentPage, size: pageSize },
+        params: { page: currentPage, size: pageSize, startDate, endDate },
       });
       if (response.data.success) {
         setServices(response.data.body.data);
@@ -42,6 +44,7 @@ const SubCategoryList = () => {
       );
     }
   };
+
   const [isToastActive, setIsToastActive] = useState(false);
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "0" ? "1" : "0";
@@ -117,6 +120,11 @@ const SubCategoryList = () => {
     setCurrentPage(pageNumber);
   };
 
+  // // Function to handle date range filter change
+  // const handleDateFilterChange = () => {
+  //   fetchData(); // Re-fetch data when date range changes
+  // };
+
   return (
     <>
       <ToastContainer position="top-right" autoClose={5000} />
@@ -131,7 +139,7 @@ const SubCategoryList = () => {
                       Sub Categories
                     </h6>
                     <div className="d-flex align-items-center">
-                      <div className="mx-3">
+                      <div className="mx-2">
                         <input
                           type="text"
                           className="form-control"
@@ -144,13 +152,46 @@ const SubCategoryList = () => {
                           }}
                         />
                       </div>
-                      <Link
+                      <div className="mx-1">
+                        <input
+                          type="date"
+                          className="form-control"
+                          value={startDate}
+                          onChange={(e) => setStartDate(e.target.value)}
+                          style={{
+                            backgroundColor: "white",
+                          }}
+                        />
+                        </div>
+                        <div className="mx-2">
+                        <input
+                          type="date"
+                          className="form-control"
+                          value={endDate}
+                          onChange={(e) => setEndDate(e.target.value)}
+                          style={{
+                            backgroundColor: "white",
+                          }}
+                        />
+                      </div>
+                      {/* <div className="mx-3">
+                        <button
+                          onClick={handleDateFilterChange}
+                          className="btn btn-light"
+                          style={{ marginTop: "10px" }}
+                        >
+                          Apply Date Filter
+                        </button>
+                      </div> */}
+                     <div className="mx-1 mt-1">
+                     <Link
                         to="/subcategoryadd"
-                        className="btn btn-light "
+                        className="btn btn-light"
                         style={{ marginTop: "10px" }}
                       >
                         Add
                       </Link>
+                     </div>
                     </div>
                   </div>
                 </div>
@@ -183,7 +224,6 @@ const SubCategoryList = () => {
                                     ? service.cat_id.name
                                     : "No Category"}
                                 </td>
-
                                 <td>{service.name || "no sub category"}</td>
                                 <td>${service.price || "no price"}</td>
                                 <td>
