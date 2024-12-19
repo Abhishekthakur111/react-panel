@@ -99,7 +99,8 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
     "/profile":"Profile",
     '/contacts':'Contacts',
     '/categoryadd':'Add Category',
-    '/subcategoryadd': 'Add Sub Category'
+    '/subcategoryadd': 'Add Sub Category',
+    '/calendar': 'Calendar',
   };
 
   const currentPath = location.pathname;

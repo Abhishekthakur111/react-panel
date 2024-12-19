@@ -36,6 +36,7 @@ const menuItems = [
     icon: "lock",
     activePaths: ["/contactview"]
    },
+   { to: "/calendar", label: "Calendar", icon: "event" },
 ];
 
 const Sidebar = ({ handleLinkClick }) => {

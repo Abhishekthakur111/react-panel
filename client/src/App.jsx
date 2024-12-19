@@ -24,6 +24,8 @@ import CategoryEdit from './Category/CategoryEdit';
 import SubCategoryEdit from './SubCategory/SubCategoryEdit';
 import ContactList from './Contact/ContactList';
 import ContactView from './Contact/ContactView';
+import CalendarPage from './admin/Calendar';
+
 
 const App = () => {
  
@@ -55,6 +57,7 @@ const App = () => {
             <Route path="/Map" element={<PrivateRoute element={<Map />} />} />
             <Route path='/contacts' element={<PrivateRoute element={<ContactList/>}/>}/>
             <Route path='/contactview/:_id' element={<PrivateRoute element={<ContactView/>}/>}/>
+            <Route path='/calendar' element={<PrivateRoute element={<CalendarPage/>}/>}/>
           </Route>
         </Routes>
       </Router>

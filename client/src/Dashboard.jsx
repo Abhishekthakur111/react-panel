@@ -19,7 +19,7 @@ const Dashboard = () => {
       const token = localStorage.getItem('token');
       if (!token) {
         toast.error('Authentication token missing');
-        navigate('/login'); 
+        navigate('/'); 
         return;
       }
 
