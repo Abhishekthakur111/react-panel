@@ -273,7 +273,7 @@ module.exports = {
     if (!token) {
       return helper.error(res, "No token provided");
     }
-    const decoded = jwt.verify(token, "secretkey_12");
+    const decoded = jwt.verify(token, process.env.SECRET);
     const userId = decoded.id;
     const find_data = await user.findById(userId);
     if (!find_data) {

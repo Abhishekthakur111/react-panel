@@ -139,6 +139,21 @@ const Dashboard = () => {
               </div>
             </Link>
           </div>
+          <div className="col-xl-3 col-sm-6 mt-5">
+            <Link to="/map">
+              <div className="card">
+                <div className="card-header p-3 pt-2">
+                  <div className="icon icon-lg icon-shape bg-gradient-danger shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                  <i className="material-icons opacity-10">map</i>
+                  </div>
+                  <div className="text-end pt-1">
+                    <h4>Map</h4>
+                    <h4>Current location</h4>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
       <div className='container-fluid'>

@@ -45,7 +45,7 @@ const Privacy = () => {
         content,
       });
       toast.success("Privacy policy updated successfully");
-      navigate("/privacy");
+      navigate("/privacypolicy");
     } catch (error) {
       setSubmitError("Error submitting privacy policy. Please try again.");
       toast.error("Error submitting privacy policy. Please try again.");

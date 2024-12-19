@@ -88,8 +88,6 @@ const BookingList = () => {
     }
   };
   
- 
-
   const handleStatusChange = async (bookingId, newStatus) => {
     try {
       const response = await axios.post(`${BASE_URL}/bookingstatus`, { id: bookingId, status: newStatus });
@@ -135,7 +133,7 @@ const BookingList = () => {
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Search by name..."
+                      placeholder="Search by bookingcode..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       style={{ backgroundColor: "white" ,paddingLeft:'10px'}} 
