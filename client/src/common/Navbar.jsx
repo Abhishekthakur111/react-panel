@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_URL } from "../Config";
 
+
 const Navbar = ({ toggleSidebar, closeSidebar }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -62,28 +63,30 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
     }
   }, [location.state]);
   
-  const logout = async () => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You will be logged out of your account.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#D81B60",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, log out!",
-    });
+  
 
-    if (result.isConfirmed) {
-      try {
-        await axios.post(`${BASE_URL}/logout`);
-        localStorage.removeItem("token");
-        navigate("/");
-        closeDropdown();
-      } catch (error) {
-        console.error("Error logging out:", error);
-      }
+const logout = async () => {
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "You will be logged out of your account.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#D81B60",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, log out!",
+  });
+
+  if (result.isConfirmed) {
+    try {
+      await axios.post(`${BASE_URL}/logout`);
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error logging out:", error);
     }
-  };
+  }
+};
+
 
   const pathToTitleMap = {
     "/dashboard": "Dashboard",
@@ -205,13 +208,13 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
                   >
                     <i className="fas fa-cogs" /> Change Password
                   </Link>
-                  <a
-                    href="#"
+                  <Link
+                    to="#"
                     className="dropdown-item has-icon text-danger"
                     onClick={logout}
                   >
                     <i className="fas fa-sign-out-alt" /> Log out
-                  </a>
+                  </Link>
                 </div>
               )}
             </div>

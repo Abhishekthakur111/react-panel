@@ -111,58 +111,6 @@ module.exports = {
       return helper.error(res, "Internal server error");
     }
   },
-  provider_list: async (req, res) => {
-    try {
-      const page = parseInt(req.query.page) || 1; 
-      const size = parseInt(req.query.size) || 10; 
-    
-      const skip = (page - 1) * size;
-      const data = await user.find({role: 2 , raw: true, nest: true })
-          .skip(skip)
-          .limit(size);
-      const totalCount = await user.countDocuments({role: 2});
-      const totalPages = Math.ceil(totalCount / size);
-
-      return helper.success(res, "All providers Detail", {
-          data,
-          pagination: {
-              totalCount,
-              totalPages,
-              currentPage: page,
-              pageSize: size
-          }
-      });
-    } catch (error) {
-      console.error("Error fetching providers:", error);
-      return helper.error(res, "Internal server error");
-    }
-  },
-  workers_list:async(req,res)=>{
-    try {
-      const page = parseInt(req.query.page) || 1; 
-      const size = parseInt(req.query.size) || 10; 
-    
-      const skip = (page - 1) * size;
-      const data = await user.find({role: 3 , raw: true, nest: true })
-          .skip(skip)
-          .limit(size);
-      const totalCount = await user.countDocuments({role: 3});
-      const totalPages = Math.ceil(totalCount / size);
-
-      return helper.success(res, "All workers Detail", {
-          data,
-          pagination: {
-              totalCount,
-              totalPages,
-              currentPage: page,
-              pageSize: size
-          }
-      });
-    } catch (error) {
-      console.error('error fetching workers: ',error);
-      return helper.error(res, "internal server error");
-    }
-  },
   view: async (req, res) => {
     try {
       let view = await user.findById({_id:req.params._id});

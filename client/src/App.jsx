@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route ,Navigate } from "react-router-dom";
 import Login from "./admin/Login";
 import Layout from "./common/Layout";
 import Dashboard from "./Dashboard";
@@ -28,13 +28,13 @@ import CalendarPage from './admin/Calendar';
 
 
 const App = () => {
- 
+  const isAuthenticated = localStorage.getItem("token");
 
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+        <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}/>
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
             <Route path="/userlist" element={<PrivateRoute element={<UserList />} />} />

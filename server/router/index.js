@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-let usercontroller = require('../controller/apicontroller/usercontroller');
 let authcontroller = require('../controller/admincontroller/authcontroller');
 let auth =require("../middleware/authtoken");
 let cmscontroller = require("../controller/admincontroller/cmscontroller");
@@ -27,7 +26,6 @@ router.get('/profile', auth.verifyToken, authcontroller.profile);
 router.post('/profileupdate', auth.verifyToken, authcontroller.edit_profile); 
 
 // routesfor user controller
-router.post("/createadmin",usercontroller.user_create);
 router.post('/userstatus',authcontroller.status);
 
 // routes for cms
@@ -44,12 +42,6 @@ router.post('/logout', authcontroller.logout);
 
 // route for graph
 router.post('/graph', authcontroller.apexcharts);
-
-// router for provider
-router.get('/provider', authcontroller.provider_list);
-
-//  router for workers
-router.get('/worker', authcontroller.workers_list);
 
 // router for categeory
 router.post('/createCategory', category.createCategory);

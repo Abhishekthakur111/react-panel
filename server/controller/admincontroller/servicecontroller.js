@@ -76,8 +76,7 @@ module.exports = {
           console.error("Error retrieving services:", error);
           return helper.error(res, "Internal server error");
         }
-      },
-      
+    },  
     serviceView: async (req, res) => {
         try {
             const service = await Services.findById(req.params._id)

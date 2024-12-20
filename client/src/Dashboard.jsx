@@ -154,6 +154,21 @@ const Dashboard = () => {
               </div>
             </Link>
           </div>
+          <div className="col-xl-3 col-sm-6 mt-5">
+            <Link to="/calendar">
+              <div className="card">
+                <div className="card-header p-3 pt-2">
+                  <div className="icon icon-lg icon-shape bg-gradient-primary shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                  <i className="material-icons opacity-10">event</i>
+                  </div>
+                  <div className="text-end pt-1">
+                    <h4>Calendar</h4>
+                    <h4>Event</h4>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
       <div className='container-fluid'>
