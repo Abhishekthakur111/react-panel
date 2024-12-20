@@ -19,9 +19,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(flash());
 app.use(fileUpload());
+const buildpath=path.resolve(__dirname,"../client/build")
 app.use(bodyParser.urlencoded({extended : true}));
 
 app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(buildpath));
+app.get('/',async(req,res)=>{
+  res.sendFile(buildpath,"index.html");
+})
 app.use("/", indexRouter);
 
 
