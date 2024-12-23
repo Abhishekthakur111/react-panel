@@ -29,7 +29,7 @@ router.post('/profileupdate', auth.verifyToken, authcontroller.edit_profile);
 router.post('/userstatus',authcontroller.status);
 
 // routes for cms
-router.post('/createcms',cmscontroller.createcms);
+
 router.get("/privacy",cmscontroller.privacy_policy);
 router.post("/privacypolicy", cmscontroller.privacypolicy);
 router.get("/aboutus",cmscontroller.aboutus);

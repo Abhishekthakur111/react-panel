@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../Config";
+import { axiosInstance } from "../Config";
 
 const Privacy = () => {
   const [title, setTitle] = useState("");
@@ -17,12 +16,12 @@ const Privacy = () => {
   useEffect(() => {
     const fetchPrivacyPolicy = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/privacy`);
+        const response = await axiosInstance.get(`/privacy`);
         const { data } = response.data;
         setTitle(data.title || "");
         setContent(data.content || "<p><br></p>");
       } catch (error) {
-        console.error("Error fetching privacy policy:", error);
+        toast.error("Please try again.");
       }
     };
 
@@ -40,7 +39,7 @@ const Privacy = () => {
     setSubmitError("");
 
     try {
-      await axios.post(`${BASE_URL}/privacypolicy`, {
+      await axiosInstance.post(`/privacypolicy`, {
         title,
         content,
       });
@@ -49,7 +48,7 @@ const Privacy = () => {
     } catch (error) {
       setSubmitError("Error submitting privacy policy. Please try again.");
       toast.error("Error submitting privacy policy. Please try again.");
-      console.error("Error submitting privacy policy:", error);
+     
     }
   };
 

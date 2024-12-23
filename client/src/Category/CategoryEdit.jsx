@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { BASE_URL } from "../Config";
+import { axiosInstance, BASE_URL } from "../Config";
 import { toast, ToastContainer } from "react-toastify";
 
 const CategoryEdit = () => {
@@ -9,21 +8,24 @@ const CategoryEdit = () => {
   const [data, setData] = useState({ name: "", image: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
   const [newImage, setNewImage] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/viewcategory/${_id}`);
+        const response = await axiosInstance.get(`/viewcategory/${_id}`);
         if (response.data.success) {
           setData(response.data.body);
+          setImagePreview(
+            response.data.body.image ? `${BASE_URL}/${response.data.body.image}` : null
+          );
         } else {
           setError("Failed to fetch category data.");
         }
       } catch (err) {
         setError("Error fetching category data.");
-        console.error("Error fetching category:", err);
       } finally {
         setLoading(false);
       }
@@ -33,15 +35,21 @@ const CategoryEdit = () => {
   }, [_id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleImageChange = (e) => {
-    setNewImage(e.target.files[0]);
+    const { name, value, files } = e.target;
+    if (name === "image" && files.length > 0) {
+      const file = files[0];
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select a valid image file.");
+        return;
+      }
+      setNewImage(file); 
+      setImagePreview(URL.createObjectURL(file)); 
+    } else {
+      setData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -53,10 +61,7 @@ const CategoryEdit = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/updatecategory/${_id}`,
-        formData
-      );
+      const response = await axiosInstance.post(`/updatecategory/${_id}`, formData);
       if (response.data.success) {
         toast.success("Category updated successfully");
         setTimeout(() => {
@@ -67,7 +72,6 @@ const CategoryEdit = () => {
       }
     } catch (err) {
       setError("Error updating category.");
-      console.error("Error updating category:", err);
     }
   };
 
@@ -108,31 +112,31 @@ const CategoryEdit = () => {
                     <div className="card">
                       <div className="card-body">
                         <form onSubmit={handleSubmit}>
-                          <div className="form-group mx-auto text-center">
-                            {data.image && (
-                              <div className="image-container">
+                          <div className="form-group col-3 mx-auto">
+                            <div className="admin_profile" data-aspect="1/1">
+                              {imagePreview && (
                                 <img
-                                  src={
-                                    data.image.startsWith("http")
-                                      ? data.image
-                                      : `${BASE_URL}${data.image}`
-                                  }
-                                  alt="Category"
+                                  src={imagePreview}
+                                  alt="Preview"
                                   style={{
-                                    width: "200px",
+                                    borderRadius: "10px",
+                                    width: "290px",
                                     height: "200px",
-                                    objectFit: "cover",
-                                    borderRadius: "20%",
+                                    marginBottom: "5px",
                                   }}
                                 />
-                              </div>
-                            )}
-                            <input
-                              type="file"
-                              className="form-control mt-3"
-                              onChange={handleImageChange}
-                              style={{ paddingLeft: "500px" }}
-                            />
+                              )}
+                              <input
+                                type="file"
+                                name="image"
+                                className="form-control"
+                                onChange={handleChange}
+                                style={{
+                                  paddingLeft: "10px",
+                                  backgroundColor: "lightpink",
+                                }}
+                              />
+                            </div>
                           </div>
                           <div className="form-group mt-3">
                             <label>Name</label>
@@ -159,7 +163,7 @@ const CategoryEdit = () => {
                             <button
                               type="button"
                               className="btn btn-primary"
-                              onClick={() => navigate("/categorylist")}
+                              onClick={handleBack}
                             >
                               Back
                             </button>

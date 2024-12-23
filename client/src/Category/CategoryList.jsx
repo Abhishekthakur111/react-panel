@@ -1,36 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
-import { BASE_URL } from "../Config";
-
-
+import { axiosInstance, BASE_URL } from "../Config";
+import Pagination from "../Pagination";
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [pageSize] = useState(10);
-  const navigate = useNavigate();
+  const [pageSize] = useState(5);
+  const [isToastActive, setIsToastActive] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
+  }, []);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/categorylist`, {
-        params: {
-          page: currentPage,
-          size: pageSize,
-        },
-      });
+      const response = await axiosInstance.get(`/categorylist`);
 
       if (response.data.success) {
         setCategories(response.data.body.data);
-        setTotalPages(response.data.body.pagination.totalPages);
       } else {
         Swal.fire(
           "Error",
@@ -39,7 +30,6 @@ const CategoryList = () => {
         );
       }
     } catch (error) {
-      console.error("Error fetching category list", error);
       Swal.fire(
         "Error",
         "An error occurred while fetching the category list",
@@ -48,7 +38,7 @@ const CategoryList = () => {
     }
   };
 
-  const deleteUser = async (_id) => {
+  const deleteCategory = async (_id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -61,7 +51,7 @@ const CategoryList = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${BASE_URL}/deletecategory/${_id}`);
+        await axiosInstance.delete(`/deletecategory/${_id}`);
         fetchData();
         Swal.fire("Deleted!", "Category has been deleted.", "success");
       } catch (error) {
@@ -76,46 +66,50 @@ const CategoryList = () => {
     }
   };
 
-  const [isToastActive, setIsToastActive] = useState(false);
+  const toggleStatus = async (id, currentStatus) => {
+    const newStatus = currentStatus === "0" ? "1" : "0";
 
-const toggleStatus = async (id, currentStatus) => {
-  const newStatus = currentStatus === "0" ? "1" : "0";
+    try {
+      const response = await axiosInstance.post(`/categorystatus`, {
+        id,
+        status: newStatus,
+      });
 
-  try {
-    const response = await axios.post(`${BASE_URL}/categorystatus`, {
-      id,
-      status: newStatus,
-    });
-
-    if (response.data.success) {
-      fetchData();
-      if (!isToastActive) {
-        setIsToastActive(true);
-        toast.success(
-          `Category status changed to ${
-            newStatus === "0" ? "Active" : "Inactive"
-          }`
-        );
-        setTimeout(() => {
-          setIsToastActive(false);
-        }, 2000);
+      if (response.data.success) {
+        fetchData();
+        if (!isToastActive) {
+          setIsToastActive(true);
+          toast.success(
+            `Category status changed to ${
+              newStatus === "0" ? "Active" : "Inactive"
+            }`
+          );
+          setTimeout(() => {
+            setIsToastActive(false);
+          }, 2000);
+        }
+      } else {
+        toast.error(response.data.message || "Failed to change status");
       }
-    } else {
-      toast.error(response.data.message || "Failed to change status");
+    } catch (error) {
+      toast.error("An error occurred while changing category status");
     }
-  } catch (error) {
-    toast.error("An error occurred while changing category status");
-  }
-};
-
+  };
 
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalPages = Math.ceil(filteredCategories.length / pageSize);
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  const paginatedCategories = filteredCategories.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <>
@@ -130,7 +124,7 @@ const toggleStatus = async (id, currentStatus) => {
         draggable
         pauseOnHover
       />
-      <div className="container-fluid ">
+      <div className="container-fluid">
         <div className="row">
           <div className="col-12">
             <div className="card my-4">
@@ -152,15 +146,15 @@ const toggleStatus = async (id, currentStatus) => {
                           }}
                         />
                       </div>
-                     <div className="mt-1">
-                     <Link
-                        to="/categoryadd"
-                        className="btn btn-light"
-                        style={{  marginTop: "10px" }}
-                      >
-                        Add
-                      </Link>
-                     </div>
+                      <div className="mt-1">
+                        <Link
+                          to="/categoryadd"
+                          className="btn btn-light"
+                          style={{ marginTop: "10px" }}
+                        >
+                          Add
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -181,12 +175,12 @@ const toggleStatus = async (id, currentStatus) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filteredCategories.map((category, index) => (
+                          {paginatedCategories.map((category, index) => (
                             <tr key={category._id}>
                               <td>
                                 {(currentPage - 1) * pageSize + index + 1}
                               </td>
-                              <td>{category.name || 'no category'}</td>
+                              <td>{category.name || "no category"}</td>
                               <td>
                                 {category.image ? (
                                   <img
@@ -251,8 +245,8 @@ const toggleStatus = async (id, currentStatus) => {
                                   <i className="me-100 fas fa-edit" />
                                 </Link>
                                 <button
-                                  onClick={() => deleteUser(category._id)}
-                                  className="has-icon btn  m-1 "
+                                  onClick={() => deleteCategory(category._id)}
+                                  className="has-icon btn m-1"
                                   style={{
                                     backgroundColor: "#D81B60",
                                     borderColor: "#D81B60",
@@ -268,56 +262,14 @@ const toggleStatus = async (id, currentStatus) => {
                       </table>
                     </div>
                   </div>
-                  <div className="card-footer text-right">
-                    <nav className="d-inline-block">
-                      <ul className="pagination mb-0">
-                        <li
-                          className={`page-item ${
-                            currentPage === 1 ? "disabled" : ""
-                          }`}
-                        >
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={() => handlePageChange(currentPage - 1)}
-                          >
-                            <i className="fas fa-chevron-left" />
-                          </a>
-                        </li>
-                        {[...Array(totalPages).keys()].map((page) => (
-                          <li
-                            key={page}
-                            className={`page-item ${
-                              currentPage === page + 1 ? "active" : ""
-                            }`}
-                          >
-                            <a
-                              className="page-link"
-                              href="#"
-                              onClick={() => handlePageChange(page + 1)}
-                            >
-                              {page + 1}
-                            </a>
-                          </li>
-                        ))}
-                        <li
-                          className={`page-item ${
-                            currentPage === totalPages ? "disabled" : ""
-                          }`}
-                        >
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={() => handlePageChange(currentPage + 1)}
-                          >
-                            <i className="fas fa-chevron-right" />
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
                 </div>
               </div>
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>

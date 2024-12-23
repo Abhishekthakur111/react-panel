@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../Config";
+import { axiosInstance } from "../Config";
 
 const Terms = () => {
   const [title, setTitle] = useState("");
@@ -17,12 +16,12 @@ const Terms = () => {
   useEffect(() => {
     const fetchPrivacyPolicy = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/terms`);
+        const response = await axiosInstance.get(`/terms`);
         const { data } = response.data;
         setTitle(data.title || "");
         setContent(data.content || "<p><br></p>");
       } catch (error) {
-        console.error("Error fetching terms&condtions:", error);
+         toast.error("Please try again.");
       }
     };
 
@@ -40,7 +39,7 @@ const Terms = () => {
     setSubmitError("");
 
     try {
-      await axios.post(`${BASE_URL}/updateterm`, {
+      await axiosInstance.post(`/updateterm`, {
         title,
         content,
       });
@@ -49,7 +48,6 @@ const Terms = () => {
     } catch (error) {
       setSubmitError("Error submitting terms&conditons. Please try again.");
       toast.error("Error submitting terms&conditons. Please try again.");
-      console.error("Error submitting terms&conditons:", error);
     }
   };
 

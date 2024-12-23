@@ -3,8 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css';
-import axios from 'axios';
-import { BASE_URL } from '../Config';
+import { axiosInstance } from '../Config';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Login = () => {
@@ -50,7 +49,7 @@ const Login = () => {
     }
     if (!emailError && !passwordError) {
       try {
-        const response = await axios.post(`${BASE_URL}/login`, { email, password });
+        const response = await axiosInstance.post("/login", { email, password });
         if (response.data.success) {
           localStorage.setItem('token', response.data.body.token);
           // toast.success('login successfully');

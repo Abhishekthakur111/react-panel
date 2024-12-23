@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BASE_URL } from '../Config';
+import { axiosInstance } from '../Config';
 
 
 
@@ -15,7 +14,7 @@ const ContactView = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`${BASE_URL}/contactview/${_id}`);
+        const response = await axiosInstance.get(`/contactview/${_id}`);
        
         if (response.data.data)
              {
@@ -25,7 +24,6 @@ const ContactView = () => {
         }
       } catch (error) {
         setError("Error fetching contact data.");
-        console.error("Error fetching contact:", error);
       } finally {
         setLoading(false);
       }

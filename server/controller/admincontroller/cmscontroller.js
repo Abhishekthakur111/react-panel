@@ -1,25 +1,12 @@
 const cms = require("../../models/cms");
 
 module.exports ={
-
-    createcms:async(req,res)=>{
-        try {
-            const data = await cms.create({
-                ...req.body
-            });
-            res.status(200).json({message:'true',data});
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({messgae:"Internal server error"});
-        }
-    },
     privacy_policy:async (req,res) =>{
         try {
             let data = await cms.findOne({type :1});
             return res.status(200).json({message:"privacy policy....",data});
         } catch (error) {
-                    console.log(error);
-                    return res.status(500).json({messgae:"Internal server error"});
+         throw error
         }
     },
     privacypolicy: async (req, res) => {
@@ -32,8 +19,7 @@ module.exports ={
             );
             return res.status(200).json({ message: "Privacy policy updated successfully.", data });
         } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: "Internal server error" });
+          throw error
         }
     },
     aboutus:async(req, res) => {
@@ -41,8 +27,7 @@ module.exports ={
             let data = await cms.findOne({type:2});
             return res.status(200).json({message:"about us..", data});
         } catch (error) {
-            console.log(error);
-            return res.status(500).json({messgae:"Internal server error"});
+           throw error
         }
     },
     updateabout: async (req, res) => {
@@ -63,8 +48,7 @@ module.exports ={
             }
             return res.status(200).json({ message: "Update About Us successfully." });
         } catch (error) {
-            console.error("Error updating About Us:", error);
-            return res.status(500).json({ message: "Internal server error" });
+          throw error
         }
     },
     term:async(req,res)=>{
@@ -72,8 +56,7 @@ module.exports ={
             let data = await cms.findOne({type:3});
             return res.status(200).json({message:"Term and Condtions.....", data});            
         } catch (error) {
-            console.log(error);
-            return res.status(500).json({messgae:"Internal server error"});
+          throw error
         }
     },
     updateterm:async(req,res)=> {
@@ -85,8 +68,7 @@ module.exports ={
             );
             return res.status(200).json({message:'Term and conditions......', data});
         } catch (error) {
-            console.log(error);
-            return res.status(500).json({message:"internal server error"})
+         throw error
         }
     }
 }

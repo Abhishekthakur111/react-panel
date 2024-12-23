@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenNib } from "@fortawesome/free-solid-svg-icons";
-import { BASE_URL } from "../Config";
+import { axiosInstance, BASE_URL } from "../Config";
 
 const Profile = () => {
   const [data, setData] = useState({
@@ -28,7 +27,7 @@ const Profile = () => {
       }
 
       try {
-        const response = await axios.get(`${BASE_URL}/profile`, {
+        const response = await axiosInstance.get(`/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,7 +41,6 @@ const Profile = () => {
           setImagePreview(imageUrl);
         }
       } catch (error) {
-        console.error("Error fetching profile data", error);
         toast.error("Error fetching profile data");
       }
     };
@@ -90,7 +88,7 @@ const Profile = () => {
     }
   
     try {
-      const response = await axios.post(`${BASE_URL}/profileupdate`, formData, {
+      const response = await axiosInstance.post(`/profileupdate`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -108,7 +106,6 @@ const Profile = () => {
       toast.success("Profile updated successfully");
       navigate("/profile", { state: { updated: true } });
     } catch (error) {
-      console.error("Error updating profile", error);
       toast.error("Error updating profile");
     }
   };

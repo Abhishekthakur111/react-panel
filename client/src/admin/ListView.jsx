@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BASE_URL } from '../Config';
-
+import { axiosInstance,BASE_URL } from '../Config';
 
 
 const ListView = () => {
@@ -15,7 +13,7 @@ const ListView = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`${BASE_URL}/view/${_id}`);
+        const response = await axiosInstance.get(`/view/${_id}`);
         if (response.data.success) {
           setData(response.data.body);
         } else {
@@ -23,7 +21,6 @@ const ListView = () => {
         }
       } catch (error) {
         setError("Error fetching user data.");
-        console.error("Error fetching user:", error);
       } finally {
         setLoading(false);
       }

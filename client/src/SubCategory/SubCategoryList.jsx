@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
-import { BASE_URL } from "../Config";
+import { axiosInstance, BASE_URL } from "../Config";
+import Pagination from "../Pagination"; 
 
 const SubCategoryList = () => {
   const [services, setServices] = useState([]);
+  const [filteredServices, setFilteredServices] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [startDate, setStartDate] = useState(""); 
   const [endDate, setEndDate] = useState(""); 
@@ -17,16 +17,22 @@ const SubCategoryList = () => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, startDate, endDate]);
+  }, []);
+
+  useEffect(() => {
+    filterServicesByDate(); 
+  }, [startDate, endDate, services]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm, services]);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/services`, {
-        params: { page: currentPage, size: pageSize, startDate, endDate },
-      });
+      const response = await axiosInstance.get(`/services`);
       if (response.data.success) {
         setServices(response.data.body.data);
-        setTotalPages(response.data.body.pagination.totalPages);
+        setFilteredServices(response.data.body.data); 
       } else {
         Swal.fire(
           "Error",
@@ -35,7 +41,6 @@ const SubCategoryList = () => {
         );
       }
     } catch (error) {
-      console.error("Error fetching sub category list", error);
       Swal.fire(
         "Error",
         error.response?.data?.message ||
@@ -45,12 +50,32 @@ const SubCategoryList = () => {
     }
   };
 
+  const filterServicesByDate = () => {
+    let filtered = [...services];
+
+    if (startDate && endDate) {
+      filtered = filtered.filter((service) => {
+        const serviceDate = new Date(service.createdAt);
+        return serviceDate >= new Date(startDate) && serviceDate <= new Date(endDate);
+      });
+    }
+
+    setFilteredServices(filtered);
+  };
+
+  const handleSearch = () => {
+    const filtered = services.filter((service) =>
+      service.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredServices(filtered);
+  };
+
   const [isToastActive, setIsToastActive] = useState(false);
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "0" ? "1" : "0";
 
     try {
-      const response = await axios.post(`${BASE_URL}/subcategorystatus`, {
+      const response = await axiosInstance.post(`/subcategorystatus`, {
         id,
         status: newStatus,
       });
@@ -89,7 +114,7 @@ const SubCategoryList = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${BASE_URL}/delete_service/${_id}`);
+        await axiosInstance.delete(`/delete_service/${_id}`);
         fetchData();
         Swal.fire("Deleted!", "Sub Category has been deleted.", "success");
       } catch (error) {
@@ -108,22 +133,15 @@ const SubCategoryList = () => {
     }
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // // Function to handle date range filter change
-  // const handleDateFilterChange = () => {
-  //   fetchData(); // Re-fetch data when date range changes
-  // };
+  const totalPages = Math.ceil(filteredServices.length / pageSize);
+  const paginatedServices = filteredServices.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <>
@@ -145,7 +163,7 @@ const SubCategoryList = () => {
                           className="form-control"
                           placeholder="Search by name..."
                           value={searchTerm}
-                          onChange={handleSearch}
+                          onChange={(e) => setSearchTerm(e.target.value)}
                           style={{
                             backgroundColor: "white",
                             paddingLeft: "10px",
@@ -162,8 +180,8 @@ const SubCategoryList = () => {
                             backgroundColor: "white",
                           }}
                         />
-                        </div>
-                        <div className="mx-2">
+                      </div>
+                      <div className="mx-2">
                         <input
                           type="date"
                           className="form-control"
@@ -174,24 +192,15 @@ const SubCategoryList = () => {
                           }}
                         />
                       </div>
-                      {/* <div className="mx-3">
-                        <button
-                          onClick={handleDateFilterChange}
+                      <div className="mx-1 mt-1">
+                        <Link
+                          to="/subcategoryadd"
                           className="btn btn-light"
                           style={{ marginTop: "10px" }}
                         >
-                          Apply Date Filter
-                        </button>
-                      </div> */}
-                     <div className="mx-1 mt-1">
-                     <Link
-                        to="/subcategoryadd"
-                        className="btn btn-light"
-                        style={{ marginTop: "10px" }}
-                      >
-                        Add
-                      </Link>
-                     </div>
+                          Add
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -213,8 +222,8 @@ const SubCategoryList = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filteredServices.length ? (
-                            filteredServices.map((service, index) => (
+                          {paginatedServices.length ? (
+                            paginatedServices.map((service, index) => (
                               <tr key={service._id}>
                                 <td>
                                   {(currentPage - 1) * pageSize + index + 1}
@@ -315,54 +324,11 @@ const SubCategoryList = () => {
                       </table>
                     </div>
                   </div>
-                  <div className="card-footer text-right">
-                    <nav className="d-inline-block">
-                      <ul className="pagination mb-0">
-                        <li
-                          className={`page-item ${
-                            currentPage === 1 ? "disabled" : ""
-                          }`}
-                        >
-                          <button
-                            className="page-link"
-                            onClick={() => handlePageChange(currentPage - 1)}
-                          >
-                            <i className="fas fa-chevron-left" />
-                          </button>
-                        </li>
-                        {Array.from({ length: totalPages }, (_, index) => (
-                          <li
-                            key={index}
-                            className={`page-item ${
-                              currentPage === index + 1 ? "active" : ""
-                            }`}
-                          >
-                            <button
-                              className="page-link"
-                              onClick={() => handlePageChange(index + 1)}
-                            >
-                              {index + 1}
-                              {currentPage === index + 1 && (
-                                <span className="sr-only">(current)</span>
-                              )}
-                            </button>
-                          </li>
-                        ))}
-                        <li
-                          className={`page-item ${
-                            currentPage === totalPages ? "disabled" : ""
-                          }`}
-                        >
-                          <button
-                            className="page-link"
-                            onClick={() => handlePageChange(currentPage + 1)}
-                          >
-                            <i className="fas fa-chevron-right" />
-                          </button>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
                 </div>
               </div>
             </div>

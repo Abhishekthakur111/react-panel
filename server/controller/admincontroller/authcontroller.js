@@ -24,8 +24,7 @@ module.exports = {
         datacontact
       });
     } catch (error) {
-      console.error("Error fetching dashboard data:", error);
-      return helper.error(res, "Internal server error");
+      throw err
     }
   },
   apexcharts: async (req, res) => {
@@ -54,7 +53,7 @@ module.exports = {
         categories 
       });
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
+      throw err
     }
   },
   login: async (req, res) => {
@@ -75,40 +74,23 @@ module.exports = {
       const token = jwt.sign(
         { id: userData.id, name: userData.name },
         secret,
-        { expiresIn: "23h" }
+        { expiresIn: "2h" }
       );
       userData.token = token;
       await userData.save();
       return helper.success(res, "Login successful", { token });
     } catch (error) {
-      console.error("Login Error:", error);
-      return helper.error(res, "Internal server error", error.message);
+      throw err
     }
   },
   user_list: async (req, res) => {
     try {
-      const page = parseInt(req.query.page) || 1; 
-      const size = parseInt(req.query.size) || 10; 
-    
-      const skip = (page - 1) * size;
       const data = await user.find({role: 1 , raw: true, nest: true })
-          .skip(skip)
-          .limit(size);
-      const totalCount = await user.countDocuments({role: 1});
-      const totalPages = Math.ceil(totalCount / size);
-
       return helper.success(res, "All users Detail", {
           data,
-          pagination: {
-              totalCount,
-              totalPages,
-              currentPage: page,
-              pageSize: size
-          }
       });
     } catch (error) {
-      console.log(error);
-      return helper.error(res, "Internal server error");
+      throw err
     }
   },
   view: async (req, res) => {
@@ -116,8 +98,7 @@ module.exports = {
       let view = await user.findById({_id:req.params._id});
       return helper.success(res, "data", view);
     } catch (error) {
-      console.log(error);
-      return helper.error(res, "An error occurred", error);
+      throw err
     }
   },  
   user_edit: async (req, res) => {
@@ -146,7 +127,7 @@ module.exports = {
         return helper.success(res, "User update successfully", find_data);
     } catch (error) {
       
-      return res.status(500).json({ message: "Internal server error" });
+      throw err
     }
   },
   delete_user: async (req, res) => {
@@ -160,7 +141,7 @@ module.exports = {
       }
     } catch (error) {
       
-      return res.status(500).json({ message: "Internal server error" });
+      throw err
     }
   },
   profile: async (req, res) => {
@@ -174,8 +155,7 @@ module.exports = {
 
       return res.status(200).json({ message: "Profile fetched successfully", body: find_user });
     } catch (error) {
-      console.error("Error fetching profile:", error);
-      return res.status(500).json({ message: "An error occurred while fetching profile" });
+      throw err
     }
   },
   edit_profile: async (req, res) => {
@@ -209,8 +189,7 @@ module.exports = {
       }
       return res.status(200).json({ message: "Profile updated successfully", body: updatedProfile });
     } catch (error) {
-      console.error("Error updating profile:", error);
-      return res.status(500).json({ message: "An error occurred while updating profile" });
+      throw err
     }
   },
   reset_password: async (req, res) => {
@@ -241,39 +220,27 @@ module.exports = {
 
     return helper.success(res, "Password changed successfully", updatedUser);
   } catch (error) {
-    console.error("Error resetting password:", error);
-    return helper.error(res, "An error occurred while resetting the password");
+    throw err
   }
   },
   status: async (req, res) => {
   try {
     const { id, status } = req.body;
-
-    
-    if (status !== "0" && status !== "1") {
-      return res.status(400).json({ message: "Invalid status value" });
-    }
     const updatedUser = await user.findByIdAndUpdate(
       id,
       { status },
       { new: true }
     );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
     return res.status(200).json({ success: true, message: "User status updated successfully" });
   } catch (error) {
-    console.error("Error updating user status:", error);
-    return res.status(500).json({ message: "An error occurred while updating user status" });
+    throw err
   }
   },   
   logout: (req, res) => {
     try {
       res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
-      console.error("Error during logout:", error);
-      return res.status(500).json({ message: "An error occurred during logout" });
+      throw err
     }
   },
 };

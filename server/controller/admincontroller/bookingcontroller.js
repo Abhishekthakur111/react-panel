@@ -54,20 +54,12 @@ const createBooking = async (req, res) => {
         return helper.success(res, 'Booking Created Successfully', { data: newBooking });
 
     } catch (error) {
-        console.error('Error creating booking:', error);
-        return helper.error(res, 'Internal server error');
+      throw error
     }
 };
 const bookinglist = async (req, res) => {
-    try {
-        const { page = 1, size = 5 } = req.query; 
-        const limit = parseInt(size, 10);
-        const skip = (parseInt(page, 10) - 1) * limit;
-
-        const totalCount = await Booking.countDocuments();
+    try {   
         const bookings = await Booking.find()
-            .skip(skip)
-            .limit(limit)
             .populate('user_id')
             .populate('service_id') 
             .populate('cat_id')     
@@ -79,16 +71,10 @@ const bookinglist = async (req, res) => {
             body: {
                 data: bookings,
                 pagination: {
-                    totalCount,
-                    totalPages: Math.ceil(totalCount / limit),
-                    currentPage: parseInt(page, 10),
-                    pageSize: limit
-                }
-            }
+            }}
         });
     } catch (error) {
-        console.error("Error retrieving booking:", error);
-        return helper.error(res, "Internal server error");
+       throw error
     }
 };
 const bookingView = async (req, res) => {
@@ -106,8 +92,7 @@ const bookingView = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error retrieving booking:", error);
-        return helper.error(res, "Internal server error");
+        throw error
     }
 };
 const status = async (req, res) => {
@@ -144,8 +129,7 @@ const  deletebooking = async(req, res)=>{
           return helper.error(res, "Booking not found");
         }
       } catch (error) {
-        
-        return res.status(500).json({ message: "Internal server error" });
+       throw error
       }
   };
 module.exports = {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BASE_URL } from '../Config';
+import { axiosInstance, BASE_URL } from '../Config';
 
 
 
@@ -15,8 +14,7 @@ const SubCategoryView = () => {
   useEffect(() => {
     async function fetchService() {
       try {
-        const response = await axios.get(`${BASE_URL}/service/${_id}`);
-        console.log(response,'//////////');
+        const response = await axiosInstance.get(`/service/${_id}`);
         if (response.data.success) {
           setService(response.data.body);
         } else {
@@ -24,7 +22,6 @@ const SubCategoryView = () => {
         }
       } catch (err) {
         setError("Error fetching service data.");
-        console.error("Error fetching service:", err);
       } finally {
         setLoading(false);
       }

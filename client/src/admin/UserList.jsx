@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
-import { BASE_URL } from "../Config";
+import { Link } from "react-router-dom";
+import { axiosInstance, BASE_URL } from "../Config";
 import '@fortawesome/fontawesome-free/css/all.min.css';
-
+import Pagination from "../Pagination";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [pageSize] = useState(10);
-  const navigate = useNavigate();
   const [isToastActive, setIsToastActive] = useState(false);
 
-  useEffect(() => {
-    fetchData(currentPage);
-  }, [currentPage]);
 
-  const fetchData = async (page) => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/user_list`, {
-        params: { page, size: pageSize },
-      });
+      const response = await axiosInstance.get('/user_list');
       if (response.data.success) {
         setUsers(response.data.body.data);
-        setTotalPages(response.data.body.pagination.totalPages);
       } else {
         Swal.fire(
           "Error",
@@ -58,8 +53,8 @@ const UserList = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${BASE_URL}/user_delete/${_id}`);
-        fetchData(currentPage);
+        await axiosInstance.delete(`/user_delete/${_id}`);
+        fetchData();
         Swal.fire("Deleted!", "User has been deleted.", "success");
       } catch (error) {
         Swal.fire(
@@ -73,44 +68,48 @@ const UserList = () => {
     }
   };
 
-  
+  const toggleStatus = async (id, currentStatus) => {
+    const newStatus = currentStatus === "0" ? "1" : "0";
 
-const toggleStatus = async (id, currentStatus) => {
-  const newStatus = currentStatus === "0" ? "1" : "0";
+    try {
+      const response = await axiosInstance.post('/userstatus', {
+        id,
+        status: newStatus,
+      });
 
-  try {
-    const response = await axios.post(`${BASE_URL}/userstatus`, {
-      id,
-      status: newStatus,
-    });
-
-    if (response.data.success) {
-      fetchData(currentPage);
-      if (!isToastActive) {
-        setIsToastActive(true);
-        toast.success(
-          `User status changed to ${newStatus === "0" ? "Active" : "Inactive"}`
-        );
-        setTimeout(() => {
-          setIsToastActive(false);
-        }, 2000); 
+      if (response.data.success) {
+        fetchData();
+        if (!isToastActive) {
+          setIsToastActive(true);
+          toast.success(
+            `User status changed to ${newStatus === "0" ? "Active" : "Inactive"}`
+          );
+          setTimeout(() => {
+            setIsToastActive(false);
+          }, 2000);
+        }
+      } else {
+        toast.error(response.data.message || "Failed to change status");
       }
-    } else {
-      toast.error(response.data.message || "Failed to change status");
+    } catch (error) {
+      toast.error("An error occurred while changing user status");
     }
-  } catch (error) {
-    toast.error("An error occurred while changing user status");
-  }
-};
-
+  };
 
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const totalPages = Math.ceil(filteredUsers.length / pageSize);
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  const displayedUsers = filteredUsers.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <>
@@ -162,7 +161,7 @@ const toggleStatus = async (id, currentStatus) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filteredUsers.map((user, index) => (
+                          {displayedUsers.map((user, index) => (
                             <tr key={user._id}>
                               <td>
                                 {(currentPage - 1) * pageSize + index + 1}
@@ -239,54 +238,12 @@ const toggleStatus = async (id, currentStatus) => {
                       </table>
                     </div>
                   </div>
-                  <div className="card-footer text-right">
-                    <nav className="d-inline-block">
-                      <ul className="pagination mb-0">
-                        <li
-                          className={`page-item ${
-                            currentPage === 1 ? "disabled" : ""
-                          }`}
-                        >
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={() => handlePageChange(currentPage - 1)}
-                          >
-                            <i className="fas fa-chevron-left" />
-                          </a>
-                        </li>
-                        {[...Array(totalPages).keys()].map((page) => (
-                          <li
-                            key={page}
-                            className={`page-item ${
-                              currentPage === page + 1 ? "active" : ""
-                            }`}
-                          >
-                            <a
-                              className="page-link"
-                              href="#"
-                              onClick={() => handlePageChange(page + 1)}
-                            >
-                              {page + 1}
-                            </a>
-                          </li>
-                        ))}
-                        <li
-                          className={`page-item ${
-                            currentPage === totalPages ? "disabled" : ""
-                          }`}
-                        >
-                          <a
-                            className="page-link"
-                            href="#"
-                            onClick={() => handlePageChange(currentPage + 1)}
-                          >
-                            <i className="fas fa-chevron-right" />
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
-                  </div>
+                 
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
                 </div>
               </div>
             </div>

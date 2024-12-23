@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
-import { BASE_URL } from '../Config';
+import { axiosInstance } from '../Config';
 
 const Password = () => {
   const navigate = useNavigate();
@@ -21,7 +20,6 @@ const Password = () => {
       toast.error("New password and confirm password do not match");
       return;
     }
-
     const token = localStorage.getItem('token');
     if (!token) {
       toast.error("No token found. Please log in again.");
@@ -29,8 +27,8 @@ const Password = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/change_password`,
+      const response = await axiosInstance.post(
+        `/change_password`,
         { password, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );

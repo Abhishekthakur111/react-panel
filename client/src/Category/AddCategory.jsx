@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../Config";
+import { axiosInstance } from "../Config";
 
 const AddCategory = () => {
   const [data, setData] = useState({
@@ -48,8 +47,8 @@ const AddCategory = () => {
     formData.append("name", data.name);
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/createcategory`,
+      const response = await axiosInstance.post(
+        `/createcategory`,
         formData,
         {
           headers: {
@@ -65,7 +64,6 @@ const AddCategory = () => {
         toast.error("Category creation failed: " + response.data.message);
       }
     } catch (error) {
-      console.error("Error:", error);
       toast.error("Request failed: " + error.message);
     }
   };
@@ -106,7 +104,7 @@ const AddCategory = () => {
                           alt="Preview"
                           style={{
                             borderRadius: "10px",
-                            width: "330px",
+                            width: "290px",
                             height: "200px",
                             marginBottom: "5px",
                           }}

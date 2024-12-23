@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BASE_URL } from '../Config';
+import { axiosInstance } from '../Config';
 
 
 
@@ -16,7 +15,7 @@ const BookingView = () => {
     const fetchBooking = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${BASE_URL}/booking/${_id}`);
+        const response = await axiosInstance.get(`/booking/${_id}`);
         if (response.data.success) {
           setBooking(response.data.body);
         } else {
@@ -24,7 +23,6 @@ const BookingView = () => {
         }
       } catch (err) {
         setError("Error fetching booking data.");
-        console.error("Error fetching booking:", err);
       } finally {
         setLoading(false);
       }

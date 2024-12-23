@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../Config";
+import { axiosInstance } from "../Config";
 
 const SubCategoryAdd = () => {
   const [data, setData] = useState({
@@ -30,7 +29,7 @@ const SubCategoryAdd = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/categorylist`);
+      const response = await axiosInstance.get(`/categorylist`);
       if (response.data.success) {
         const activeCategories = response.data.body.data.filter(
           (category) => category.status == 0
@@ -38,7 +37,6 @@ const SubCategoryAdd = () => {
         setCategories(activeCategories);
       }
     } catch (error) {
-      console.error("Error fetching category list", error);
     }
   };
 
@@ -100,7 +98,7 @@ const SubCategoryAdd = () => {
     }
 
     try {
-      const response = await axios.post(`${BASE_URL}/createservice`, formData, {
+      const response = await axiosInstance.post(`/createservice`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -154,7 +152,7 @@ const SubCategoryAdd = () => {
                           alt="Preview"
                           style={{
                             borderRadius: "10px",
-                            width: "330px",
+                            width: "290px",
                             height: "200px",
                             marginBottom: "5px",
                           }}

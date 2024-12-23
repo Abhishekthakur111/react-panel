@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { BASE_URL } from "../Config";
+import { axiosInstance, BASE_URL } from "../Config";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,7 +16,7 @@ const SubCategoryEdit = () => {
   useEffect(() => {
     const fetchSubcategoryData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/editget/${_id}`);
+        const response = await axiosInstance.get(`/editget/${_id}`);
         if (response.data.success) {
           setSubcategory(response.data.body);
           setImagePreview(
@@ -29,7 +28,7 @@ const SubCategoryEdit = () => {
           setError("Failed to fetch subcategory data.");
         }
 
-        const categoryResponse = await axios.get(`${BASE_URL}/categorylist`);
+        const categoryResponse = await axiosInstance.get(`/categorylist`);
         if (categoryResponse.data.success) {
           const activeCategories = categoryResponse.data.body.data.filter(
             (category) => category.status == 0
@@ -40,7 +39,6 @@ const SubCategoryEdit = () => {
         }
       } catch (err) {
         setError("Error fetching data.");
-        console.error("Error fetching data:", err);
       } finally {
         setLoading(false);
       }
@@ -86,8 +84,8 @@ const SubCategoryEdit = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/updatesubcategory/${_id}`,
+      const response = await axiosInstance.post(
+        `/updatesubcategory/${_id}`,
         formData,
         {
           headers: {
@@ -106,7 +104,6 @@ const SubCategoryEdit = () => {
         );
       }
     } catch (error) {
-      console.error("Request error:", error);
       toast.error(`Request failed: ${error.message}`);
     }
   };
@@ -146,7 +143,7 @@ const SubCategoryEdit = () => {
                           alt="Preview"
                           style={{
                             borderRadius: "10px",
-                            width: "300px",
+                            width: "290px",
                             height: "200px",
                             marginBottom: "5px",
                           }}

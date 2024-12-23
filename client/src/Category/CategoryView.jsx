@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { BASE_URL } from '../Config';
+import { axiosInstance, BASE_URL } from '../Config';
 
 
 
@@ -15,7 +14,7 @@ const CategoryView = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/viewcategory/${_id}`);
+        const response = await axiosInstance.get(`/viewcategory/${_id}`);
         if (response.data.success) {
           setData(response.data.body);
         } else {
@@ -23,7 +22,6 @@ const CategoryView = () => {
         }
       } catch (err) {
         setError("Error fetching category data.");
-        console.error("Error fetching category:", err);
       } finally {
         setLoading(false);
       }

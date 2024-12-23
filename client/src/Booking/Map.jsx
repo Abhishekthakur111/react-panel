@@ -36,13 +36,11 @@ const Map = () => {
           setLoading(false);
         },
         (err) => {
-          console.error("Geolocation error:", err.message);
           setError("Unable to retrieve your location. Using default position.");
           setLoading(false);
         }
       );
     } else {
-      console.error("Geolocation not supported.");
       setError("Geolocation is not supported by your browser.");
       setLoading(false);
     }

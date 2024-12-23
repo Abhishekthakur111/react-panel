@@ -1,30 +1,26 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
-import { BASE_URL } from "../Config";
+import { axiosInstance } from "../Config";
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Pagination from '../Pagination'; 
 
 const ContactList = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
-    fetchData(currentPage);
-  }, [currentPage]);
+    fetchData();
+  }, []);
 
-  const fetchData = async (page) => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/contactlist`, {
-        params: { page, size: pageSize },
-      });
+      const response = await axiosInstance.get(`/contactlist`);
       if (response.data.success) {
         setData(response.data.body.data);
-        setTotalPages(response.data.body.pagination.totalPages);
       } else {
         Swal.fire(
           "Error",
@@ -55,8 +51,8 @@ const ContactList = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`${BASE_URL}/contactdelete/${_id}`);
-        fetchData(currentPage); 
+        await axiosInstance.delete(`/contactdelete/${_id}`);
+        fetchData(); 
         Swal.fire("Deleted!", "Contact has been deleted.", "success");
       } catch (error) {
         Swal.fire(
@@ -74,8 +70,12 @@ const ContactList = () => {
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+ 
+  const totalPages = Math.ceil(filteredUsers.length / pageSize);
+  const currentUsers = filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   const handlePageChange = (page) => {
-    if (page > 0 && page <= totalPages) {
+    if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
@@ -128,7 +128,7 @@ const ContactList = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {filteredUsers.map((user, index) => (
+                          {currentUsers.map((user, index) => (
                             <tr key={user._id}>
                               <td>{index + 1}</td>
                               <td>{user.name || "no user"}</td>
@@ -163,54 +163,11 @@ const ContactList = () => {
                         </tbody>
                       </table>
                     </div>
-                    <div className="card-footer text-right">
-                      <nav className="d-inline-block">
-                        <ul className="pagination mb-0">
-                          <li
-                            className={`page-item ${
-                              currentPage === 1 ? "disabled" : ""
-                            }`}
-                          >
-                            <a
-                              className="page-link"
-                              href="#"
-                              onClick={() => handlePageChange(currentPage - 1)}
-                            >
-                              <i className="fas fa-chevron-left" />
-                            </a>
-                          </li>
-                          {[...Array(totalPages).keys()].map((page) => (
-                            <li
-                              key={page}
-                              className={`page-item ${
-                                currentPage === page + 1 ? "active" : ""
-                              }`}
-                            >
-                              <a
-                                className="page-link"
-                                href="#"
-                                onClick={() => handlePageChange(page + 1)}
-                              >
-                                {page + 1}
-                              </a>
-                            </li>
-                          ))}
-                          <li
-                            className={`page-item ${
-                              currentPage === totalPages ? "disabled" : ""
-                            }`}
-                          >
-                            <a
-                              className="page-link"
-                              href="#"
-                              onClick={() => handlePageChange(currentPage + 1)}
-                            >
-                              <i className="fas fa-chevron-right" />
-                            </a>
-                          </li>
-                        </ul>
-                      </nav>
-                    </div>
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                    />
                   </div>
                 </div>
               </div>

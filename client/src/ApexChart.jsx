@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import axios from 'axios';
-import { BASE_URL } from './Config';
+import { axiosInstance } from './Config';
 
 const ApexChart = () => {
   const [series, setSeries] = useState([{ name: 'Users', data: [] }]);
@@ -74,7 +73,7 @@ const ApexChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post(`${BASE_URL}/graph`);
+        const response = await axiosInstance.post(`/graph`);
         const { data, categories } = response.data;
 
         setSeries([{ name: 'Users', data }]);

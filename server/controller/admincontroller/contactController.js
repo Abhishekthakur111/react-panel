@@ -12,39 +12,21 @@ module.exports = {
             });
             res.status(200).json({message:true, contact:contact});
         } catch (error) {
-            console.log(error,'error');
+         throw error
         }
     },
     contact_get: async (req, res) => {
         try {
-          const { page = 1, size = 5 } = req.query;
-          const limit = parseInt(size, 10);
-          const skip = (parseInt(page, 10) - 1) * limit;
-      
-          const totalCount = await Contact.countDocuments();
           const data = await Contact.find()
-            .skip(skip)
-            .limit(limit);
-      
           res.status(200).json({
             success: true,
             message: "Contact List retrieved successfully",
             body: {
-              data: data,
-              pagination: {
-                totalCount,
-                totalPages: Math.ceil(totalCount / limit),
-                currentPage: parseInt(page, 10),
-                pageSize: limit,
-              },
+              data: data
             },
           });
         } catch (error) {
-          console.error('Error fetching contacts:', error);
-          res.status(500).json({
-            success: false,
-            message: 'An error occurred while fetching contacts.',
-          });
+         throw error
         }
       },
       
@@ -54,7 +36,7 @@ module.exports = {
             data = await Contact.findById(contactId);
             return res.status(200).json({message:true, data:data});
         } catch (error) {
-            console.log(error,'error');
+           throw error
         }
     },
     contact_delete:async(req,res)=>{
@@ -63,7 +45,7 @@ module.exports = {
             const data = await Contact.findByIdAndDelete(_id);
             return res.status(200).json({message:true, data:data});
         } catch (error) {
-            console.log(error,'error');
+           throw error
         }
     }
 

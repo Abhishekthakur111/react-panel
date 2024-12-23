@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
-import { BASE_URL } from "../Config";
+import { axiosInstance, BASE_URL } from "../Config";
 
 
 const Navbar = ({ toggleSidebar, closeSidebar }) => {
@@ -41,7 +40,7 @@ const Navbar = ({ toggleSidebar, closeSidebar }) => {
         return;
       }
       try {
-        const response = await axios.get(`${BASE_URL}/profile`, {
+        const response = await axiosInstance.get(`/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -78,11 +77,10 @@ const logout = async () => {
 
   if (result.isConfirmed) {
     try {
-      await axios.post(`${BASE_URL}/logout`);
+      await axiosInstance.post(`/logout`);
       localStorage.removeItem("token");
       window.location.href = "/";
     } catch (error) {
-      console.error("Error logging out:", error);
     }
   }
 };

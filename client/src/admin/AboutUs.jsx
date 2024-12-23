@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../Config";
+import { axiosInstance} from "../Config";
 
 const AboutUs = () => {
   const [title, setTitle] = useState("");
@@ -17,12 +16,12 @@ const AboutUs = () => {
   useEffect(() => {
     const fetchPrivacyPolicy = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/aboutus`);
+        const response = await axiosInstance.get(`/aboutus`);
         const { data } = response.data;
         setTitle(data.title || "");
         setContent(data.content || "<p><br></p>");
       } catch (error) {
-        console.error("Error fetching About Us:", error);
+        toast.error(" Please try again.");
       }
     };
 
@@ -40,7 +39,7 @@ const AboutUs = () => {
     setSubmitError("");
 
     try {
-      await axios.post(`${BASE_URL}/updateabout`, {
+      await axiosInstance.post(`/updateabout`, {
         title,
         content,
       });
@@ -49,7 +48,6 @@ const AboutUs = () => {
     } catch (error) {
       setSubmitError("Error submitting About Us. Please try again.");
       toast.error("Error submitting About Us. Please try again.");
-      console.error("Error submitting About Us:", error);
     }
   };
 
@@ -161,3 +159,6 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
+
+
+    

@@ -29,34 +29,17 @@ module.exports = {
 
       return helper.success(res, "Category Created Successfully", { data: newCategory });
     } catch (error) {
-      console.error("Error creating category:", error);
-      return helper.error(res, "Internal server error");
+      throw error
     }
   },
   Categorylist:async(req, res) =>{
    try {
-    const page = parseInt(req.query.page) || 1; 
-    const size = parseInt(req.query.size) || 5; 
-  
-    const skip = (page - 1) * size;
     const data = await Category.find()
-        .skip(skip)
-        .limit(size);
-    const totalCount = await Category.countDocuments({});
-    const totalPages = Math.ceil(totalCount / size);
-
     return helper.success(res, "All category Detail", {
         data,
-        pagination: {
-            totalCount,
-            totalPages,
-            currentPage: page,
-            pageSize: size
-        }
     });
     } catch (error) {
-      console.log(error);
-      return helper.error(res, "Internal server error");
+   throw error
     }
   },  
   categeoryview: async(req,res)=> {
@@ -64,16 +47,13 @@ module.exports = {
         let categeoryview= await Category.findById({_id:req.params._id});
         return helper.success(res, "data", categeoryview);
       } catch (error) {
-        console.log(error);
-        return helper.error(res, "An error occurred", error);
+       throw error
       }
 
   },
   status: async (req, res) => {
     try {
       const { id, status } = req.body;
-  
-      
       if (status !== "0" && status !== "1") {
         return res.status(400).json({ message: "Invalid status value" });
       }
@@ -88,8 +68,7 @@ module.exports = {
       }
       return res.status(200).json({ success: true, message: "User status updated successfully" });
     } catch (error) {
-      console.error("Error updating user status:", error);
-      return res.status(500).json({ message: "An error occurred while updating user status" });
+      throw error
     }
   },
   deletecategeory: async(req, res)=>{
@@ -102,7 +81,7 @@ module.exports = {
           return helper.error(res, "User not found");
         }
       } catch (error) {
-        return res.status(500).json({ message: "Internal server error" });
+        throw error
       }
   },
   editcategory: async (req, res) => {
@@ -140,8 +119,7 @@ module.exports = {
       await category.save();
       return helper.success(res, "Category updated successfully", { data: category });
     } catch (error) {
-      console.error("Error updating category:", error);
-      return helper.error(res, "Internal server error");
+      throw error
     }
   },
 };
