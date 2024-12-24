@@ -10,7 +10,7 @@ let booking = require('../controller/admincontroller/bookingcontroller');
 let contact = require('../controller/admincontroller/contactController');
 
 // routes for admincontroller
-router.get('/dashboard',authcontroller.dashboard);
+router.get('/dash_board',authcontroller.dashboard);
 router.post('/login',authcontroller.login);
 router.get("/user_list",authcontroller.user_list);
 router.get('/view/:_id', authcontroller.view);

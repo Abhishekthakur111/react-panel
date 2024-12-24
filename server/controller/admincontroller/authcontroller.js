@@ -236,7 +236,7 @@ module.exports = {
     throw err
   }
   },   
-  logout: (req, res) => {
+  logout:(req, res) => {
     try {
       res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {

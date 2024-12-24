@@ -13,21 +13,21 @@ const flash = require('express-flash');
 const indexRouter = require('./router/index');
 
 const app = express();
-const port = process.env.port 
+const PORT = process.env.PORT 
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(flash());
 app.use(fileUpload());
-const buildpath=path.resolve(__dirname,"../client/build")
+const buildpath=path.resolve(__dirname,"../client/build");
 app.use(bodyParser.urlencoded({extended : true}));
-
-app.use(express.static(path.join(__dirname,'public')));
 app.use(express.static(buildpath));
-app.get('/',async(req,res)=>{
-  res.sendFile(buildpath,"index.html");
+app.use('/user',express.static(path.join(__dirname,'public')));
+app.use("/user", indexRouter);
+app.get('*',(req,res)=>{
+  res.sendFile(path.join(buildpath, "index.html"));
 })
-app.use("/", indexRouter);
+
 
 
 mongoose.set("strictQuery", true);
@@ -37,9 +37,9 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(port, () => {
+    app.listen(PORT, () => {
       console.log(
-        `Server is connecting to the database and running on port ${port}`
+        `Server is connecting to the database and running on PORT ${PORT}`
       );
     });
   })

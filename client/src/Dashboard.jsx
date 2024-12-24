@@ -22,7 +22,7 @@ const Dashboard = () => {
         return;
       }
 
-      const response = await axiosInstance.get(`/dashboard`, {
+      const response = await axiosInstance.get(`/dash_board`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

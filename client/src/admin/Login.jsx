@@ -12,7 +12,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [rememberMe, setRememberMe] = useState(false); 
+ 
 
   const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,10 +43,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!rememberMe) {
-      toast.error('Please check "Remember Me" before logging in');
-      return; 
-    }
+
     if (!emailError && !passwordError) {
       try {
         const response = await axiosInstance.post("/login", { email, password });
@@ -122,7 +119,7 @@ const Login = () => {
                         </div>
                         {emailError && <small className="text-danger">{emailError}</small>}
                         
-                        <div className="input-group input-group-outline mb-3">
+                        <div className="input-group input-group-outline mb-2">
                           <input
                             type="password"
                             className="form-control"
@@ -134,16 +131,7 @@ const Login = () => {
                         </div>
                         {passwordError && <small className="text-danger">{passwordError}</small>}
 
-                        <div className="form-check form-switch d-flex align-items-center mb-3">
-                          <input 
-                            className="form-check-input" 
-                            type="checkbox" 
-                            id="rememberMe" 
-                            checked={rememberMe} 
-                            onChange={() => setRememberMe(!rememberMe)} 
-                          />
-                          <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe">Remember me</label>
-                        </div>
+                        
                         <div className="text-center">
                           <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
                         </div>

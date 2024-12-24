@@ -25,6 +25,7 @@ import SubCategoryEdit from './SubCategory/SubCategoryEdit';
 import ContactList from './Contact/ContactList';
 import ContactView from './Contact/ContactView';
 import CalendarPage from './admin/Calendar';
+import SignUp from './admin/SignUp';
 
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
     <>
       <Router>
         <Routes>
+        <Route path='/signup' element={<SignUp/>}/>
         <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}/>
           <Route element={<Layout />}>
             <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
