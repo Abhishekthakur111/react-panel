@@ -124,7 +124,7 @@ const Dashboard = () => {
             </Link>
           </div>
           <div className="col-xl-3 col-sm-6 mt-5">
-            <Link to="/bookinglist">
+            <Link to="/contacts">
               <div className="card">
                 <div className="card-header p-3 pt-2">
                   <div className="icon icon-lg icon-shape bg-gradient-warning shadow-info text-center border-radius-xl mt-n4 position-absolute">
