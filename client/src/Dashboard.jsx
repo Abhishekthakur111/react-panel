@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import ApexChart from './ApexChart';
 import { axiosInstance} from './Config';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = () => {
   const [users, setUsers] = useState(0);
@@ -50,17 +51,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      <ToastContainer />
       <div className='container-fluid py-4'>
         <div className="row">
           <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">

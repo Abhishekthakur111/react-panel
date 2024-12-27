@@ -174,10 +174,10 @@ const SubCategoryAdd = () => {
           image: null,
         });
         setImagePreview(null);
-        toast.success("Service added successfully!");
+        toast.success("Sub Category added successfully!");
         navigate("/subcategory");
       } else {
-        toast.error(`Service creation failed: ${response.data.message}`);
+        toast.error(`Sub Category creation failed: ${response.data.message}`);
       }
     } catch (error) {
       toast.error(`Request failed: ${error.message}`);
