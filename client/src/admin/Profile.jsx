@@ -56,37 +56,61 @@ const Profile = () => {
     }
   };
 
-  const validateForm = () => {
-    let formErrors = {};
-    if (!data.name) formErrors.name = "Name is required";
-    if (!data.phone_no) formErrors.phone_no = "Phone number is required";
-    if (!data.address) formErrors.address = "Address is required";
-    return formErrors;
+  const validateName = (name) => {
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    if (!name) return "Name is required";
+    if (!nameRegex.test(name)) return "Name must contain only letters and spaces";
+    return "";
+  };
+
+  const validatePhone = (phone_no) => {
+    const phoneRegex = /^[0-9]+$/;
+    if (!phone_no) return "Phone number is required";
+    if (!phoneRegex.test(phone_no)) return "Phone number must contain only numbers";
+    return "";
+  };
+
+  const handleNameChange = (e) => {
+    const { value } = e.target;
+    setData((prevData) => ({ ...prevData, name: value }));
+    const nameError = validateName(value);
+    setErrors((prevErrors) => ({ ...prevErrors, name: nameError }));
+  };
+
+  const handlePhoneChange = (e) => {
+    const { value } = e.target;
+    setData((prevData) => ({ ...prevData, phone_no: value }));
+    const phoneError = validatePhone(value);
+    setErrors((prevErrors) => ({ ...prevErrors, phone_no: phoneError }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formErrors = validateForm();
+    let formErrors = {};
+
+    if (errors.name || errors.phone_no) {
+      formErrors = { ...formErrors, ...errors };
+    }
+    
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
     }
-  
+
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("No token found in localStorage");
       return;
     }
-  
+
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("email", data.email);
     formData.append("phone_no", data.phone_no);
-    formData.append("address", data.address);
     if (selectedImage) {
       formData.append("image", selectedImage);
     }
-  
+
     try {
       const response = await axiosInstance.post(`/profileupdate`, formData, {
         headers: {
@@ -102,14 +126,13 @@ const Profile = () => {
           : `${BASE_URL}/${updatedData.image}`;
         setImagePreview(imageUrl);
       }
-  
+
       toast.success("Profile updated successfully");
       navigate("/profile", { state: { updated: true } });
     } catch (error) {
       toast.error("Error updating profile");
     }
   };
-  
 
   return (
     <>
@@ -241,10 +264,9 @@ const Profile = () => {
                                       id={field}
                                       value={data[field]}
                                       onChange={(e) =>
-                                        setData((prevData) => ({
-                                          ...prevData,
-                                          [field]: e.target.value,
-                                        }))
+                                        field === "name"
+                                          ? handleNameChange(e)
+                                          : handlePhoneChange(e)
                                       }
                                     />
                                     {errors[field] && (

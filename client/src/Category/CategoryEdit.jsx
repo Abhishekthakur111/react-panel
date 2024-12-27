@@ -11,6 +11,7 @@ const CategoryEdit = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const navigate = useNavigate();
   const [newImage, setNewImage] = useState(null);
+  const [nameError, setNameError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +37,16 @@ const CategoryEdit = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+
+    if (name === "name") {
+      const nameRegex = /^[a-zA-Z\s]*$/;
+      if (!nameRegex.test(value)) {
+        setNameError("Name must contain only alphabetic characters and spaces.");
+      } else {
+        setNameError(""); 
+      }
+    }
+
     if (name === "image" && files.length > 0) {
       const file = files[0];
       if (!file.type.startsWith("image/")) {
@@ -54,6 +65,11 @@ const CategoryEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (nameError) {
+      toast.error("Please fix the errors before submitting.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", data.name);
     if (newImage) {
@@ -151,12 +167,18 @@ const CategoryEdit = () => {
                                 backgroundColor: "lightpink",
                               }}
                             />
+                            {nameError && (
+                              <div style={{ color: "red", fontSize: "12px" }}>
+                                {nameError}
+                              </div>
+                            )}
                           </div>
                           <div className="text-end mt-4">
                             <button
                               type="submit"
                               className="btn btn-primary"
                               style={{ marginRight: "10px" }}
+                              disabled={nameError}
                             >
                               Update
                             </button>

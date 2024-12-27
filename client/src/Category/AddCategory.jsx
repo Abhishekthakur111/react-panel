@@ -10,21 +10,37 @@ const AddCategory = () => {
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
+  const [nameError, setNameError] = useState(""); // State for name validation error
+  const [imageError, setImageError] = useState(""); // State for image validation error
   const navigate = useNavigate();
+
+  // Regular expression to allow only alphabetic characters and spaces
+  const nameValidation = /^[A-Za-z\s]+$/;
 
   const handleChange = (e) => {
     const { id, value, files } = e.target;
     if (id === "image" && files.length > 0) {
-      setData((prevData) => ({
-        ...prevData,
-        [id]: files[0],
-      }));
-      setImagePreview(URL.createObjectURL(files[0]));
-    } else {
+      const file = files[0];
+      if (file.type.startsWith("image/")) {
+        setData((prevData) => ({
+          ...prevData,
+          [id]: file,
+        }));
+        setImagePreview(URL.createObjectURL(file));
+        setImageError(""); // Clear image error on valid file
+      } else {
+        setImageError("Please select a valid image file.");
+      }
+    } else if (id === "name") {
       setData((prevData) => ({
         ...prevData,
         [id]: value,
       }));
+      if (!nameValidation.test(value.trim())) {
+        setNameError("Category name must only contain alphabets and spaces.");
+      } else {
+        setNameError(""); // Clear error if valid
+      }
     }
   };
 
@@ -37,6 +53,14 @@ const AddCategory = () => {
     }
     if (!data.name.trim()) {
       toast.error("Category name is required!");
+      return;
+    }
+    if (nameError) {
+      toast.error("Please fix the name error before submitting!");
+      return;
+    }
+    if (imageError) {
+      toast.error("Please fix the image error before submitting!");
       return;
     }
 
@@ -120,6 +144,7 @@ const AddCategory = () => {
                           backgroundColor: "lightpink",
                         }}
                       />
+                      {imageError && <div style={{ color: "red" }}>{imageError}</div>}
                     </div>
                   </div>
                   <div className="form-group">
@@ -135,6 +160,7 @@ const AddCategory = () => {
                         backgroundColor: "lightpink",
                       }}
                     />
+                    {nameError && <div style={{ color: "red" }}>{nameError}</div>}
                   </div>
                 </div>
                 <div className="mx-4 text-end">

@@ -49,6 +49,10 @@ const SubCategoryEdit = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+    if (name === "name" && !/^[A-Za-z\s]*$/.test(value)) {
+      toast.error("Name should only contain alphabetic characters.");
+      return;
+    }
     if (name === "image" && files.length > 0) {
       const file = files[0];
       if (!file.type.startsWith("image/")) {

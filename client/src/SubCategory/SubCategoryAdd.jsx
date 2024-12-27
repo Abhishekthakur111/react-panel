@@ -13,6 +13,11 @@ const SubCategoryAdd = () => {
   });
   const [categories, setCategories] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
+  const [errors, setErrors] = useState({
+    name: "",
+    image: "",
+    price: "",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,22 +42,64 @@ const SubCategoryAdd = () => {
         setCategories(activeCategories);
       }
     } catch (error) {
+      console.error("Error fetching categories:", error);
     }
   };
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+
     if (name === "image" && files.length > 0) {
       const file = files[0];
       if (!file.type.startsWith("image/")) {
-        toast.error("Please select a valid image file.");
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          image: "Please select a valid image file.",
+        }));
         return;
       }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        image: "",
+      }));
       setData((prevData) => ({
         ...prevData,
         [name]: file,
       }));
       setImagePreview(URL.createObjectURL(file));
+    } else if (name === "name") {
+      const regex = /^[A-Za-z\s]+$/;
+      if (!value || !regex.test(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          name: "Name must only contain alphabetic characters.",
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          name: "",
+        }));
+      }
+      setData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    } else if (name === "price") {
+      if (value <= 0 || isNaN(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          price: "Price must be a positive number.",
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          price: "",
+        }));
+      }
+      setData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     } else {
       setData((prevData) => ({
         ...prevData,
@@ -62,24 +109,39 @@ const SubCategoryAdd = () => {
   };
 
   const validateForm = () => {
-    if (!data.image) {
-      toast.error("Please upload an image.");
-      return false;
-    }
-    if (!data.cat_id) {
-      toast.error("Please select a category.");
-      return false;
-    }
-    if (!data.name.trim()) {
-      toast.error("Subcategory name is required.");
-      return false;
-    }
-    if (!data.price || data.price <= 0) {
-      toast.error("Price must be a positive number.");
-      return false;
+    const { name, price, image, cat_id } = data;
+    let isValid = true;
+
+    if (!name.trim() || errors.name) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        name: "Subcategory name is required and must be valid.",
+      }));
+      isValid = false;
     }
 
-    return true;
+    if (!price || price <= 0 || errors.price) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        price: "Price must be a positive number.",
+      }));
+      isValid = false;
+    }
+
+    if (!image) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        image: "Please upload an image.",
+      }));
+      isValid = false;
+    }
+
+    if (!cat_id) {
+      toast.error("Please select a category.");
+      isValid = false;
+    }
+
+    return isValid;
   };
 
   const handleSubmit = async (e) => {
@@ -168,6 +230,9 @@ const SubCategoryAdd = () => {
                           backgroundColor: "lightpink",
                         }}
                       />
+                      {errors.image && (
+                        <small className="text-danger">{errors.image}</small>
+                      )}
                     </div>
                   </div>
 
@@ -209,6 +274,9 @@ const SubCategoryAdd = () => {
                         backgroundColor: "lightpink",
                       }}
                     />
+                    {errors.name && (
+                      <small className="text-danger">{errors.name}</small>
+                    )}
                   </div>
 
                   <div className="form-group mb-2">
@@ -224,6 +292,9 @@ const SubCategoryAdd = () => {
                         backgroundColor: "lightpink",
                       }}
                     />
+                    {errors.price && (
+                      <small className="text-danger">{errors.price}</small>
+                    )}
                   </div>
                 </div>
 
