@@ -1,99 +1,57 @@
-import React, { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { toast, ToastContainer } from "react-toastify";
-import { Link } from "react-router-dom";
-import { axiosInstance, BASE_URL } from "../Config";
+import React, { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUsers, deleteUser, toggleUserStatus } from '../redux/UserSlice';
+import { toast, ToastContainer } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { BASE_URL } from '../Config';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import Pagination from "../Pagination";
+import Pagination from '../Pagination';
 
 const UserList = () => {
-  const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
-  const [isToastActive, setIsToastActive] = useState(false);
 
+  const dispatch = useDispatch();
+  const { users } = useSelector((state) => state.users);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
-  const fetchData = async () => {
-    try {
-      const response = await axiosInstance.get('/user_list');
-      if (response.data.success) {
-        setUsers(response.data.body.data);
-      } else {
-        Swal.fire(
-          "Error",
-          response.data.message || "Failed to load users",
-          "error"
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching user list", error);
-      Swal.fire(
-        "Error",
-        "An error occurred while fetching the user list",
-        "error"
-      );
-    }
-  };
-
-  const deleteUser = async (_id) => {
+  const deleteUserHandler = async (_id) => {
     const result = await Swal.fire({
-      title: "Are you sure?",
+      title: 'Are you sure?',
       text: "You won't be able to revert this!",
-      icon: "warning",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
     });
 
     if (result.isConfirmed) {
       try {
-        await axiosInstance.delete(`/user_delete/${_id}`);
-        fetchData();
-        Swal.fire("Deleted!", "User has been deleted.", "success");
+        dispatch(deleteUser(_id));
+        Swal.fire('Deleted!', 'User has been deleted.', 'success');
       } catch (error) {
         Swal.fire(
-          "Error!",
-          error.response?.data?.message || "Error deleting user",
-          "error"
+          'Error!',
+          error.response?.data?.message || 'Error deleting user',
+          'error'
         );
       }
     } else {
-      Swal.fire("Cancelled", "User deletion has been cancelled", "info");
+      Swal.fire('Cancelled', 'User deletion has been cancelled', 'info');
     }
   };
 
   const toggleStatus = async (id, currentStatus) => {
-    const newStatus = currentStatus === "0" ? "1" : "0";
-
-    try {
-      const response = await axiosInstance.post('/userstatus', {
-        id,
-        status: newStatus,
-      });
-
-      if (response.data.success) {
-        fetchData();
-        if (!isToastActive) {
-          setIsToastActive(true);
-          toast.success(
-            `User status changed to ${newStatus === "0" ? "Active" : "Inactive"}`
-          );
-          setTimeout(() => {
-            setIsToastActive(false);
-          }, 2000);
-        }
-      } else {
-        toast.error(response.data.message || "Failed to change status");
-      }
-    } catch (error) {
-      toast.error("An error occurred while changing user status");
-    }
+    dispatch(toggleUserStatus({ id, currentStatus }));
+    toast.success(
+      `User status changed to ${currentStatus === '0' ? 'Active' : 'Inactive'}`
+    );
   };
 
   const filteredUsers = users.filter((user) =>
@@ -124,21 +82,21 @@ const UserList = () => {
         draggable
         pauseOnHover
       />
-      <div className="container-fluid ">
+      <div className="container-fluid">
         <div className="row">
           <div className="col-12">
             <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-3 d-flex justify-content-between align-items-center ">
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-3 d-flex justify-content-between align-items-center">
                   <h6 className="text-white text-capitalize ps-3">Users</h6>
-                  <div className="mx-3 ">
+                  <div className="mx-3">
                     <input
                       type="text"
                       className="form-control"
                       placeholder="Search by name..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      style={{ backgroundColor: "white", paddingLeft: "10px" }}
+                      style={{ backgroundColor: 'white', paddingLeft: '10px' }}
                     />
                   </div>
                 </div>
@@ -170,15 +128,15 @@ const UserList = () => {
                                 {user.image ? (
                                   <img
                                     src={`${BASE_URL}/${user.image}`}
-                                    alt={`${user.image}`}
+                                    alt={user.image}
                                     style={{
-                                      width: "50px",
-                                      height: "50px",
-                                      borderRadius: "50%",
+                                      width: '50px',
+                                      height: '50px',
+                                      borderRadius: '50%',
                                     }}
                                   />
                                 ) : (
-                                  "No Image"
+                                  'No Image'
                                 )}
                               </td>
                               <td>{user.name || 'no user'}</td>
@@ -191,19 +149,15 @@ const UserList = () => {
                                     className="form-check-input"
                                     type="checkbox"
                                     id={`toggleStatus${user._id}`}
-                                    checked={user.status === "0"}
+                                    checked={user.status === '0'}
                                     onChange={() =>
                                       toggleStatus(user._id, user.status)
                                     }
                                     style={{
                                       backgroundColor:
-                                        user.status === "0"
-                                          ? "#D81B60"
-                                          : "lightgray",
+                                        user.status === '0' ? '#D81B60' : 'lightgray',
                                       borderColor:
-                                        user.status === "0"
-                                          ? "#D81B60"
-                                          : "lightgray",
+                                        user.status === '0' ? '#D81B60' : 'lightgray',
                                     }}
                                   />
                                 </div>
@@ -213,20 +167,20 @@ const UserList = () => {
                                   to={`/viewuser/${user._id}`}
                                   className="has-icon btn btn-success m-1"
                                   style={{
-                                    backgroundColor: "#D81B60",
-                                    color: "white",
+                                    backgroundColor: '#D81B60',
+                                    color: 'white',
                                   }}
                                 >
                                   <i className="me-100 fas fa-eye" />
                                 </Link>
 
                                 <button
-                                  onClick={() => deleteUser(user._id)}
+                                  onClick={() => deleteUserHandler(user._id)}
                                   className="has-icon btn m-1"
                                   style={{
-                                    backgroundColor: "#D81B60",
-                                    borderColor: "#D81B60",
-                                    color: "#fff",
+                                    backgroundColor: '#D81B60',
+                                    borderColor: '#D81B60',
+                                    color: '#fff',
                                   }}
                                 >
                                   <i className="me-100 fas fa-trash" />
@@ -238,7 +192,7 @@ const UserList = () => {
                       </table>
                     </div>
                   </div>
-                 
+
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
