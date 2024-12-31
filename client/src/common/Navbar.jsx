@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { axiosInstance, BASE_URL } from "../Config";
 
 
 const Navbar = ({ toggleSidebar, closeSidebar }) => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [image, setImage] = useState("");
   const [name, setName] = useState("");

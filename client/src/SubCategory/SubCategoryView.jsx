@@ -60,7 +60,7 @@ const SubCategoryView = () => {
                                 width: "200px",
                                 height: "200px",
                                 objectFit: "cover",
-                                borderRadius: "50%",
+                                borderRadius: "20%",
                                 display: "block",
                               }}
                             />

@@ -78,7 +78,14 @@ const SubCategoryEdit = () => {
       toast.error("Please fill in all required fields.");
       return;
     }
-
+    const selectedCategory = categories.find(
+      (category) => category._id === subcategory.cat_id
+    );
+    
+    if (!selectedCategory || selectedCategory.status == 1) {
+      toast.error("Cannot update with an inactive category.");
+      return;
+    }
     const formData = new FormData();
     formData.append("cat_id", subcategory.cat_id);
     formData.append("name", subcategory.name);
@@ -86,7 +93,6 @@ const SubCategoryEdit = () => {
     if (subcategory.image) {
       formData.append("image", subcategory.image);
     }
-
     try {
       const response = await axiosInstance.post(
         `/updatesubcategory/${_id}`,
@@ -99,9 +105,9 @@ const SubCategoryEdit = () => {
       );
       if (response.data.success) {
         toast.success("Subcategory updated successfully!");
-       setTimeout(()=>{
-        navigate("/subcategory");
-       }, 1000);
+        setTimeout(() => {
+          navigate("/subcategory");
+        }, 1000);
       } else {
         toast.error(
           `Update failed: ${response.data.message || "Unknown error"}`
@@ -111,6 +117,7 @@ const SubCategoryEdit = () => {
       toast.error(`Request failed: ${error.message}`);
     }
   };
+  
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
