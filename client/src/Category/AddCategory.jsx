@@ -10,11 +10,11 @@ const AddCategory = () => {
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
-  const [nameError, setNameError] = useState(""); // State for name validation error
-  const [imageError, setImageError] = useState(""); // State for image validation error
+  const [nameError, setNameError] = useState(""); 
+  const [imageError, setImageError] = useState("");
   const navigate = useNavigate();
 
-  // Regular expression to allow only alphabetic characters and spaces
+  
   const nameValidation = /^[A-Za-z\s]+$/;
 
   const handleChange = (e) => {
@@ -27,7 +27,7 @@ const AddCategory = () => {
           [id]: file,
         }));
         setImagePreview(URL.createObjectURL(file));
-        setImageError(""); // Clear image error on valid file
+        setImageError(""); 
       } else {
         setImageError("Please select a valid image file.");
       }
@@ -39,7 +39,7 @@ const AddCategory = () => {
       if (!nameValidation.test(value.trim())) {
         setNameError("Category name must only contain alphabets and spaces.");
       } else {
-        setNameError(""); // Clear error if valid
+        setNameError(""); 
       }
     }
   };

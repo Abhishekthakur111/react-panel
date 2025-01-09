@@ -70,8 +70,7 @@ const bookinglist = async (req, res) => {
             message: "Booking retrieved successfully",
             body: {
                 data: bookings,
-                pagination: {
-            }}
+                }
         });
     } catch (error) {
        throw error
