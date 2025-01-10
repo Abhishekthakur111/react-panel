@@ -112,7 +112,7 @@ const ListView = () => {
                       <button
                         type="button"
                         className="btn btn-primary"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate('/userlist')}
                       >
                         Back
                       </button>
