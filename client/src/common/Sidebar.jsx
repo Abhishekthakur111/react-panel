@@ -28,15 +28,16 @@ const menuItems = [
     activePaths: ["/booking"] 
   },
   { to: "/map", label: "Map", icon: "map" },
-  { to: "/privacypolicy", label: "Privacy Policy", icon: "shield" },
-  { to: "/aboutus", label: "About Us", icon: "info" },
-  { to: "/terms&conditions", label: "Terms&Conditions", icon: "article" },
-  { to: "/contacts", 
+   { to: "/calendar", label: "Calendar", icon: "event" },
+   { to: "/contacts", 
     label: "Contacts", 
     icon: "lock",
     activePaths: ["/contactview"]
    },
-   { to: "/calendar", label: "Calendar", icon: "event" },
+  { to: "/privacypolicy", label: "Privacy Policy", icon: "shield" },
+  { to: "/aboutus", label: "About Us", icon: "info" },
+  { to: "/terms&conditions", label: "Terms&Conditions", icon: "article" },
+ 
 ];
 
 const Sidebar = ({ handleLinkClick }) => {
