@@ -8,6 +8,9 @@ const ApexChart = () => {
     chart: {
       height: 350,
       type: 'bar',
+      toolbar:{
+        show:false,
+      }
     },
     colors: ['#D81B60'],
     plotOptions: {
@@ -96,7 +99,7 @@ const ApexChart = () => {
     <div className="col-12">
       <div className="card card-statistics">
         <div className="card-header">
-          <h4 className="card-title">Users Chart</h4>
+          <h4 className="card-title">User Chart</h4>
         </div>
         <div className="card-body">
           <ReactApexChart 

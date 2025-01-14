@@ -18,6 +18,7 @@
     "axios": "^1.7.7",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "font-awesome": "^4.7.0",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "moment": "^2.30.1",
