@@ -143,7 +143,7 @@ const AboutUs = () => {
                   <button
                     type="submit"
                     className="btn "
-                    style={{ backgroundColor: "#D81B60", color: "white" }}
+                    style={{ backgroundColor: "#D81B60", color: "white", marginTop:'20px'}}
                   >
                     Update
                   </button>

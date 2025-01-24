@@ -51,7 +51,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer/>
       <div className='container-fluid py-4'>
         <div className="row">
           <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -76,7 +76,7 @@ const Dashboard = () => {
                   <div className="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
                     <i className="material-icons opacity-10">weekend</i>
                   </div>
-                  <div className="text-end ">
+                  <div className="text-end pt-1">
                     <h4>Categories</h4>
                     <h4>{categories}</h4>
                   </div>
@@ -84,14 +84,14 @@ const Dashboard = () => {
               </div>
             </Link>
           </div>
-          <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4 ">
             <Link to="/subcategory">
               <div className="card">
                 <div className="card-header p-3 pt-2">
                   <div className="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
                     <i className="material-icons opacity-10">list</i>
                   </div>
-                  <div className="text-end pt-1">
+                  <div className="text-end ">
                     <h4>Sub Categories</h4>
                     <h4>{subCategories}</h4>
                   </div>
@@ -99,7 +99,7 @@ const Dashboard = () => {
               </div>
             </Link>
           </div>
-          <div className="col-xl-3 col-sm-6">
+          <div className="col-xl-3 col-sm-6 ">
             <Link to="/bookinglist">
               <div className="card">
                 <div className="card-header p-3 pt-2">
@@ -114,7 +114,7 @@ const Dashboard = () => {
               </div>
             </Link>
           </div>
-          <div className="col-xl-3 col-sm-6 mt-5">
+          <div className="col-xl-3 col-sm-6 mt-4">
             <Link to="/contacts">
               <div className="card">
                 <div className="card-header p-3 pt-2">
@@ -129,7 +129,7 @@ const Dashboard = () => {
               </div>
             </Link>
           </div>
-          <div className="col-xl-3 col-sm-6 mt-5">
+          {/* <div className="col-xl-3 col-sm-6 mt-4">
             <Link to="/map">
               <div className="card">
                 <div className="card-header p-3 pt-2">
@@ -143,8 +143,8 @@ const Dashboard = () => {
                 </div>
               </div>
             </Link>
-          </div>
-          <div className="col-xl-3 col-sm-6 mt-5">
+          </div> */}
+          {/* <div className="col-xl-3 col-sm-6 mt-4">
             <Link to="/calendar">
               <div className="card">
                 <div className="card-header p-3 pt-2">
@@ -158,7 +158,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className='container-fluid'>
