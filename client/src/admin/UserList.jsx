@@ -71,7 +71,17 @@ const UserList = () => {
 
   return (
     <>
-       <ToastContainer/>
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="container-fluid">
         <div className="row">
           <div className="col-12">
