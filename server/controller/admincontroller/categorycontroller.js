@@ -7,7 +7,7 @@ module.exports = {
     try {
       const v = new Validator(req.body, {
         name: "required|string",
-        image: "string", 
+        image: "string",
       });
       let errorsResponse = await helper.checkValidation(v);
       if (errorsResponse) {
@@ -24,7 +24,7 @@ module.exports = {
       const newCategory = await Category.create({
         name: req.body.name,
         image: req.body.image,
-        status: req.body.status || '0', 
+        status: req.body.status || '0',
       });
 
       return helper.success(res, "Category Created Successfully", { data: newCategory });
@@ -32,23 +32,23 @@ module.exports = {
       throw error
     }
   },
-  Categorylist:async(req, res) =>{
-   try {
-    const data = await Category.find()
-    return helper.success(res, "All category Detail", {
-        data,
-    });
-    } catch (error) {
-   throw error
-    }
-  },  
-  categeoryview: async(req,res)=> {
+  Categorylist: async (req, res) => {
     try {
-        let categeoryview= await Category.findById({_id:req.params._id});
-        return helper.success(res, "data", categeoryview);
-      } catch (error) {
-       throw error
-      }
+      const data = await Category.find()
+      return helper.success(res, "All category Detail", {
+        data,
+      });
+    } catch (error) {
+      throw error
+    }
+  },
+  categeoryview: async (req, res) => {
+    try {
+      let categeoryview = await Category.findById({ _id: req.params._id });
+      return helper.success(res, "data", categeoryview);
+    } catch (error) {
+      throw error
+    }
 
   },
   status: async (req, res) => {
@@ -62,7 +62,7 @@ module.exports = {
         { status },
         { new: true }
       );
-  
+
       if (!updatedUser) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -71,18 +71,18 @@ module.exports = {
       throw error
     }
   },
-  deletecategeory: async(req, res)=>{
+  deletecategeory: async (req, res) => {
     try {
-        const { _id } = req.params;
-        let data = await Category.findByIdAndDelete(_id);
-        if (data) {
-          return helper.success(res, "User Deleted successfully");
-        } else {
-          return helper.error(res, "User not found");
-        }
-      } catch (error) {
-        throw error
+      const { _id } = req.params;
+      let data = await Category.findByIdAndDelete(_id);
+      if (data) {
+        return helper.success(res, "User Deleted successfully");
+      } else {
+        return helper.error(res, "User not found");
       }
+    } catch (error) {
+      throw error
+    }
   },
   editcategory: async (req, res) => {
     try {

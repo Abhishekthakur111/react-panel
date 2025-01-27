@@ -15,7 +15,7 @@ module.exports = {
       let subdata = await SubCategory.countDocuments({});
       let databooking = await booking.countDocuments({});
       let datacontact = await Contact.countDocuments({});
-  
+
       return helper.success(res, "Dashboard data fetched successfully", {
         userCount,
         data,
@@ -34,7 +34,7 @@ module.exports = {
         Array.from({ length: 12 }, async (_, month) => {
           const startOfMonth = new Date(currentYear, month, 1);
           const endOfMonth = new Date(currentYear, month + 1, 0);
-  
+
           return await user.countDocuments({
             role: { $in: ['1'] },
             createdAt: {
@@ -44,13 +44,13 @@ module.exports = {
           });
         })
       );
-  
+
       const categories = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      
+
 
       res.json({
-        data, 
-        categories 
+        data,
+        categories
       });
     } catch (error) {
       throw err
@@ -70,7 +70,7 @@ module.exports = {
       if (!isPasswordValid) {
         return helper.error(res, "Incorrect Password");
       }
-      const secret = process.env.SECRET ;
+      const secret = process.env.SECRET;
       const token = jwt.sign(
         { id: userData.id, name: userData.name },
         secret,
@@ -85,9 +85,9 @@ module.exports = {
   },
   user_list: async (req, res) => {
     try {
-      const data = await user.find({role: 1 , raw: true, nest: true })
+      const data = await user.find({ role: 1, raw: true, nest: true })
       return helper.success(res, "All users Detail", {
-          data,
+        data,
       });
     } catch (error) {
       throw err
@@ -95,14 +95,14 @@ module.exports = {
   },
   view: async (req, res) => {
     try {
-      let view = await user.findById({_id:req.params._id});
+      let view = await user.findById({ _id: req.params._id });
       return helper.success(res, "data", view);
     } catch (error) {
       throw err
     }
-  },  
+  },
   user_edit: async (req, res) => {
-    try { 
+    try {
       if (req.files && req.files.image) {
         let images = await helper.fileUpload(req.files.image);
 
@@ -120,13 +120,13 @@ module.exports = {
           image: req.body.image,
         },
         {
-          new:true
+          new: true
         }
       );
       if (find_data)
         return helper.success(res, "User update successfully", find_data);
     } catch (error) {
-      
+
       throw err
     }
   },
@@ -140,14 +140,14 @@ module.exports = {
         return helper.error(res, "User not found");
       }
     } catch (error) {
-      
+
       throw err
     }
   },
   profile: async (req, res) => {
     try {
       const userId = req.user._id;
-      const find_user = await user.findById(userId).select('name email address phone_no image'); 
+      const find_user = await user.findById(userId).select('name email address phone_no image');
 
       if (!find_user) {
         return res.status(404).json({ message: "User not found" });
@@ -162,9 +162,9 @@ module.exports = {
     try {
       const userId = req.user._id;
       const find_user = await user.findById(userId);
-  
+
       let imagePath = find_user.image;
-  
+
       if (req.files && req.files.image) {
         try {
           imagePath = await helper.fileUpload(req.files.image);
@@ -183,7 +183,7 @@ module.exports = {
         },
         { new: true }
       );
-  
+
       if (!updatedProfile) {
         return res.status(400).json({ message: "No changes were made" });
       }
@@ -193,50 +193,50 @@ module.exports = {
     }
   },
   reset_password: async (req, res) => {
-  try {
-    const { password, newPassword } = req.body;
-    const token = req.headers.authorization?.split(' ')[1];
+    try {
+      const { password, newPassword } = req.body;
+      const token = req.headers.authorization?.split(' ')[1];
 
-    if (!token) {
-      return helper.error(res, "No token provided");
-    }
-    const decoded = jwt.verify(token, process.env.SECRET);
-    const userId = decoded.id;
-    const find_data = await user.findById(userId);
-    if (!find_data) {
-      return helper.error(res, "User not found");
-    }
-    const isPasswordMatch = await bcrypt.compare(password, find_data.password);
+      if (!token) {
+        return helper.error(res, "No token provided");
+      }
+      const decoded = jwt.verify(token, process.env.SECRET);
+      const userId = decoded.id;
+      const find_data = await user.findById(userId);
+      if (!find_data) {
+        return helper.error(res, "User not found");
+      }
+      const isPasswordMatch = await bcrypt.compare(password, find_data.password);
 
-    if (!isPasswordMatch) {
-      return helper.error(res, "Current password is incorrect");
-    }
-    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-    const updatedUser = await user.findByIdAndUpdate(
-      userId,
-      { password: hashedNewPassword },
-      { new: true }
-    );
+      if (!isPasswordMatch) {
+        return helper.error(res, "Current password is incorrect");
+      }
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      const updatedUser = await user.findByIdAndUpdate(
+        userId,
+        { password: hashedNewPassword },
+        { new: true }
+      );
 
-    return helper.success(res, "Password changed successfully", updatedUser);
-  } catch (error) {
-    throw err
-  }
+      return helper.success(res, "Password changed successfully", updatedUser);
+    } catch (error) {
+      throw err
+    }
   },
   status: async (req, res) => {
-  try {
-    const { id, status } = req.body;
-    const updatedUser = await user.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    );
-    return res.status(200).json({ success: true, message: "User status updated successfully" });
-  } catch (error) {
-    throw err
-  }
-  },   
-  logout:(req, res) => {
+    try {
+      const { id, status } = req.body;
+      const updatedUser = await user.findByIdAndUpdate(
+        id,
+        { status },
+        { new: true }
+      );
+      return res.status(200).json({ success: true, message: "User status updated successfully" });
+    } catch (error) {
+      throw err
+    }
+  },
+  logout: (req, res) => {
     try {
       res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {

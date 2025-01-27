@@ -12,7 +12,7 @@ const createBooking = async (req, res) => {
         const validator = new Validator(req.body, {
             user_id: 'required',
             service_id: 'required',
-            cat_id: 'required'  
+            cat_id: 'required'
         });
 
         const isValid = await validator.check();
@@ -31,7 +31,7 @@ const createBooking = async (req, res) => {
         if (!userExists) {
             return helper.error(res, 'User not found');
         }
-        
+
         if (!serviceExists) {
             return helper.error(res, 'Service not found');
         }
@@ -54,15 +54,15 @@ const createBooking = async (req, res) => {
         return helper.success(res, 'Booking Created Successfully', { data: newBooking });
 
     } catch (error) {
-      throw error
+        throw error
     }
 };
 const bookinglist = async (req, res) => {
-    try {   
+    try {
         const bookings = await Booking.find()
             .populate('user_id')
-            .populate('service_id') 
-            .populate('cat_id')     
+            .populate('service_id')
+            .populate('cat_id')
             .exec();
 
         res.status(200).json({
@@ -70,19 +70,19 @@ const bookinglist = async (req, res) => {
             message: "Booking retrieved successfully",
             body: {
                 data: bookings,
-                }
+            }
         });
     } catch (error) {
-       throw error
+        throw error
     }
 };
 const bookingView = async (req, res) => {
     try {
         const booking = await Booking.findById(req.params._id)
-           .populate("user_id")
-           .populate('service_id')
-           .populate('cat_id')
-           .exec();
+            .populate("user_id")
+            .populate('service_id')
+            .populate('cat_id')
+            .exec();
 
         res.status(200).json({
             success: true,
@@ -118,19 +118,19 @@ const status = async (req, res) => {
         return res.status(500).json({ message: "An error occurred while updating booking status" });
     }
 };
-const  deletebooking = async(req, res)=>{
+const deletebooking = async (req, res) => {
     try {
         const { _id } = req.params;
         let data = await Booking.findByIdAndDelete(_id);
         if (data) {
-          return helper.success(res, "Booking Deleted successfully");
+            return helper.success(res, "Booking Deleted successfully");
         } else {
-          return helper.error(res, "Booking not found");
+            return helper.error(res, "Booking not found");
         }
-      } catch (error) {
-       throw error
-      }
-  };
+    } catch (error) {
+        throw error
+    }
+};
 module.exports = {
     createBooking,
     bookinglist,
