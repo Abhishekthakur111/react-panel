@@ -120,7 +120,7 @@ const AddCategory = () => {
               </div>
               <form onSubmit={handleSubmit}>
                 <div className="card-body">
-                  <div className="form-group col-3 mb-2 mx-auto bg-lightpink">
+                  <div className="form-group col-3 mb-2 bg-lightpink">
                     <div className="admin_profile mt-2" data-aspect="1/1">
                       {imagePreview && (
                         <img

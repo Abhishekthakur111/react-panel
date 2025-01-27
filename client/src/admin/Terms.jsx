@@ -21,7 +21,7 @@ const Terms = () => {
         setTitle(data.title || "");
         setContent(data.content || "<p><br></p>");
       } catch (error) {
-         toast.error("Please try again.");
+        toast.error("Please try again.");
       }
     };
 
@@ -44,7 +44,7 @@ const Terms = () => {
         content,
       });
       toast.success("Terms&Conditions updated successfully");
-      navigate("/terms");
+      navigate("/terms&conditions");
     } catch (error) {
       setSubmitError("Error submitting terms&conditons. Please try again.");
       toast.error("Error submitting terms&conditons. Please try again.");
@@ -141,18 +141,21 @@ const Terms = () => {
                   </div>
                 </div>
                 <div className="row">
-                <div className="col-12 d-flex justify-content-end">
-                  <button
-                    type="submit"
-                    className="btn "
-                    style={{ backgroundColor: "#D81B60", color: "white", marginTop:'20px' }}
-                  >
-                    Update
-                  </button>
+                  <div className="col-12 d-flex justify-content-end">
+                    <button
+                      type="submit"
+                      className="btn "
+                      style={{
+                        backgroundColor: "#D81B60",
+                        color: "white",
+                        marginTop: "20px",
+                      }}
+                    >
+                      Update
+                    </button>
+                  </div>
                 </div>
-              </div>
               </form>
-              
             </div>
           </div>
         </div>

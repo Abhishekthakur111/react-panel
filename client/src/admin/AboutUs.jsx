@@ -4,7 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { axiosInstance} from "../Config";
+import { axiosInstance } from "../Config";
 
 const AboutUs = () => {
   const [title, setTitle] = useState("");
@@ -139,16 +139,20 @@ const AboutUs = () => {
                   </div>
                 </div>
                 <div className="row">
-                <div className="col-12 d-flex justify-content-end">
-                  <button
-                    type="submit"
-                    className="btn "
-                    style={{ backgroundColor: "#D81B60", color: "white", marginTop:'20px'}}
-                  >
-                    Update
-                  </button>
+                  <div className="col-12 d-flex justify-content-end">
+                    <button
+                      type="submit"
+                      className="btn "
+                      style={{
+                        backgroundColor: "#D81B60",
+                        color: "white",
+                        marginTop: "20px",
+                      }}
+                    >
+                      Update
+                    </button>
+                  </div>
                 </div>
-              </div>
               </form>
             </div>
           </div>
@@ -159,6 +163,3 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
-
-
-    

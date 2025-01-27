@@ -206,7 +206,7 @@ const SubCategoryAdd = () => {
               </div>
               <form onSubmit={handleSubmit}>
                 <div className="card-body">
-                  <div className="form-group col-3 mx-auto">
+                  <div className="form-group col-3">
                     <div className="admin_profile" data-aspect="1/1">
                       {imagePreview && (
                         <img

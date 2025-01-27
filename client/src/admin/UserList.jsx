@@ -104,7 +104,7 @@ const UserList = () => {
               <div className="section-body">
                 <div className="card">
                   <div className="card-body">
-                    <div className="table-responsive">
+                    <div className="table-responsive scroll">
                       <table className="table text-center">
                         <thead>
                           <tr>

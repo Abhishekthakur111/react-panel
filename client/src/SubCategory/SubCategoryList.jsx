@@ -10,7 +10,7 @@ const SubCategoryList = () => {
   const [filteredServices, setFilteredServices] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize ] = useState(10);
   const [startDate, setStartDate] = useState(""); 
   const [endDate, setEndDate] = useState(""); 
   const navigate = useNavigate();
