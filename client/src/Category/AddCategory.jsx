@@ -10,26 +10,31 @@ const AddCategory = () => {
     image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
-  const [nameError, setNameError] = useState(""); 
+  const [nameError, setNameError] = useState("");
   const [imageError, setImageError] = useState("");
   const navigate = useNavigate();
 
-  
   const nameValidation = /^[A-Za-z\s]+$/;
-
   const handleChange = (e) => {
     const { id, value, files } = e.target;
     if (id === "image" && files.length > 0) {
       const file = files[0];
-      if (file.type.startsWith("image/")) {
+      const allowedTypes = ["image/jpeg", "image/png"];
+
+      if (allowedTypes.includes(file.type)) {
         setData((prevData) => ({
           ...prevData,
           [id]: file,
         }));
         setImagePreview(URL.createObjectURL(file));
-        setImageError(""); 
+        setImageError("");
       } else {
-        setImageError("Please select a valid image file.");
+        setImageError("Only JPG and PNG images are allowed.");
+        setData((prevData) => ({
+          ...prevData,
+          [id]: null,
+        }));
+        setImagePreview(null);
       }
     } else if (id === "name") {
       setData((prevData) => ({
@@ -39,7 +44,7 @@ const AddCategory = () => {
       if (!nameValidation.test(value.trim())) {
         setNameError("Category name must only contain alphabets and spaces.");
       } else {
-        setNameError(""); 
+        setNameError("");
       }
     }
   };
@@ -71,19 +76,17 @@ const AddCategory = () => {
     formData.append("name", data.name);
 
     try {
-      const response = await axiosInstance.post(
-        `/createcategory`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axiosInstance.post(`/createcategory`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response.status === 200 && response.data.success) {
         toast.success("Category added successfully!");
-        navigate("/categorylist");
+        setTimeout(()=>{
+          navigate("/categorylist");
+        }, 1000);
       } else {
         toast.error("Category creation failed: " + response.data.message);
       }
@@ -110,11 +113,9 @@ const AddCategory = () => {
           <div className="col-12">
             <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                  <div className="d-flex justify-content-between align-items-center px-3">
-                    <h6 className="text-white text-capitalize">
-                      Add New Category
-                    </h6>
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                  <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                    <h6 className="text-white text-capitalize">Add Category</h6>
                   </div>
                 </div>
               </div>
@@ -144,7 +145,9 @@ const AddCategory = () => {
                           backgroundColor: "lightpink",
                         }}
                       />
-                      {imageError && <div style={{ color: "red" }}>{imageError}</div>}
+                      {imageError && (
+                        <div style={{ color: "red" }}>{imageError}</div>
+                      )}
                     </div>
                   </div>
                   <div className="form-group">
@@ -160,7 +163,9 @@ const AddCategory = () => {
                         backgroundColor: "lightpink",
                       }}
                     />
-                    {nameError && <div style={{ color: "red" }}>{nameError}</div>}
+                    {nameError && (
+                      <div style={{ color: "red" }}>{nameError}</div>
+                    )}
                   </div>
                 </div>
                 <div className="mx-4 text-end">

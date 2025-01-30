@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { axiosInstance,BASE_URL } from '../Config';
-
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { axiosInstance, BASE_URL } from "../Config";
 
 const ListView = () => {
   const { _id } = useParams();
@@ -38,8 +37,10 @@ const ListView = () => {
         <div className="col-12">
           <div className="card my-4">
             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 className="text-white text-capitalize ps-3">Detail</h6>
+              <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                  <h6 className="text-white text-capitalize">User Detail</h6>
+                </div>
               </div>
             </div>
             <div className="section-body">
@@ -71,7 +72,10 @@ const ListView = () => {
                           id="name"
                           value={data.name || ""}
                           readOnly
-                          style={{paddingLeft:'10px',backgroundColor:'lightpink'}}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group mb-2">
@@ -82,7 +86,10 @@ const ListView = () => {
                           className="form-control"
                           value={data.email || ""}
                           readOnly
-                          style={{paddingLeft:'10px',backgroundColor:'lightpink'}}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group mb-2">
@@ -93,7 +100,10 @@ const ListView = () => {
                           className="form-control"
                           value={data.address || ""}
                           readOnly
-                          style={{paddingLeft:'10px',backgroundColor:'lightpink'}}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group ">
@@ -104,7 +114,10 @@ const ListView = () => {
                           className="form-control"
                           value={data.phone_no || ""}
                           readOnly
-                          style={{paddingLeft:'10px',backgroundColor:'lightpink'}}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                     </div>
@@ -112,7 +125,7 @@ const ListView = () => {
                       <button
                         type="button"
                         className="btn btn-primary"
-                        onClick={() => navigate('/userlist')}
+                        onClick={() => navigate("/userlist")}
                       >
                         Back
                       </button>
@@ -126,6 +139,6 @@ const ListView = () => {
       </div>
     </div>
   );
-}
+};
 
 export default ListView;

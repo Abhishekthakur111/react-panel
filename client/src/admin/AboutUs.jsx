@@ -69,8 +69,10 @@ const AboutUs = () => {
           <div className="col-12">
             <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                  <h6 className="text-white text-capitalize ps-3">About Us</h6>
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                  <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                    <h6 className="text-white text-capitalize">About Us</h6>
+                  </div>
                 </div>
               </div>
               <form onSubmit={handleSubmit} className="p-4">

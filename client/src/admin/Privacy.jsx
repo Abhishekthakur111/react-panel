@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; 
+import "react-quill/dist/quill.snow.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosInstance } from "../Config";
@@ -48,7 +48,6 @@ const Privacy = () => {
     } catch (error) {
       setSubmitError("Error submitting privacy policy. Please try again.");
       toast.error("Error submitting privacy policy. Please try again.");
-     
     }
   };
 
@@ -70,10 +69,12 @@ const Privacy = () => {
           <div className="col-12">
             <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                  <h6 className="text-white text-capitalize ps-3">
-                    Privacy Policy
-                  </h6>
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                  <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                    <h6 className="text-white text-capitalize">
+                      Privacy Policy
+                    </h6>
+                  </div>
                 </div>
               </div>
               <form onSubmit={handleSubmit} className="p-4">
@@ -87,8 +88,10 @@ const Privacy = () => {
                         className="form-control"
                         value={title}
                         readOnly
-                        style={{paddingLeft:'10px',backgroundColor:'lightpink'}}
-                       
+                        style={{
+                          paddingLeft: "10px",
+                          backgroundColor: "lightpink",
+                        }}
                       />
                     </div>
                   </div>
@@ -140,18 +143,21 @@ const Privacy = () => {
                   </div>
                 </div>
                 <div className="row">
-                <div className="col-12 d-flex justify-content-end">
-                  <button
-                    type="submit"
-                    className="btn "
-                    style={{ backgroundColor: "#D81B60", color: "white" , marginTop:'20px'}}
-                  >
-                    Update
-                  </button>
+                  <div className="col-12 d-flex justify-content-end">
+                    <button
+                      type="submit"
+                      className="btn "
+                      style={{
+                        backgroundColor: "#D81B60",
+                        color: "white",
+                        marginTop: "20px",
+                      }}
+                    >
+                      Update
+                    </button>
+                  </div>
                 </div>
-              </div>
               </form>
-             
             </div>
           </div>
         </div>

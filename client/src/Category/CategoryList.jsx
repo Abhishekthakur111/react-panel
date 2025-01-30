@@ -130,10 +130,16 @@ const CategoryList = () => {
             <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
-                  <div className="d-flex justify-content-between align-items-center px-3">
+                  <div className="d-flex justify-content-between align-items-center px-3 pt-1">
                     <h6 className="text-white text-capitalize">Categories</h6>
-                    <div className="d-flex align-items-center">
-                      <div className="mx-3">
+                  </div>
+                </div>
+              </div>
+              <div className="section-body">
+                <div className="card">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-end">
+                      <div className="me-2">
                         <input
                           type="text"
                           className="form-control"
@@ -141,28 +147,21 @@ const CategoryList = () => {
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
                           style={{
-                            backgroundColor: "white",
+                            backgroundColor: "pink",
                             paddingLeft: "10px",
                           }}
                         />
                       </div>
-                      <div className="mt-1">
+                      <div className="">
                         <Link
                           to="/categoryadd"
                           className="btn btn-light"
-                          style={{ marginTop: "10px" }}
+                          style={{ backgroundColor: "pink" }}
                         >
                           Add
                         </Link>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="section-body">
-                <div className="card">
-                  <div className="card-body">
                     <div className="table-responsive">
                       <table className="table text-center">
                         <thead>

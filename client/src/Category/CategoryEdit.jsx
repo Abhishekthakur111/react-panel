@@ -20,7 +20,9 @@ const CategoryEdit = () => {
         if (response.data.success) {
           setData(response.data.body);
           setImagePreview(
-            response.data.body.image ? `${BASE_URL}/${response.data.body.image}` : null
+            response.data.body.image
+              ? `${BASE_URL}/${response.data.body.image}`
+              : null
           );
         } else {
           setError("Failed to fetch category data.");
@@ -41,20 +43,25 @@ const CategoryEdit = () => {
     if (name === "name") {
       const nameRegex = /^[a-zA-Z\s]*$/;
       if (!nameRegex.test(value)) {
-        setNameError("Name must contain only alphabetic characters and spaces.");
+        setNameError(
+          "Name must contain only alphabetic characters and spaces."
+        );
       } else {
-        setNameError(""); 
+        setNameError("");
       }
     }
 
     if (name === "image" && files.length > 0) {
       const file = files[0];
-      if (!file.type.startsWith("image/")) {
-        toast.error("Please select a valid image file.");
+      const validFormats = ["image/jpeg", "image/png"];
+
+      if (!validFormats.includes(file.type)) {
+        toast.error("Only JPG and PNG files are allowed.");
         return;
       }
-      setNewImage(file); 
-      setImagePreview(URL.createObjectURL(file)); 
+
+      setNewImage(file);
+      setImagePreview(URL.createObjectURL(file));
     } else {
       setData((prevData) => ({
         ...prevData,
@@ -77,7 +84,10 @@ const CategoryEdit = () => {
     }
 
     try {
-      const response = await axiosInstance.post(`/updatecategory/${_id}`, formData);
+      const response = await axiosInstance.post(
+        `/updatecategory/${_id}`,
+        formData
+      );
       if (response.data.success) {
         toast.success("Category updated successfully");
         setTimeout(() => {
@@ -100,26 +110,16 @@ const CategoryEdit = () => {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <div className="container-fluid ">
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
+      <div className="container-fluid">
         <div className="row">
           <div className="col-12">
             <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-3">
-                  <h6 className="text-white text-capitalize ps-3">
-                    Edit Category
-                  </h6>
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                  <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                    <h6 className="text-white text-capitalize">Edit Category</h6>
+                  </div>
                 </div>
               </div>
               <div className="section-body">
@@ -147,6 +147,7 @@ const CategoryEdit = () => {
                                 name="image"
                                 className="form-control"
                                 onChange={handleChange}
+                                accept="image/jpeg, image/png"
                                 style={{
                                   paddingLeft: "10px",
                                   backgroundColor: "lightpink",

@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { axiosInstance } from '../Config';
-
-
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { axiosInstance } from "../Config";
 
 const BookingView = () => {
-  const { _id } = useParams(); 
+  const { _id } = useParams();
   const [booking, setBooking] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,8 +38,10 @@ const BookingView = () => {
         <div className="col-12">
           <div className="card my-4">
             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 className="text-white text-capitalize ps-3">Booking Detail</h6>
+              <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                  <h6 className="text-white text-capitalize">Booking Detail</h6>
+                </div>
               </div>
             </div>
             <div className="section-body">
@@ -57,7 +57,10 @@ const BookingView = () => {
                           className="form-control"
                           value={booking.user_id?.name || "Unknown"}
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group mb-2">
@@ -68,7 +71,10 @@ const BookingView = () => {
                           className="form-control"
                           value={booking.cat_id?.name || "Unknown"}
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group mb-2">
@@ -79,7 +85,10 @@ const BookingView = () => {
                           className="form-control"
                           value={booking.service_id?.name || "Unknown"}
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group mb-2">
@@ -90,7 +99,10 @@ const BookingView = () => {
                           id="bookingCode"
                           value={booking.booking_code || "N/A"}
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group mb-2">
@@ -101,7 +113,10 @@ const BookingView = () => {
                           className="form-control"
                           value={booking.no_of_booking || "N/A"}
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group mb-2">
@@ -110,9 +125,16 @@ const BookingView = () => {
                           type="text"
                           id="date"
                           className="form-control"
-                          value={booking.date ? new Date(booking.date).toLocaleDateString() : "N/A"}
+                          value={
+                            booking.date
+                              ? new Date(booking.date).toLocaleDateString()
+                              : "N/A"
+                          }
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group mb-2">
@@ -123,7 +145,10 @@ const BookingView = () => {
                           className="form-control"
                           value={booking.location || "N/A"}
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group mb-2">
@@ -133,7 +158,10 @@ const BookingView = () => {
                           className="form-control"
                           value={booking.description || "N/A"}
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                       <div className="form-group ">
@@ -144,11 +172,14 @@ const BookingView = () => {
                           className="form-control"
                           value={`$${booking.amount || "N/A"}`}
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
                     </div>
-                    
+
                     <div className="mx-4 d-flex justify-content-end">
                       <button
                         type="button"
@@ -167,6 +198,6 @@ const BookingView = () => {
       </div>
     </div>
   );
-}
+};
 
 export default BookingView;

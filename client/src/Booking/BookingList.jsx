@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { axiosInstance } from '../Config';
-import Pagination from '../Pagination';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { axiosInstance } from "../Config";
+import Pagination from "../Pagination";
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
@@ -13,7 +13,7 @@ const BookingList = () => {
   const [statusOptions] = useState([
     { value: "0", label: "Pending" },
     { value: "1", label: "Ongoing" },
-    { value: "2", label: "Complete" }
+    { value: "2", label: "Complete" },
   ]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
@@ -29,10 +29,19 @@ const BookingList = () => {
       if (response.data.success) {
         setBookings(response.data.body.data);
       } else {
-        Swal.fire("Error", response.data.message || "Failed to load bookings", "error");
+        Swal.fire(
+          "Error",
+          response.data.message || "Failed to load bookings",
+          "error"
+        );
       }
     } catch (error) {
-      Swal.fire("Error", error.response?.data?.message || "An error occurred while fetching the booking list", "error");
+      Swal.fire(
+        "Error",
+        error.response?.data?.message ||
+          "An error occurred while fetching the booking list",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -42,13 +51,15 @@ const BookingList = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredBookings = bookings.filter(booking =>
+  const filteredBookings = bookings.filter((booking) =>
     booking.booking_code.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  
   const totalPages = Math.ceil(filteredBookings.length / pageSize);
-  const currentBookings = filteredBookings.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const currentBookings = filteredBookings.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const deleteUser = async (_id) => {
     const result = await Swal.fire({
@@ -60,11 +71,11 @@ const BookingList = () => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     });
-  
+
     if (result.isConfirmed) {
       try {
         await axiosInstance.delete(`/bookingdelete/${_id}`);
-        fetchData();  
+        fetchData();
         Swal.fire("Deleted!", "Booking has been deleted.", "success");
       } catch (error) {
         Swal.fire(
@@ -80,15 +91,27 @@ const BookingList = () => {
 
   const handleStatusChange = async (bookingId, newStatus) => {
     try {
-      const response = await axiosInstance.post(`/bookingstatus`, { id: bookingId, status: newStatus });
+      const response = await axiosInstance.post(`/bookingstatus`, {
+        id: bookingId,
+        status: newStatus,
+      });
       if (response.data.success) {
         toast.success("Booking status updated successfully");
-        fetchData(); 
+        fetchData();
       } else {
-        Swal.fire("Error", response.data.message || "Failed to update status", "error");
+        Swal.fire(
+          "Error",
+          response.data.message || "Failed to update status",
+          "error"
+        );
       }
     } catch (error) {
-      Swal.fire("Error", error.response?.data?.message || "An error occurred while updating the status", "error");
+      Swal.fire(
+        "Error",
+        error.response?.data?.message ||
+          "An error occurred while updating the status",
+        "error"
+      );
     }
   };
 
@@ -116,23 +139,27 @@ const BookingList = () => {
           <div className="col-12">
             <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-3 d-flex justify-content-between align-items-center ">
-                  <h6 className="text-white text-capitalize ps-3">Bookings</h6>
-                  <div className="mx-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Search by booking code..."
-                      value={searchTerm}
-                      onChange={handleSearch}
-                      style={{ backgroundColor: "white" ,paddingLeft:'10px'}} 
-                    />
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                  <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                    <h6 className="text-white text-capitalize">Bookings</h6>
                   </div>
                 </div>
               </div>
               <div className="section-body">
                 <div className="card">
                   <div className="card-body">
+                    <div className="d-flex justify-content-end">
+                      <div className="">
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Search by booking code..."
+                          value={searchTerm}
+                          onChange={handleSearch}
+                          style={{ backgroundColor: "pink" }}
+                        />
+                      </div>
+                    </div>
                     {loading ? (
                       <p>Loading...</p>
                     ) : (
@@ -154,20 +181,37 @@ const BookingList = () => {
                             {currentBookings.length ? (
                               currentBookings.map((booking, index) => (
                                 <tr key={booking._id}>
-                                  <td>{(currentPage - 1) * pageSize + index + 1}</td>
+                                  <td>
+                                    {(currentPage - 1) * pageSize + index + 1}
+                                  </td>
                                   <td>{booking.user_id?.name || "no name"}</td>
-                                  <td>{booking.cat_id?.name || "no category"}</td>
-                                  <td>{booking.service_id?.name || "no sub category"}</td>
-                                  <td>{booking.booking_code || 'no booking code'}</td>
-                                  <td>${booking.amount || 'no amount'}</td>
+                                  <td>
+                                    {booking.cat_id?.name || "no category"}
+                                  </td>
+                                  <td>
+                                    {booking.service_id?.name ||
+                                      "no sub category"}
+                                  </td>
+                                  <td>
+                                    {booking.booking_code || "no booking code"}
+                                  </td>
+                                  <td>${booking.amount || "no amount"}</td>
                                   <td>
                                     <select
                                       value={booking.status}
-                                      onChange={(e) => handleStatusChange(booking._id, e.target.value)}
+                                      onChange={(e) =>
+                                        handleStatusChange(
+                                          booking._id,
+                                          e.target.value
+                                        )
+                                      }
                                       className="form-select"
                                     >
-                                      {statusOptions.map(option => (
-                                        <option key={option.value} value={option.value}>
+                                      {statusOptions.map((option) => (
+                                        <option
+                                          key={option.value}
+                                          value={option.value}
+                                        >
                                           {option.label}
                                         </option>
                                       ))}

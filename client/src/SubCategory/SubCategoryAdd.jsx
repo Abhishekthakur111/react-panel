@@ -54,7 +54,7 @@ const SubCategoryAdd = () => {
       if (!file.type.startsWith("image/")) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          image: "Please select a valid image file.",
+          image: "Please select a valid image file .jpg or .png.",
         }));
         return;
       }
@@ -175,7 +175,9 @@ const SubCategoryAdd = () => {
         });
         setImagePreview(null);
         toast.success("Sub Category added successfully!");
-        navigate("/subcategory");
+        setTimeout(() => {
+          navigate("/subcategory");
+        }, 1000);
       } else {
         toast.error(`Sub Category creation failed: ${response.data.message}`);
       }
@@ -196,8 +198,8 @@ const SubCategoryAdd = () => {
           <div className="col-12">
             <div className="card my-4">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                  <div className="d-flex justify-content-between align-items-center px-3">
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                  <div className="d-flex justify-content-between align-items-center px-3 pt-1">
                     <h6 className="text-white text-capitalize">
                       Add New Sub Category
                     </h6>

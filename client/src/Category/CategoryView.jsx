@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { axiosInstance, BASE_URL } from '../Config';
-
-
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { axiosInstance, BASE_URL } from "../Config";
 
 const CategoryView = () => {
   const { _id } = useParams();
@@ -10,7 +8,7 @@ const CategoryView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,8 +37,12 @@ const CategoryView = () => {
         <div className="col-12">
           <div className="card my-4">
             <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div className="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-3">
-                <h6 className="text-white text-capitalize ps-3"> Detail</h6>
+              <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                  <h6 className="text-white text-capitalize">
+                    Category Detail
+                  </h6>
+                </div>
               </div>
             </div>
             <div className="section-body">
@@ -52,7 +54,11 @@ const CategoryView = () => {
                         {data.image && (
                           <div className="image-container text-center">
                             <img
-                              src={data.image.startsWith("http") ? data.image : `${BASE_URL}${data.image}`}
+                              src={
+                                data.image.startsWith("http")
+                                  ? data.image
+                                  : `${BASE_URL}${data.image}`
+                              }
                               alt="Category"
                               style={{
                                 width: "200px",
@@ -71,11 +77,12 @@ const CategoryView = () => {
                           className="form-control"
                           value={data.name || ""}
                           readOnly
-                          style={{ paddingLeft: '10px', backgroundColor: 'lightpink' }}
+                          style={{
+                            paddingLeft: "10px",
+                            backgroundColor: "lightpink",
+                          }}
                         />
                       </div>
-                      
-
                     </div>
                     <div className="text-end mx-4">
                       <button

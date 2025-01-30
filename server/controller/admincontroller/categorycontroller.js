@@ -1,6 +1,7 @@
 const Category = require("../../models/categeory");
 const { Validator } = require("node-input-validator");
 const helper = require('../../helper/helper');
+const SubCategory = require('../../models/services');
 
 module.exports = {
   createCategory: async (req, res) => {
@@ -71,19 +72,23 @@ module.exports = {
       throw error
     }
   },
-  deletecategeory: async (req, res) => {
+  deleteCategory: async (req, res) => {
     try {
-      const { _id } = req.params;
-      let data = await Category.findByIdAndDelete(_id);
-      if (data) {
-        return helper.success(res, "User Deleted successfully");
-      } else {
-        return helper.error(res, "User not found");
-      }
+        const { _id } = req.params;
+        const deletedCategory = await Category.findByIdAndDelete(_id);
+
+        if (!deletedCategory) {
+            return helper.error(res, "Category not found");
+        }
+        await SubCategory.deleteMany({ category_id: _id });
+
+        return helper.success(res, "Category and its subcategories deleted successfully");
     } catch (error) {
-      throw error
+        return helper.error(res, error.message);
     }
-  },
+},
+
+
   editcategory: async (req, res) => {
     try {
       const { _id } = req.params;

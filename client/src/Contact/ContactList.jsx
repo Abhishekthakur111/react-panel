@@ -3,8 +3,8 @@ import Swal from "sweetalert2";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../Config";
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import Pagination from '../Pagination'; 
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import Pagination from "../Pagination";
 
 const ContactList = () => {
   const [data, setData] = useState([]);
@@ -52,7 +52,7 @@ const ContactList = () => {
     if (result.isConfirmed) {
       try {
         await axiosInstance.delete(`/contactdelete/${_id}`);
-        fetchData(); 
+        fetchData();
         Swal.fire("Deleted!", "Contact has been deleted.", "success");
       } catch (error) {
         Swal.fire(
@@ -70,9 +70,11 @@ const ContactList = () => {
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
- 
   const totalPages = Math.ceil(filteredUsers.length / pageSize);
-  const currentUsers = filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const currentUsers = filteredUsers.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -97,24 +99,30 @@ const ContactList = () => {
         <div className="row">
           <div className="col-12">
             <div className="card my-4">
-              <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-3 d-flex justify-content-between align-items-center">
-                  <h6 className="text-white text-capitalize ps-3">Contacts</h6>
-                  <div className="mx-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Search by name..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      style={{ backgroundColor: "white", paddingLeft: "10px" }}
-                    />
-                  </div>
+            <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                  <h6 className="text-white text-capitalize">
+                    Contacts
+                  </h6>
                 </div>
               </div>
+            </div>
               <div className="section-body">
                 <div className="card">
                   <div className="card-body">
+                    <div className="d-flex justify-content-end">
+                      <div>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Search by name..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          style={{ backgroundColor: "pink" }}
+                        />
+                      </div>
+                    </div>
                     <div className="table-responsive">
                       <table className="table text-center">
                         <thead>

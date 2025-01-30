@@ -47,7 +47,7 @@ router.post('/graph', authcontroller.apexcharts);
 router.post('/createCategory', category.createCategory);
 router.get('/categorylist', category.Categorylist);
 router.get('/viewcategory/:_id', category.categeoryview);
-router.delete('/deletecategory/:_id', category.deletecategeory);
+router.delete('/deletecategory/:_id', category.deleteCategory);
 router.post('/categorystatus',category.status);
 router.post('/updatecategory/:_id',category.editcategory);
 

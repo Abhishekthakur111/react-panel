@@ -3,16 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import { axiosInstance, BASE_URL } from "../Config";
-import Pagination from "../Pagination"; 
+import Pagination from "../Pagination";
 
 const SubCategoryList = () => {
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize ] = useState(10);
-  const [startDate, setStartDate] = useState(""); 
-  const [endDate, setEndDate] = useState(""); 
+  const [pageSize] = useState(10);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const SubCategoryList = () => {
   }, []);
 
   useEffect(() => {
-    filterServicesByDate(); 
+    filterServicesByDate();
   }, [startDate, endDate, services]);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const SubCategoryList = () => {
       const response = await axiosInstance.get(`/services`);
       if (response.data.success) {
         setServices(response.data.body.data);
-        setFilteredServices(response.data.body.data); 
+        setFilteredServices(response.data.body.data);
       } else {
         Swal.fire(
           "Error",
@@ -56,7 +56,9 @@ const SubCategoryList = () => {
     if (startDate && endDate) {
       filtered = filtered.filter((service) => {
         const serviceDate = new Date(service.createdAt);
-        return serviceDate >= new Date(startDate) && serviceDate <= new Date(endDate);
+        return (
+          serviceDate >= new Date(startDate) && serviceDate <= new Date(endDate)
+        );
       });
     }
 
@@ -152,12 +154,18 @@ const SubCategoryList = () => {
             <div className="card my-3">
               <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2 ">
                 <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-1">
-                  <div className="d-flex justify-content-between align-items-center px-3">
+                  <div className="d-flex justify-content-between align-items-center px-3 pt-1">
                     <h6 className="text-white text-capitalize ">
                       Sub Categories
                     </h6>
-                    <div className="d-flex align-items-center">
-                      <div className="mx-2">
+                  </div>
+                </div>
+              </div>
+              <div className="section-body">
+                <div className="card">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-end">
+                      <div className="me-2">
                         <input
                           type="text"
                           className="form-control"
@@ -165,49 +173,43 @@ const SubCategoryList = () => {
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
                           style={{
-                            backgroundColor: "white",
+                            backgroundColor: "pink",
                             paddingLeft: "10px",
                           }}
                         />
                       </div>
-                      <div className="mx-1">
+                      <div className="me-2">
                         <input
                           type="date"
                           className="form-control"
                           value={startDate}
                           onChange={(e) => setStartDate(e.target.value)}
                           style={{
-                            backgroundColor: "white",
+                            backgroundColor: "pink",
                           }}
                         />
                       </div>
-                      <div className="mx-2">
+                      <div className="me-2">
                         <input
                           type="date"
                           className="form-control"
                           value={endDate}
                           onChange={(e) => setEndDate(e.target.value)}
                           style={{
-                            backgroundColor: "white",
+                            backgroundColor: "pink",
                           }}
                         />
                       </div>
-                      <div className="mx-1 mt-1">
+                      <div className="jus">
                         <Link
                           to="/subcategoryadd"
                           className="btn btn-light"
-                          style={{ marginTop: "10px" }}
+                          style={{ backgroundColor: "pink" }}
                         >
                           Add
                         </Link>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div className="section-body">
-                <div className="card">
-                  <div className="card-body">
                     <div className="table-responsive">
                       <table className="table text-center">
                         <thead>
