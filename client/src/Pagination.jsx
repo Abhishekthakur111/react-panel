@@ -1,7 +1,15 @@
-// Pagination.js
 import React from "react";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const maxPageNumbersToShow = 5;
+
+  let startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+  let endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+
+  if (endPage - startPage < maxPageNumbersToShow - 1) {
+    startPage = Math.max(1, endPage - maxPageNumbersToShow + 1);
+  }
+
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       onPageChange(page);
@@ -9,42 +17,28 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
 
   return (
-    <div className="card-footer text-right">
+    <div className="card-footer text-end">
       <nav className="d-inline-block">
         <ul className="pagination mb-0">
           <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-            <a
-              className="page-link"
-              href="#"
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
+            <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
               <i className="fas fa-chevron-left" />
-            </a>
+            </button>
           </li>
-          {[...Array(totalPages).keys()].map((page) => (
-            <li
-              key={page}
-              className={`page-item ${currentPage === page + 1 ? "active" : ""}`}
-            >
-              <a
-                className="page-link"
-                href="#"
-                onClick={() => handlePageChange(page + 1)}
-              >
-                {page + 1}
-              </a>
-            </li>
-          ))}
-          <li
-            className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
-          >
-            <a
-              className="page-link"
-              href="#"
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
+          {Array.from({ length: Math.min(endPage - startPage + 1, maxPageNumbersToShow) }, (_, index) => {
+            const page = startPage + index;
+            return (
+              <li key={page} className={`page-item ${currentPage === page ? "active" : ""}`}>
+                <button className="page-link" onClick={() => handlePageChange(page)}>
+                  {page}
+                </button>
+              </li>
+            );
+          })}
+          <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
               <i className="fas fa-chevron-right" />
-            </a>
+            </button>
           </li>
         </ul>
       </nav>

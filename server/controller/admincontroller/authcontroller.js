@@ -140,8 +140,7 @@ module.exports = {
         return helper.error(res, "User not found");
       }
     } catch (error) {
-
-      throw err
+      throw error
     }
   },
   profile: async (req, res) => {
