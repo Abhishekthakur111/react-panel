@@ -58,6 +58,10 @@ const ApexChart = () => {
       },
     },
     yaxis: {
+      show: false, 
+    labels: {
+      show: false,
+    },
       axisBorder: {
         show: false,
       },
