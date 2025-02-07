@@ -20,20 +20,20 @@ module.exports ={
             body:body
         });
     },
-    fileUpload: async (file) => {
-        if (file) {
-          var extension = path.extname(file.name);
-          var filename = uuid() + extension;
-          file.mv(
-            process.cwd() + `/public/images/` + filename,
-            function (err) {
-              if (err) return err;
-            }
-          );   
-        } 
-    
-        let fullpath = `/images/` + filename
-        return fullpath;
+     fileUpload : async (file) => {
+        if (!file) return null;
+      
+        try {
+          const extension = path.extname(file.name);
+          const filename = uuid() + extension;
+          const uploadPath = path.join(process.cwd(), "public", "images", filename);
+      
+          await file.mv(uploadPath);
+      
+          return `/images/${filename}`;
+        } catch (err) {
+          throw err; 
+        }
       },
     checkValidation: async (v) => {
         var errorsResponse;

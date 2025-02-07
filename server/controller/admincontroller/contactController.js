@@ -29,7 +29,6 @@ module.exports = {
       throw error
     }
   },
-
   contact_view: async (req, res) => {
     try {
       const contactId = req.params._id
@@ -48,5 +47,4 @@ module.exports = {
       throw error
     }
   }
-
 }

@@ -33,19 +33,10 @@ module.exports = {
     updateabout: async (req, res) => {
         try {
             const { content } = req.body;
-            if (!content || content.trim() === '') {
-                return res.status(400).json({ message: 'Content field cannot be empty.' });
-            }
             const result = await cms.updateOne(
                 { type: 2 },
                 { $set: { content } }
             );
-            if (result.matchedCount === 0) {
-                return res.status(404).json({ message: 'Document not found.' });
-            }
-            if (result.modifiedCount === 0) {
-                return res.status(400).json({ message: 'No changes made.' });
-            }
             return res.status(200).json({ message: "Update About Us successfully." });
         } catch (error) {
             throw error

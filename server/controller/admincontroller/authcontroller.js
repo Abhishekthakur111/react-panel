@@ -24,7 +24,7 @@ module.exports = {
         datacontact
       });
     } catch (error) {
-      throw err
+      throw error
     }
   },
   apexcharts: async (req, res) => {
@@ -53,7 +53,7 @@ module.exports = {
         categories
       });
     } catch (error) {
-      throw err
+      throw error
     }
   },
   login: async (req, res) => {
@@ -80,7 +80,7 @@ module.exports = {
       await userData.save();
       return helper.success(res, "Login successful", { token });
     } catch (error) {
-      throw err
+      throw error
     }
   },
   user_list: async (req, res) => {
@@ -90,7 +90,7 @@ module.exports = {
         data,
       });
     } catch (error) {
-      throw err
+      throw error
     }
   },
   view: async (req, res) => {
@@ -98,18 +98,15 @@ module.exports = {
       let view = await user.findById({ _id: req.params._id });
       return helper.success(res, "data", view);
     } catch (error) {
-      throw err
+      throw error
     }
   },
   user_edit: async (req, res) => {
     try {
       if (req.files && req.files.image) {
         let images = await helper.fileUpload(req.files.image);
-
         req.body.image = images;
       };
-
-
       let find_data = await user.findByIdAndUpdate(
         { _id: req.params._id },
         {
@@ -123,22 +120,16 @@ module.exports = {
           new: true
         }
       );
-      if (find_data)
         return helper.success(res, "User update successfully", find_data);
     } catch (error) {
-
-      throw err
+      throw error
     }
   },
   delete_user: async (req, res) => {
     try {
       const { _id } = req.params;
       let data = await user.findByIdAndDelete(_id);
-      if (data) {
-        return helper.success(res, "User Deleted successfully");
-      } else {
-        return helper.error(res, "User not found");
-      }
+      return helper.success(res, "User Deleted successfully");
     } catch (error) {
       throw error
     }
@@ -147,23 +138,16 @@ module.exports = {
     try {
       const userId = req.user._id;
       const find_user = await user.findById(userId).select('name email address phone_no image');
-
-      if (!find_user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-
       return res.status(200).json({ message: "Profile fetched successfully", body: find_user });
     } catch (error) {
-      throw err
+      throw error
     }
   },
   edit_profile: async (req, res) => {
     try {
       const userId = req.user._id;
       const find_user = await user.findById(userId);
-
       let imagePath = find_user.image;
-
       if (req.files && req.files.image) {
         try {
           imagePath = await helper.fileUpload(req.files.image);
@@ -182,13 +166,9 @@ module.exports = {
         },
         { new: true }
       );
-
-      if (!updatedProfile) {
-        return res.status(400).json({ message: "No changes were made" });
-      }
       return res.status(200).json({ message: "Profile updated successfully", body: updatedProfile });
     } catch (error) {
-      throw err
+      throw error
     }
   },
   reset_password: async (req, res) => {
@@ -219,7 +199,7 @@ module.exports = {
 
       return helper.success(res, "Password changed successfully", updatedUser);
     } catch (error) {
-      throw err
+      throw error
     }
   },
   status: async (req, res) => {
@@ -232,14 +212,14 @@ module.exports = {
       );
       return res.status(200).json({ success: true, message: "User status updated successfully" });
     } catch (error) {
-      throw err
+      throw error
     }
   },
   logout: (req, res) => {
     try {
       res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
-      throw err
+      throw error
     }
   },
 };

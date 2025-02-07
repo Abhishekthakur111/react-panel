@@ -68,14 +68,7 @@ module.exports = {
     deleteService: async (req, res) => {
         try {
             const { _id } = req.params;
-
             const deletedService = await Services.findByIdAndDelete(_id);
-
-
-            if (!deletedService) {
-                return helper.error(res, "Service not found");
-            }
-
             return helper.success(res, "Service deleted successfully");
         } catch (error) {
             throw error
@@ -84,24 +77,11 @@ module.exports = {
     status: async (req, res) => {
         try {
             const { id, status } = req.body;
-
-            if (status !== "0" && status !== "1") {
-                return res.status(400).json({ message: "Invalid status value" });
-            }
-
-
             const updatedService = await Services.findByIdAndUpdate(
                 id,
                 { status },
                 { new: true }
             );
-
-
-            if (!updatedService) {
-                return res.status(404).json({ message: "Service not found" });
-            }
-
-
             return res.status(200).json({
                 success: true,
                 message: "Service status updated successfully",
@@ -121,7 +101,6 @@ module.exports = {
                 message: "Services retrieved successfully",
                 body: service
             });
-
         } catch (error) {
             throw error
         }
@@ -129,20 +108,16 @@ module.exports = {
     editservice: async (req, res) => {
         try {
             const { _id } = req.params;
-
             const service = await Services.findById(_id);
             if (!service) {
                 return helper.error(res, "Service not found", 404);
             }
-
             if (req.body.cat_id) {
                 const category = await Category.findById(req.body.cat_id);
                 if (!category) {
                     return helper.error(res, "Category not found", 404);
                 }
             }
-
-
             if (req.files && req.files.image) {
                 let images = await helper.fileUpload(req.files.image);
                 req.body.image = images;
