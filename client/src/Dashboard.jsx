@@ -44,10 +44,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-    if (location.state && location.state.message) {
+    if (location.state?.message) {
       toast.success(location.state.message);
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state]);
+  }, [location, navigate]);
+
 
   return (
     <>

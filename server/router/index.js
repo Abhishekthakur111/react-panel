@@ -8,22 +8,25 @@ let category = require('../controller/admincontroller/categorycontroller');
 let service = require('../controller/admincontroller/servicecontroller');
 let booking = require('../controller/admincontroller/bookingcontroller');
 let contact = require('../controller/admincontroller/contactController');
+router.post('/login',authcontroller.login);
 
+
+router.use(auth.verifyToken);
 // routes for admincontroller
 router.get('/dash_board',authcontroller.dashboard);
-router.post('/login',authcontroller.login);
+
 router.get("/user_list",authcontroller.user_list);
 router.get('/view/:_id', authcontroller.view);
 
 
 router.post('/user_edit/:_id',authcontroller.user_edit);
 router.delete('/user_delete/:_id', authcontroller.delete_user);
-router.post('/change_password',auth.verifyToken,authcontroller.reset_password);
+router.post('/change_password',authcontroller.reset_password);
 
 
 // routes for profile
-router.get('/profile', auth.verifyToken, authcontroller.profile);
-router.post('/profileupdate', auth.verifyToken, authcontroller.edit_profile); 
+router.get('/profile',  authcontroller.profile);
+router.post('/profileupdate',  authcontroller.edit_profile); 
 
 // routesfor user controller
 router.post('/userstatus',authcontroller.status);
