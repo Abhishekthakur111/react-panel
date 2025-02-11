@@ -7,7 +7,7 @@ import { axiosInstance, BASE_URL } from "../Config";
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isToastActive, setIsToastActive] = useState(false);
+
 
   useEffect(() => {
     fetchData();
@@ -232,6 +232,7 @@ const CategoryList = () => {
           </div>
         </div>
       </div>
+      
     </>
   );
 };

@@ -1,24 +1,22 @@
-import React, { useState } from "react";
-import { Pagination } from "flowbite-react";
+import * as React from 'react';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
+import Stack from '@mui/material/Stack';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const PaginationComponent = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const onPageChange = (page) => setCurrentPage(page);
-
+export default function CustomIcons() {
   return (
-    <div className="flex overflow-x-auto sm:justify-center">
+    <Stack spacing={2}>
       <Pagination
-        layout="pagination"
-        currentPage={currentPage}
-        totalPages={1000}
-        onPageChange={onPageChange}
-        previousLabel="Go back"
-        nextLabel="Go forward"
-        showIcons
+        count={10}
+        renderItem={(item) => (
+          <PaginationItem
+            slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }}
+            {...item}
+          />
+        )}
       />
-    </div>
+    </Stack>
   );
-};
-
-export default PaginationComponent;
+}
