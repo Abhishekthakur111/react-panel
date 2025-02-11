@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosInstance } from "../Config";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
@@ -14,17 +16,21 @@ const BookingList = () => {
     { value: "1", label: "Ongoing" },
     { value: "2", label: "Complete" },
   ]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 10;
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(currentPage);
+  }, [currentPage]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`/booking`);
+      const response = await axiosInstance.get(`/booking?page=${currentPage}&limit=${limit}`);
       if (response.data.success) {
         setBookings(response.data.body.data);
+        setTotalPages(response.data.body.totalPages);
       } else {
         Swal.fire(
           "Error",
@@ -43,7 +49,9 @@ const BookingList = () => {
       setLoading(false);
     }
   };
-
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -66,7 +74,14 @@ const BookingList = () => {
     if (result.isConfirmed) {
       try {
         await axiosInstance.delete(`/bookingdelete/${_id}`);
-        fetchData();
+        const response = await axiosInstance.get(`/bookinglist?page=${currentPage}&limit=${limit}`);
+        if (response.data.success) {
+          const newTotalPages = response.data.body.totalPages;
+          if (currentPage > newTotalPages) {
+            setCurrentPage(newTotalPages || 1);
+          }
+          setTotalPages(newTotalPages);
+        }
         Swal.fire("Deleted!", "Booking has been deleted.", "success");
       } catch (error) {
         Swal.fire(
@@ -88,7 +103,7 @@ const BookingList = () => {
       });
       if (response.data.success) {
         toast.success("Status updated successfully");
-        fetchData();
+        fetchData(currentPage);
       } else {
         Swal.fire(
           "Error",
@@ -166,7 +181,7 @@ const BookingList = () => {
                             {filteredBookings.length ? (
                               filteredBookings.map((booking, index) => (
                                 <tr key={booking._id}>
-                                  <td>{index + 1}</td>
+                                   <td>{(currentPage - 1) * limit + index + 1}</td>
                                   <td>{booking.user_id?.name || "no name"}</td>
                                   <td>
                                     {booking.cat_id?.name || "no category"}
@@ -234,6 +249,9 @@ const BookingList = () => {
                         </table>
                       </div>
                     )}
+                      <Stack spacing={2} className="d-flex justify-content-center mt-3">
+                  <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} color="primary" />
+                </Stack>
                   </div>
                 </div>
               </div>

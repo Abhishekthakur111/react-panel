@@ -11,23 +11,33 @@ const CategoryList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 10;
-  
+  const limit = 5;
+
   useEffect(() => {
     fetchData(currentPage);
   }, [currentPage]);
 
   const fetchData = async (page) => {
     try {
-      const response = await axiosInstance.get(`/categorylist?page=${page}&limit=${limit}`);
+      const response = await axiosInstance.get(
+        `/categorylist?page=${page}&limit=${limit}`
+      );
       if (response.data.success) {
         setCategories(response.data.body.data);
         setTotalPages(response.data.body.totalPages);
       } else {
-        Swal.fire("Error", response.data.message || "Failed to load categories", "error");
+        Swal.fire(
+          "Error",
+          response.data.message || "Failed to load categories",
+          "error"
+        );
       }
     } catch (error) {
-      Swal.fire("Error", "An error occurred while fetching the category list", "error");
+      Swal.fire(
+        "Error",
+        "An error occurred while fetching the category list",
+        "error"
+      );
     }
   };
 
@@ -49,7 +59,9 @@ const CategoryList = () => {
     if (result.isConfirmed) {
       try {
         await axiosInstance.delete(`/deletecategory/${_id}`);
-        const response = await axiosInstance.get(`/categorylist?page=${currentPage}&limit=${limit}`);
+        const response = await axiosInstance.get(
+          `/categorylist?page=${currentPage}&limit=${limit}`
+        );
         if (response.data.success) {
           setCategories(response.data.body.data);
           const newTotalPages = response.data.body.totalPages;
@@ -73,13 +85,13 @@ const CategoryList = () => {
 
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "0" ? "1" : "0";
-  
+
     try {
       const response = await axiosInstance.post(`/categorystatus`, {
         id,
         status: newStatus,
       });
-  
+
       if (response.data.success) {
         fetchData(currentPage);
         toast.success("Status updated successfully");
@@ -90,8 +102,7 @@ const CategoryList = () => {
       toast.error("An error occurred while changing category status");
     }
   };
-  
-  
+
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -236,9 +247,17 @@ const CategoryList = () => {
                         </tbody>
                       </table>
                     </div>
-                    <Stack spacing={2} className="d-flex justify-content-center mt-3">
-                  <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} color="primary" />
-                </Stack>
+                    <Stack
+                      spacing={2}
+                      className="d-flex justify-content-center mt-3"
+                    >
+                      <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        color="primary"
+                      />
+                    </Stack>
                   </div>
                 </div>
               </div>
@@ -246,7 +265,6 @@ const CategoryList = () => {
           </div>
         </div>
       </div>
-      
     </>
   );
 };

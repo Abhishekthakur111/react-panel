@@ -6,16 +6,28 @@ import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../Config";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const UserList = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 5;
 
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.users);
+  const { users = [], totalPages } = useSelector((state) => state.users);
+
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    dispatch(fetchUsers({ page: currentPage, limit })).then((response) => {
+      console.log("Fetched users:", response.payload); 
+    });
+  }, [dispatch, currentPage]);
+  
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
   const deleteUserHandler = async (_id) => {
     const result = await Swal.fire({
@@ -48,11 +60,12 @@ const UserList = () => {
     dispatch(toggleUserStatus({ id, currentStatus }));
     toast.success("Status updated successfully");
   };
-  
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = Array.isArray(users)
+  ? users.filter((user) =>
+      user.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  : [];
 
   return (
     <>
@@ -89,7 +102,10 @@ const UserList = () => {
                           placeholder="Search by name..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          style={{ backgroundColor: "pink", paddingLeft: "10px" }}
+                          style={{
+                            backgroundColor: "pink",
+                            paddingLeft: "10px",
+                          }}
                         />
                       </div>
                     </div>
@@ -110,13 +126,17 @@ const UserList = () => {
                         <tbody>
                           {filteredUsers.map((user, index) => (
                             <tr key={user._id}>
-                              <td>{index + 1}</td>
+                              <td>{(currentPage - 1) * limit + index + 1}</td>
                               <td>
                                 {user.image ? (
                                   <img
                                     src={`${BASE_URL}/${user.image}`}
                                     alt={user.image}
-                                    style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                                    style={{
+                                      width: "50px",
+                                      height: "50px",
+                                      borderRadius: "50%",
+                                    }}
                                   />
                                 ) : (
                                   "No Image"
@@ -133,10 +153,18 @@ const UserList = () => {
                                     type="checkbox"
                                     id={`toggleStatus${user._id}`}
                                     checked={user.status === "0"}
-                                    onChange={() => toggleStatus(user._id, user.status)}
+                                    onChange={() =>
+                                      toggleStatus(user._id, user.status)
+                                    }
                                     style={{
-                                      backgroundColor: user.status === "0" ? "#D81B60" : "lightgray",
-                                      borderColor: user.status === "0" ? "#D81B60" : "lightgray",
+                                      backgroundColor:
+                                        user.status === "0"
+                                          ? "#D81B60"
+                                          : "lightgray",
+                                      borderColor:
+                                        user.status === "0"
+                                          ? "#D81B60"
+                                          : "lightgray",
                                     }}
                                   />
                                 </div>
@@ -145,14 +173,21 @@ const UserList = () => {
                                 <Link
                                   to={`/viewuser/${user._id}`}
                                   className="has-icon btn btn-success m-1"
-                                  style={{ backgroundColor: "#D81B60", color: "white" }}
+                                  style={{
+                                    backgroundColor: "#D81B60",
+                                    color: "white",
+                                  }}
                                 >
                                   <i className="me-100 fas fa-eye" />
                                 </Link>
                                 <button
                                   onClick={() => deleteUserHandler(user._id)}
                                   className="has-icon btn m-1"
-                                  style={{ backgroundColor: "#D81B60", borderColor: "#D81B60", color: "#fff" }}
+                                  style={{
+                                    backgroundColor: "#D81B60",
+                                    borderColor: "#D81B60",
+                                    color: "#fff",
+                                  }}
                                 >
                                   <i className="me-100 fas fa-trash" />
                                 </button>
@@ -162,6 +197,17 @@ const UserList = () => {
                         </tbody>
                       </table>
                     </div>
+                    <Stack
+                      spacing={2}
+                      className="d-flex justify-content-center mt-3"
+                    >
+                      <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        color="primary"
+                      />
+                    </Stack>
                   </div>
                 </div>
               </div>

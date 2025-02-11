@@ -4,22 +4,28 @@ import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../Config";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const ContactList = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
- 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 5;
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(currentPage);
+  }, [currentPage]);
 
   const fetchData = async () => {
     try {
-      const response = await axiosInstance.get(`/contactlist`);
+      const response = await axiosInstance.get(
+        `/contactlist?page=${currentPage}&limit=${limit}`
+      );
       if (response.data.success) {
         setData(response.data.body.data);
+        setTotalPages(response.data.body.totalPages);
       } else {
         Swal.fire(
           "Error",
@@ -51,7 +57,16 @@ const ContactList = () => {
     if (result.isConfirmed) {
       try {
         await axiosInstance.delete(`/contactdelete/${_id}`);
-        fetchData();
+        const response = await axiosInstance.get(
+          `/contactlist?page=${currentPage}&limit=${limit}`
+        );
+        if (response.data.success) {
+          const newTotalPages = response.data.body.totalPages;
+          if (currentPage > newTotalPages) {
+            setCurrentPage(newTotalPages || 1);
+          }
+          setTotalPages(newTotalPages);
+        }
         Swal.fire("Deleted!", "Contact has been deleted.", "success");
       } catch (error) {
         Swal.fire(
@@ -68,11 +83,9 @@ const ContactList = () => {
   const filteredUsers = data.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-
-
-
-  
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
   return (
     <>
@@ -91,15 +104,13 @@ const ContactList = () => {
         <div className="row">
           <div className="col-12">
             <div className="card my-4">
-            <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
-                <div className="d-flex justify-content-between align-items-center px-3 pt-1">
-                  <h6 className="text-white text-capitalize">
-                    Contacts
-                  </h6>
+              <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div className="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-2">
+                  <div className="d-flex justify-content-between align-items-center px-3 pt-1">
+                    <h6 className="text-white text-capitalize">Contacts</h6>
+                  </div>
                 </div>
               </div>
-            </div>
               <div className="section-body">
                 <div className="card">
                   <div className="card-body">
@@ -163,6 +174,17 @@ const ContactList = () => {
                         </tbody>
                       </table>
                     </div>
+                    <Stack
+                      spacing={2}
+                      className="d-flex justify-content-center mt-3"
+                    >
+                      <Pagination
+                        count={totalPages}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        color="primary"
+                      />
+                    </Stack>
                   </div>
                 </div>
               </div>
