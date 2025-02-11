@@ -103,7 +103,7 @@ const SubCategoryList = () => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#D81B60",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     });

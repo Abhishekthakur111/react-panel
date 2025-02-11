@@ -18,7 +18,7 @@ const BookingList = () => {
   ]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 10;
+  const limit = 5;
 
   useEffect(() => {
     fetchData(currentPage);
@@ -66,7 +66,7 @@ const BookingList = () => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#D81B60",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     });
@@ -74,13 +74,10 @@ const BookingList = () => {
     if (result.isConfirmed) {
       try {
         await axiosInstance.delete(`/bookingdelete/${_id}`);
-        const response = await axiosInstance.get(`/bookinglist?page=${currentPage}&limit=${limit}`);
-        if (response.data.success) {
-          const newTotalPages = response.data.body.totalPages;
-          if (currentPage > newTotalPages) {
-            setCurrentPage(newTotalPages || 1);
-          }
-          setTotalPages(newTotalPages);
+        const updatedBookings = bookings.filter((booking) => booking._id !== _id);
+        setBookings(updatedBookings);
+        if (updatedBookings.length === 0 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
         }
         Swal.fire("Deleted!", "Booking has been deleted.", "success");
       } catch (error) {
