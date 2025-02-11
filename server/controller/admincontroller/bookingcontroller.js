@@ -45,21 +45,28 @@ const createBooking = async (req, res) => {
 };
 const bookinglist = async (req, res) => {
     try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const totalBookings = await Booking.countDocuments(); 
         const bookings = await Booking.find()
             .populate('user_id')
             .populate('service_id')
             .populate('cat_id')
+            .skip(skip) 
+            .limit(limit)
             .exec();
 
-        res.status(200).json({
-            success: true,
-            message: "Booking retrieved successfully",
-            body: {
-                data: bookings,
-            }
+        return helper.success(res, "All booking details", {
+            data: bookings,
+            total: totalBookings,
+            page,
+            limit,
+            totalPages: Math.ceil(totalBookings / limit),
         });
     } catch (error) {
-        throw error
+        return helper.error(res, error.message);
     }
 };
 const bookingView = async (req, res) => {

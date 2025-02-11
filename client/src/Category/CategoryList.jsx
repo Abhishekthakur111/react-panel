@@ -3,13 +3,10 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import { axiosInstance, BASE_URL } from "../Config";
-import Pagination from "../Pagination";
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(5);
   const [isToastActive, setIsToastActive] = useState(false);
 
   useEffect(() => {
@@ -19,7 +16,6 @@ const CategoryList = () => {
   const fetchData = async () => {
     try {
       const response = await axiosInstance.get(`/categorylist`);
-
       if (response.data.success) {
         setCategories(response.data.body.data);
       } else {
@@ -68,26 +64,15 @@ const CategoryList = () => {
 
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "0" ? "1" : "0";
-
     try {
       const response = await axiosInstance.post(`/categorystatus`, {
         id,
         status: newStatus,
       });
-
+  
       if (response.data.success) {
         fetchData();
-        if (!isToastActive) {
-          setIsToastActive(true);
-          toast.success(
-            `Category status changed to ${
-              newStatus === "0" ? "Active" : "Inactive"
-            }`
-          );
-          setTimeout(() => {
-            setIsToastActive(false);
-          }, 2000);
-        }
+        toast.success("Status updated successfully");
       } else {
         toast.error(response.data.message || "Failed to change status");
       }
@@ -95,20 +80,9 @@ const CategoryList = () => {
       toast.error("An error occurred while changing category status");
     }
   };
-
+  
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const totalPages = Math.ceil(filteredCategories.length / pageSize);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const paginatedCategories = filteredCategories.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
   );
 
   return (
@@ -117,12 +91,6 @@ const CategoryList = () => {
         position="top-right"
         autoClose={1000}
         hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
       />
       <div className="container-fluid">
         <div className="row">
@@ -174,11 +142,9 @@ const CategoryList = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {paginatedCategories.map((category, index) => (
+                          {filteredCategories.map((category, index) => (
                             <tr key={category._id}>
-                              <td>
-                                {(currentPage - 1) * pageSize + index + 1}
-                              </td>
+                              <td>{index + 1}</td>
                               <td>{category.name || "no category"}</td>
                               <td>
                                 {category.image ? (
@@ -221,38 +187,37 @@ const CategoryList = () => {
                                   />
                                 </div>
                               </td>
-
                               <td>
                                 <Link
                                   to={`/viewcategory/${category._id}`}
-                                  className="has-icon btn btn-success m-1"
+                                  className="btn btn-success m-1"
                                   style={{
                                     backgroundColor: "#D81B60",
                                     color: "white",
                                   }}
                                 >
-                                  <i className="me-100 fas fa-eye" />
+                                  <i className="fas fa-eye" />
                                 </Link>
                                 <Link
                                   to={`/updatecategory/${category._id}`}
-                                  className="has-icon btn btn-success m-1"
+                                  className="btn btn-success m-1"
                                   style={{
                                     backgroundColor: "#D81B60",
                                     color: "white",
                                   }}
                                 >
-                                  <i className="me-100 fas fa-edit" />
+                                  <i className="fas fa-edit" />
                                 </Link>
                                 <button
                                   onClick={() => deleteCategory(category._id)}
-                                  className="has-icon btn m-1"
+                                  className="btn m-1"
                                   style={{
                                     backgroundColor: "#D81B60",
                                     borderColor: "#D81B60",
                                     color: "#fff",
                                   }}
                                 >
-                                  <i className="me-100 fas fa-trash" />
+                                  <i className="fas fa-trash" />
                                 </button>
                               </td>
                             </tr>
@@ -261,11 +226,6 @@ const CategoryList = () => {
                       </table>
                     </div>
                   </div>
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
                 </div>
               </div>
             </div>

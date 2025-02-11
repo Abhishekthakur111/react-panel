@@ -3,14 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import { axiosInstance, BASE_URL } from "../Config";
-import Pagination from "../Pagination";
 
 const SubCategoryList = () => {
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const navigate = useNavigate();
@@ -71,11 +68,8 @@ const SubCategoryList = () => {
     );
     setFilteredServices(filtered);
   };
-
-  const [isToastActive, setIsToastActive] = useState(false);
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "0" ? "1" : "0";
-
     try {
       const response = await axiosInstance.post(`/subcategorystatus`, {
         id,
@@ -84,17 +78,7 @@ const SubCategoryList = () => {
 
       if (response.data.success) {
         fetchData();
-        if (!isToastActive) {
-          setIsToastActive(true);
-          toast.success(
-            `Sub Category status changed to ${
-              newStatus === "0" ? "Active" : "Inactive"
-            }`
-          );
-          setTimeout(() => {
-            setIsToastActive(false);
-          }, 2000);
-        }
+        toast.success("Status updated successfully");
       } else {
         toast.error(response.data.message || "Failed to change status");
       }
@@ -134,16 +118,6 @@ const SubCategoryList = () => {
       );
     }
   };
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const totalPages = Math.ceil(filteredServices.length / pageSize);
-  const paginatedServices = filteredServices.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
 
   return (
     <>
@@ -224,12 +198,10 @@ const SubCategoryList = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {paginatedServices.length ? (
-                            paginatedServices.map((service, index) => (
+                          {filteredServices.length ? (
+                            filteredServices.map((service, index) => (
                               <tr key={service._id}>
-                                <td>
-                                  {(currentPage - 1) * pageSize + index + 1}
-                                </td>
+                                <td>{index + 1}</td>
                                 <td>
                                   {service.cat_id?.name
                                     ? service.cat_id.name
@@ -326,11 +298,6 @@ const SubCategoryList = () => {
                       </table>
                     </div>
                   </div>
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
                 </div>
               </div>
             </div>

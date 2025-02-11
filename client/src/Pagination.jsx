@@ -1,49 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import { Pagination } from "flowbite-react";
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-  const maxPageNumbersToShow = 5;
+const PaginationComponent = () => {
+  const [currentPage, setCurrentPage] = useState(1);
 
-  let startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
-  let endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
-
-  if (endPage - startPage < maxPageNumbersToShow - 1) {
-    startPage = Math.max(1, endPage - maxPageNumbersToShow + 1);
-  }
-
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      onPageChange(page);
-    }
-  };
+  const onPageChange = (page) => setCurrentPage(page);
 
   return (
-    <div className="card-footer text-end">
-      <nav className="d-inline-block">
-        <ul className="pagination mb-0">
-          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-            <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-              <i className="fas fa-chevron-left" />
-            </button>
-          </li>
-          {Array.from({ length: Math.min(endPage - startPage + 1, maxPageNumbersToShow) }, (_, index) => {
-            const page = startPage + index;
-            return (
-              <li key={page} className={`page-item ${currentPage === page ? "active" : ""}`}>
-                <button className="page-link" onClick={() => handlePageChange(page)}>
-                  {page}
-                </button>
-              </li>
-            );
-          })}
-          <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-              <i className="fas fa-chevron-right" />
-            </button>
-          </li>
-        </ul>
-      </nav>
+    <div className="flex overflow-x-auto sm:justify-center">
+      <Pagination
+        layout="pagination"
+        currentPage={currentPage}
+        totalPages={1000}
+        onPageChange={onPageChange}
+        previousLabel="Go back"
+        nextLabel="Go forward"
+        showIcons
+      />
     </div>
   );
 };
 
-export default Pagination;
+export default PaginationComponent;

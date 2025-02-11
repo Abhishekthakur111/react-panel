@@ -2,31 +2,23 @@ const Contact = require('../../models/contacts');
 const helper = require('../../helper/helper');
 
 module.exports = {
-  createcontact: async (req, res) => {
-    try {
-      const contact = await Contact.create({
-        name: req.body.name,
-        email: req.body.email,
-        address: req.body.address,
-        phoneNumber: req.body.phoneNumber,
-      });
-      res.status(200).json({ message: true, contact: contact });
-    } catch (error) {
-      throw error
-    }
-  },
   contact_get: async (req, res) => {
     try {
-      const data = await Contact.find()
-      res.status(200).json({
-        success: true,
-        message: "Contact List retrieved successfully",
-        body: {
-          data: data
-        },
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const skip = (page - 1) * limit;
+      const totalContacts = await Contact.countDocuments();
+      const data = await Contact.find().skip(skip).limit(limit);
+
+      return helper.success(res, "All contact details", {
+        data,
+        total: totalContacts,
+        page,
+        limit,
+        totalPages: Math.ceil(totalContacts / limit),
       });
     } catch (error) {
-      throw error
+      return helper.error(res, "Something went wrong", error);
     }
   },
   contact_view: async (req, res) => {

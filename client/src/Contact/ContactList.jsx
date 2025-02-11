@@ -4,13 +4,12 @@ import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../Config";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import Pagination from "../Pagination";
+
 
 const ContactList = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+ 
 
   useEffect(() => {
     fetchData();
@@ -70,17 +69,10 @@ const ContactList = () => {
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredUsers.length / pageSize);
-  const currentUsers = filteredUsers.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
 
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+
+
+  
 
   return (
     <>
@@ -136,7 +128,7 @@ const ContactList = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {currentUsers.map((user, index) => (
+                          {filteredUsers.map((user, index) => (
                             <tr key={user._id}>
                               <td>{index + 1}</td>
                               <td>{user.name || "no user"}</td>
@@ -171,11 +163,6 @@ const ContactList = () => {
                         </tbody>
                       </table>
                     </div>
-                    <Pagination
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      onPageChange={handlePageChange}
-                    />
                   </div>
                 </div>
               </div>

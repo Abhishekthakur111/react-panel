@@ -28,7 +28,6 @@ const menuItems = [
     activePaths: ["/booking"] 
   },
   { to: "/map", label: "Map", icon: "map" },
-   { to: "/calendar", label: "Calendar", icon: "event" },
    { to: "/contacts", 
     label: "Contacts", 
     icon: "lock",

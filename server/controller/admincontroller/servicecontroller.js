@@ -40,14 +40,25 @@ module.exports = {
     },
     servicelist: async (req, res) => {
         try {
-            const data = await Services.find()
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const skip = (page - 1) * limit;
+            const totalServices = await Services.countDocuments();
+            const services = await Services.find()
                 .populate("cat_id", "name status")
+                .skip(skip)
+                .limit(limit)
                 .exec();
-            return helper.success(res, "All services detail", {
-                data,
+    
+            return helper.success(res, "All service details", {
+                data: services,
+                total: totalServices,
+                page,
+                limit,
+                totalPages: Math.ceil(totalServices / limit),
             });
         } catch (error) {
-            throw error
+            return helper.error(res, "Something went wrong", error);
         }
     },
     serviceView: async (req, res) => {

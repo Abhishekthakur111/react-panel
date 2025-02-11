@@ -71,7 +71,6 @@ router.post('/bookingstatus', booking.status);
 router.delete('/bookingdelete/:_id',booking.deletebooking);
 
 //router for contacts
-router.post('/createcontact',contact.createcontact);
 router.get('/contactlist',contact.contact_get);
 router.get('/contactview/:_id', contact.contact_view);
 router.delete('/contactdelete/:_id',contact.contact_delete);

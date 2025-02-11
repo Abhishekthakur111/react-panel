@@ -35,12 +35,22 @@ module.exports = {
   },
   Categorylist: async (req, res) => {
     try {
-      const data = await Category.find()
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+      const skip = (page - 1) * limit;
+
+      const totalCategories = await Category.countDocuments();
+      const data = await Category.find().skip(skip).limit(limit);
+
       return helper.success(res, "All category Detail", {
         data,
+        total: totalCategories,
+        page,
+        limit,
+        totalPages: Math.ceil(totalCategories / limit),
       });
     } catch (error) {
-      throw error
+      throw error;
     }
   },
   categeoryview: async (req, res) => {

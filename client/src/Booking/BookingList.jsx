@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosInstance } from "../Config";
-import Pagination from "../Pagination";
 
 const BookingList = () => {
   const [bookings, setBookings] = useState([]);
@@ -15,8 +14,6 @@ const BookingList = () => {
     { value: "1", label: "Ongoing" },
     { value: "2", label: "Complete" },
   ]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(10);
 
   useEffect(() => {
     fetchData();
@@ -55,12 +52,6 @@ const BookingList = () => {
     booking.booking_code.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredBookings.length / pageSize);
-  const currentBookings = filteredBookings.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
-
   const deleteUser = async (_id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -96,7 +87,7 @@ const BookingList = () => {
         status: newStatus,
       });
       if (response.data.success) {
-        toast.success("Booking status updated successfully");
+        toast.success("Status updated successfully");
         fetchData();
       } else {
         Swal.fire(
@@ -112,12 +103,6 @@ const BookingList = () => {
           "An error occurred while updating the status",
         "error"
       );
-    }
-  };
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
     }
   };
 
@@ -178,12 +163,10 @@ const BookingList = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {currentBookings.length ? (
-                              currentBookings.map((booking, index) => (
+                            {filteredBookings.length ? (
+                              filteredBookings.map((booking, index) => (
                                 <tr key={booking._id}>
-                                  <td>
-                                    {(currentPage - 1) * pageSize + index + 1}
-                                  </td>
+                                  <td>{index + 1}</td>
                                   <td>{booking.user_id?.name || "no name"}</td>
                                   <td>
                                     {booking.cat_id?.name || "no category"}
@@ -252,11 +235,6 @@ const BookingList = () => {
                       </div>
                     )}
                   </div>
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
                 </div>
               </div>
             </div>

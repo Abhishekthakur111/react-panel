@@ -85,14 +85,24 @@ module.exports = {
   },
   user_list: async (req, res) => {
     try {
-      const data = await user.find({ role: 1, raw: true, nest: true })
+      let { page, limit } = req.query;
+      page = parseInt(page) || 1;
+      limit = parseInt(limit) || 10;
+      const skip = (page - 1) * limit;
+      const data = await user.find({ role: 1 }).skip(skip).limit(limit);
+      const totalUsers = await user.countDocuments({ role: 1 });
+  
       return helper.success(res, "All users Detail", {
         data,
+        currentPage: page,
+        totalPages: Math.ceil(totalUsers / limit),
+        totalUsers,
       });
     } catch (error) {
-      throw error
+      throw error;
     }
   },
+  
   view: async (req, res) => {
     try {
       let view = await user.findById({ _id: req.params._id });
