@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import { axiosInstance, BASE_URL } from "../Config";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const SubCategoryList = () => {
   const [services, setServices] = useState([]);
@@ -10,11 +12,14 @@ const SubCategoryList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 10;
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     filterServicesByDate();
@@ -26,10 +31,11 @@ const SubCategoryList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axiosInstance.get(`/services`);
+      const response = await axiosInstance.get(`/services?page=${currentPage}&limit=${limit}`);
       if (response.data.success) {
         setServices(response.data.body.data);
         setFilteredServices(response.data.body.data);
+        setTotalPages(response.data.body.totalPages);
       } else {
         Swal.fire(
           "Error",
@@ -46,7 +52,9 @@ const SubCategoryList = () => {
       );
     }
   };
-
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
   const filterServicesByDate = () => {
     let filtered = [...services];
 
@@ -68,8 +76,10 @@ const SubCategoryList = () => {
     );
     setFilteredServices(filtered);
   };
+
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "0" ? "1" : "0";
+
     try {
       const response = await axiosInstance.post(`/subcategorystatus`, {
         id,
@@ -77,7 +87,7 @@ const SubCategoryList = () => {
       });
 
       if (response.data.success) {
-        fetchData();
+        fetchData(currentPage);
         toast.success("Status updated successfully");
       } else {
         toast.error(response.data.message || "Failed to change status");
@@ -101,7 +111,15 @@ const SubCategoryList = () => {
     if (result.isConfirmed) {
       try {
         await axiosInstance.delete(`/delete_service/${_id}`);
-        fetchData();
+          const response = await axiosInstance.get(`/services?page=${currentPage}&limit=${limit}`);
+                if (response.data.success) {
+                  setServices(response.data.body.data);
+                  const newTotalPages = response.data.body.totalPages;
+                  if (currentPage > newTotalPages) {
+                    setCurrentPage(newTotalPages || 1);
+                  }
+                  setTotalPages(newTotalPages);
+                }
         Swal.fire("Deleted!", "Sub Category has been deleted.", "success");
       } catch (error) {
         Swal.fire(
@@ -201,7 +219,7 @@ const SubCategoryList = () => {
                           {filteredServices.length ? (
                             filteredServices.map((service, index) => (
                               <tr key={service._id}>
-                                <td>{index + 1}</td>
+                                <td>{(currentPage - 1) * limit + index + 1}</td>
                                 <td>
                                   {service.cat_id?.name
                                     ? service.cat_id.name
@@ -291,12 +309,15 @@ const SubCategoryList = () => {
                             ))
                           ) : (
                             <tr>
-                              <td colSpan="7">No services found</td>
+                              <td colSpan="7">No Sub Category found</td>
                             </tr>
                           )}
                         </tbody>
                       </table>
                     </div>
+                    <Stack spacing={2} className="d-flex justify-content-center mt-3">
+                  <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} color="primary" />
+                </Stack>
                   </div>
                 </div>
               </div>

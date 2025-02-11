@@ -3,35 +3,36 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import { axiosInstance, BASE_URL } from "../Config";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 10;
+  
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData(currentPage);
+  }, [currentPage]);
 
-  const fetchData = async () => {
+  const fetchData = async (page) => {
     try {
-      const response = await axiosInstance.get(`/categorylist`);
+      const response = await axiosInstance.get(`/categorylist?page=${page}&limit=${limit}`);
       if (response.data.success) {
         setCategories(response.data.body.data);
+        setTotalPages(response.data.body.totalPages);
       } else {
-        Swal.fire(
-          "Error",
-          response.data.message || "Failed to load categories",
-          "error"
-        );
+        Swal.fire("Error", response.data.message || "Failed to load categories", "error");
       }
     } catch (error) {
-      Swal.fire(
-        "Error",
-        "An error occurred while fetching the category list",
-        "error"
-      );
+      Swal.fire("Error", "An error occurred while fetching the category list", "error");
     }
+  };
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
   const deleteCategory = async (_id) => {
@@ -48,7 +49,15 @@ const CategoryList = () => {
     if (result.isConfirmed) {
       try {
         await axiosInstance.delete(`/deletecategory/${_id}`);
-        fetchData();
+        const response = await axiosInstance.get(`/categorylist?page=${currentPage}&limit=${limit}`);
+        if (response.data.success) {
+          setCategories(response.data.body.data);
+          const newTotalPages = response.data.body.totalPages;
+          if (currentPage > newTotalPages) {
+            setCurrentPage(newTotalPages || 1);
+          }
+          setTotalPages(newTotalPages);
+        }
         Swal.fire("Deleted!", "Category has been deleted.", "success");
       } catch (error) {
         Swal.fire(
@@ -64,6 +73,7 @@ const CategoryList = () => {
 
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === "0" ? "1" : "0";
+  
     try {
       const response = await axiosInstance.post(`/categorystatus`, {
         id,
@@ -71,7 +81,7 @@ const CategoryList = () => {
       });
   
       if (response.data.success) {
-        fetchData();
+        fetchData(currentPage);
         toast.success("Status updated successfully");
       } else {
         toast.error(response.data.message || "Failed to change status");
@@ -80,6 +90,7 @@ const CategoryList = () => {
       toast.error("An error occurred while changing category status");
     }
   };
+  
   
   const filteredCategories = categories.filter((category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -144,7 +155,7 @@ const CategoryList = () => {
                         <tbody>
                           {filteredCategories.map((category, index) => (
                             <tr key={category._id}>
-                              <td>{index + 1}</td>
+                              <td>{(currentPage - 1) * limit + index + 1}</td>
                               <td>{category.name || "no category"}</td>
                               <td>
                                 {category.image ? (
@@ -225,6 +236,9 @@ const CategoryList = () => {
                         </tbody>
                       </table>
                     </div>
+                    <Stack spacing={2} className="d-flex justify-content-center mt-3">
+                  <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} color="primary" />
+                </Stack>
                   </div>
                 </div>
               </div>
