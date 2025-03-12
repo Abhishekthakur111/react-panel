@@ -72,7 +72,7 @@ const Layout = () => {
         ></div>
       )}
 
-      <div style={{ flex: '1', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: '1', display: 'flex', flexDirection: 'column' , overflow:'auto'}}>
         <Navbar toggleSidebar={toggleSidebar} closeSidebar={closeSidebar} />
         <div style={{ flex: '1', padding: '20px' }}>
           <Outlet />
