@@ -102,7 +102,6 @@ module.exports = {
       throw error;
     }
   },
-  
   view: async (req, res) => {
     try {
       let view = await user.findById({ _id: req.params._id });

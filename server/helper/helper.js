@@ -13,11 +13,19 @@ module.exports ={
     },
     error:function(res,message="",body={})
     {
-        return res.status(200).json({
+        return res.status(403).json({
             success:false,
             status:403,
             message:message,
             body:body
+        });
+    },
+    failure: function(res, message = "", body = {}) {
+        return res.status(400).json({
+            success: false,
+            status: 400,
+            message: message,
+            body: body
         });
     },
      fileUpload : async (file) => {

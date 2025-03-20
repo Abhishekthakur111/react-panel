@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       const { status } = error.response;
 
-      if (status === 403) {
+      if (status === 400) {
         localStorage.removeItem('token');
         window.location.replace('/');
       }

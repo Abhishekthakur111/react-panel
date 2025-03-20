@@ -24,13 +24,12 @@ module.exports = {
       req.user = { _id: findUser._id };
       next();
     } catch (error) {
-      console.error("Error verifying token:", error);
-      if (error.name === 'JsonWebTokenError') {
-        return res.status(403).json({ message: 'Invalid token' });
-      } else if (error.name === 'TokenExpiredError') {
-        return res.status(403).json({ message: 'Token expired' });
+      if (error.name === "JsonWebTokenError") {
+        return helper.failure(res, "Invalid token", 400);
+      } else if (error.name === "TokenExpiredError") {
+        return helper.failure(res, "Token expired", 400);
       }
-      return res.status(500).json({ message: 'Internal server error' });
+      return helper.failure(res, "Internal server error", 400);
     }
   }
 };
