@@ -137,7 +137,7 @@ module.exports = {
   delete_user: async (req, res) => {
     try {
       const { _id } = req.params;
-      let data = await user.findByIdAndDelete(_id);
+       await user.findByIdAndDelete(_id);
       return helper.success(res, "User Deleted successfully");
     } catch (error) {
       throw error
@@ -181,36 +181,46 @@ module.exports = {
     }
   },
   reset_password: async (req, res) => {
-    try {
-      const { password, newPassword } = req.body;
-      const token = req.headers.authorization?.split(' ')[1];
+  try {
+    const { password, newPassword } = req.body;
+    const token = req.headers.authorization?.split(' ')[1];
 
-      if (!token) {
-        return helper.error(res, "No token provided");
-      }
-      const decoded = jwt.verify(token, process.env.SECRET);
-      const userId = decoded.id;
-      const find_data = await user.findById(userId);
-      if (!find_data) {
-        return helper.error(res, "User not found");
-      }
-      const isPasswordMatch = await bcrypt.compare(password, find_data.password);
-
-      if (!isPasswordMatch) {
-        return helper.error(res, "Current password is incorrect");
-      }
-      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-      const updatedUser = await user.findByIdAndUpdate(
-        userId,
-        { password: hashedNewPassword },
-        { new: true }
-      );
-
-      return helper.success(res, "Password changed successfully", updatedUser);
-    } catch (error) {
-      throw error
+    if (!token) {
+      return helper.error(res, "No token provided");
     }
-  },
+
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const userId = decoded.id;
+
+    const find_data = await user.findById(userId);
+    if (!find_data) {
+      return helper.error(res, "User not found");
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, find_data.password);
+    if (!isPasswordMatch) {
+      return helper.error(res, "Old password is incorrect");
+    }
+
+    const isSameAsOld = await bcrypt.compare(newPassword, find_data.password);
+    if (isSameAsOld) {
+      return helper.error(res, "New password cannot be the same as the current password");
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    const updatedUser = await user.findByIdAndUpdate(
+      userId,
+      { password: hashedNewPassword },
+      { new: true }
+    );
+
+    return helper.success(res, "Password changed successfully", updatedUser);
+  } catch (error) {
+    console.error("Error in reset_password:", error);
+    return helper.error(res, "Something went wrong");
+  }
+},
+
   status: async (req, res) => {
     try {
       const { id, status } = req.body;
