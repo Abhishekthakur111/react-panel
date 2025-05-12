@@ -12,7 +12,7 @@ const ContactList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 5;
+  const limit = 10;
 
   useEffect(() => {
     fetchData(currentPage);

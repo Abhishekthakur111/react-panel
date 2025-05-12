@@ -12,7 +12,7 @@ import Stack from "@mui/material/Stack";
 const UserList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 5;
+  const limit = 10;
 
   const dispatch = useDispatch();
   const { users = [], totalPages } = useSelector((state) => state.users);
